@@ -1,0 +1,41 @@
+{
+  "name": "pokemon-ghost-shift",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env scripts/dev.mjs",
+    "build": "tsc -b && tsc -p tsconfig.server.json && vite build",
+    "test": "tsx --test src/engine.test.ts src/presentation.test.ts src/navigation.test.ts src/collision-journal.test.ts server/*.test.ts",
+    "preview": "vite preview --host 127.0.0.1",
+    "test:e2e": "playwright test",
+    "dev:client": "vite --host 0.0.0.0",
+    "dev:server": "node --env-file-if-exists=.env --import tsx server/index.ts",
+    "start": "node --env-file-if-exists=.env --import tsx server/index.ts",
+    "db:migrate": "node --env-file-if-exists=.env --import tsx server/cli.ts migrate",
+    "db:backup": "node --env-file-if-exists=.env --import tsx server/cli.ts backup",
+    "operator:create": "node --env-file-if-exists=.env --import tsx server/cli.ts operator",
+    "operator:reset-password": "node --env-file-if-exists=.env --import tsx server/cli.ts operator-reset",
+    "analytics:evaluate": "node --env-file-if-exists=.env --import tsx server/cli.ts evaluate",
+    "catalog:refresh": "node scripts/catalog.mjs"
+  },
+  "dependencies": {
+    "@types/three": "^0.186.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "three": "^0.186.1",
+    "ws": "^8.22.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@types/ws": "^8.18.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "tsx": "^4.20.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}

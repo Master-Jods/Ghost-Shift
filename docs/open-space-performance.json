@@ -1,0 +1,15 @@
+{
+  "revision": "aster-wings-v3-open",
+  "scope": "Headless Windows Chrome CPU submission samples; excludes GPU completion, input/network and compositing. Concurrent workload uncontrolled; not a sustained or physical-device benchmark.",
+  "medium": {
+    "renderCpuMs": "2.03",
+    "resolution": "960x600",
+    "environment": "Headless Chrome on Windows; desktop 1440x900 viewport; three authenticated desktop game clients; not a physical-device benchmark"
+  },
+  "low": {
+    "renderCpuMs": "3.90",
+    "resolution": "480x270",
+    "audio": "running",
+    "environment": "Headless Chrome on Windows; emulated 1066x600 touch viewport; not a physical phone benchmark"
+  }
+}

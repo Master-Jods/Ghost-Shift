@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.npm-cache/
+*.tsbuildinfo
+.qa/
+.env
+.env.*
+!.env.example
+data/
+backups/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.pem
+*.key
+*.pfx

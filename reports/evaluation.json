@@ -1,0 +1,818 @@
+{
+  "version": "ghost-shift-v1-mc1",
+  "generatedAt": "2026-10-19T11:59:42.479Z",
+  "method": "monte-carlo-actual-rules",
+  "dataSource": "Generated whole-scenario evaluation; not visitor data. Half the observed continuations have predefined standardized interventions, while forecast assumes none: report this distribution shift explicitly.",
+  "tuning": {
+    "seeds": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "n": 4,
+    "purpose": "Separate smoke scenarios; no supervised fitting."
+  },
+  "heldOut": {
+    "seeds": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012
+    ],
+    "n": 12
+  },
+  "timePopulation": "Successful generated outcomes with defined predictions; incomplete runs remain in deadline/Brier denominators.",
+  "timeN": 5,
+  "completionTimeMAE": 2.4,
+  "baselineTimeMAE": 109.4,
+  "brierScore": 0,
+  "baselineBrier": 0.25,
+  "recommendationFeasibilityRate": 1,
+  "matched": {
+    "n": 12,
+    "baselineSuccessRate": 0.4166666666666667,
+    "bestPlanSuccessRate": 0.4166666666666667,
+    "pairedBothSuccessfulN": 5,
+    "pairedTimeImprovement": 0
+  },
+  "calibration": [
+    {
+      "low": 0,
+      "high": 0.5,
+      "n": 7,
+      "predicted": 0,
+      "observed": 0
+    },
+    {
+      "low": 0.5,
+      "high": 1,
+      "n": 5,
+      "predicted": 1,
+      "observed": 1
+    }
+  ],
+  "calibrated": false,
+  "limitations": [
+    "Old scenario evaluations are incompatible and excluded.",
+    "Small generated sample; no validated five-minute visitor pacing or real-device calibration.",
+    "Manual director behavior cannot be predicted. Compare intervention cohorts separately."
+  ],
+  "rows": [
+    {
+      "seed": 1001,
+      "startElapsed": 0,
+      "duration": 120,
+      "taskCount": 3,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 4,
+        "probability": 1,
+        "remaining": 35,
+        "interval": [
+          35,
+          35
+        ],
+        "shortageRisk": 0,
+        "incomplete": 0,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 35,
+        "elapsed": 35,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 35,
+        "elapsed": 35,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 35,
+        "elapsed": 35,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "standardizedEvents": false,
+      "recommendationFeasible": true
+    },
+    {
+      "seed": 1002,
+      "startElapsed": 147,
+      "duration": 180,
+      "taskCount": 4,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 0,
+        "probability": 0,
+        "remaining": null,
+        "interval": null,
+        "shortageRisk": 0,
+        "incomplete": 4,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 11,
+        "interventions": 1
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 11,
+        "interventions": 1
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 11,
+        "interventions": 1
+      },
+      "standardizedEvents": true,
+      "recommendationFeasible": true
+    },
+    {
+      "seed": 1003,
+      "startElapsed": 257,
+      "duration": 300,
+      "taskCount": 5,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 0,
+        "probability": 0,
+        "remaining": null,
+        "interval": null,
+        "shortageRisk": 0,
+        "incomplete": 4,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 43,
+        "elapsed": 300,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 43,
+        "elapsed": 300,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 43,
+        "elapsed": 300,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "standardizedEvents": false,
+      "recommendationFeasible": true
+    },
+    {
+      "seed": 1004,
+      "startElapsed": 0,
+      "duration": 120,
+      "taskCount": 3,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 4,
+        "probability": 1,
+        "remaining": 31,
+        "interval": [
+          27,
+          32
+        ],
+        "shortageRisk": 0,
+        "incomplete": 0,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 43,
+        "elapsed": 43,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 7,
+        "interventions": 1
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 43,
+        "elapsed": 43,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 7,
+        "interventions": 1
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 43,
+        "elapsed": 43,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 7,
+        "interventions": 1
+      },
+      "standardizedEvents": true,
+      "recommendationFeasible": true
+    },
+    {
+      "seed": 1005,
+      "startElapsed": 147,
+      "duration": 180,
+      "taskCount": 4,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 0,
+        "probability": 0,
+        "remaining": null,
+        "interval": null,
+        "shortageRisk": 0,
+        "incomplete": 4,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "standardizedEvents": false,
+      "recommendationFeasible": true
+    },
+    {
+      "seed": 1006,
+      "startElapsed": 257,
+      "duration": 300,
+      "taskCount": 5,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 0,
+        "probability": 0,
+        "remaining": null,
+        "interval": null,
+        "shortageRisk": 0,
+        "incomplete": 4,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 43,
+        "elapsed": 300,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 11,
+        "interventions": 1
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 43,
+        "elapsed": 300,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 11,
+        "interventions": 1
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 43,
+        "elapsed": 300,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 11,
+        "interventions": 1
+      },
+      "standardizedEvents": true,
+      "recommendationFeasible": true
+    },
+    {
+      "seed": 1007,
+      "startElapsed": 0,
+      "duration": 120,
+      "taskCount": 3,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 4,
+        "probability": 1,
+        "remaining": 41,
+        "interval": [
+          41,
+          41
+        ],
+        "shortageRisk": 0,
+        "incomplete": 0,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 41,
+        "elapsed": 41,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 41,
+        "elapsed": 41,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 41,
+        "elapsed": 41,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "standardizedEvents": false,
+      "recommendationFeasible": true
+    },
+    {
+      "seed": 1008,
+      "startElapsed": 147,
+      "duration": 180,
+      "taskCount": 4,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 0,
+        "probability": 0,
+        "remaining": null,
+        "interval": null,
+        "shortageRisk": 0,
+        "incomplete": 4,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 11,
+        "interventions": 1
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 11,
+        "interventions": 1
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 11,
+        "interventions": 1
+      },
+      "standardizedEvents": true,
+      "recommendationFeasible": true
+    },
+    {
+      "seed": 1009,
+      "startElapsed": 257,
+      "duration": 300,
+      "taskCount": 5,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 4,
+        "probability": 1,
+        "remaining": 39,
+        "interval": [
+          39,
+          39
+        ],
+        "shortageRisk": 0,
+        "incomplete": 0,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 39,
+        "elapsed": 296,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 39,
+        "elapsed": 296,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 39,
+        "elapsed": 296,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "standardizedEvents": false,
+      "recommendationFeasible": true
+    },
+    {
+      "seed": 1010,
+      "startElapsed": 0,
+      "duration": 120,
+      "taskCount": 3,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 4,
+        "probability": 1,
+        "remaining": 45,
+        "interval": [
+          45,
+          45
+        ],
+        "shortageRisk": 0,
+        "incomplete": 0,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 45,
+        "elapsed": 45,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 3,
+        "interventions": 1
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 45,
+        "elapsed": 45,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 3,
+        "interventions": 1
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": true,
+        "remaining": 45,
+        "elapsed": 45,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 3,
+        "interventions": 1
+      },
+      "standardizedEvents": true,
+      "recommendationFeasible": true
+    },
+    {
+      "seed": 1011,
+      "startElapsed": 147,
+      "duration": 180,
+      "taskCount": 4,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 0,
+        "probability": 0,
+        "remaining": null,
+        "interval": null,
+        "shortageRisk": 0,
+        "incomplete": 4,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 33,
+        "elapsed": 180,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": null,
+        "interventions": 0
+      },
+      "standardizedEvents": false,
+      "recommendationFeasible": true
+    },
+    {
+      "seed": 1012,
+      "startElapsed": 257,
+      "duration": 300,
+      "taskCount": 5,
+      "prediction": {
+        "method": "monte-carlo-actual-rules",
+        "version": "ghost-shift-v1-mc1",
+        "source": "generated_rollouts",
+        "n": 4,
+        "successes": 0,
+        "probability": 0,
+        "remaining": null,
+        "interval": null,
+        "shortageRisk": 0,
+        "incomplete": 4,
+        "emergencyMissRisk": 0,
+        "emergencyResolutionTime": null,
+        "calibrated": false,
+        "assumptions": [
+          "Assumes NO further manual operator injections. Arbitrary future director decisions are unknown.",
+          "Current tasks, doors, threats, emergencies and the active timer use the actual authoritative reducer.",
+          "Seeded reaction .5–3.5s and movement input 0.55–1.0 model cooperative continuation, not measured visitor behavior.",
+          "Unseen partner position uses the disclosed room representative; exact unseen positions are not used.",
+          "Remaining time and central 80% range describe successful rollouts only. Failed runs remain in deadline success denominators.",
+          "Unavailable Pokémon metadata uses a neutral normalized modifier. No species/type can make mandatory work impossible."
+        ]
+      },
+      "observed": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 43,
+        "elapsed": 300,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 12,
+        "interventions": 1
+      },
+      "baseline": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 43,
+        "elapsed": 300,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 12,
+        "interventions": 1
+      },
+      "best": {
+        "emergencyMiss": false,
+        "success": false,
+        "remaining": 43,
+        "elapsed": 300,
+        "energy": 0,
+        "shortage": false,
+        "emergencyResolutionTime": 12,
+        "interventions": 1
+      },
+      "standardizedEvents": true,
+      "recommendationFeasible": true
+    }
+  ]
+}

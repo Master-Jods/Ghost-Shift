@@ -1,0 +1,24 @@
+{
+  "id": "/play",
+  "name": "Pok\u00e9mon: Ghost Shift",
+  "short_name": "Ghost Shift",
+  "description": "First-person cooperative research with a live operator.",
+  "start_url": "/play",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#080e15",
+  "theme_color": "#080e15",
+  "categories": [
+    "games",
+    "education"
+  ],
+  "icons": [
+    {
+      "src": "/icons/app.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
