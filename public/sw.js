@@ -1,5 +1,5 @@
-const CACHE='ghost-shift-collision-journal-4';
-const ESSENTIAL=['/','/play','/manifest.webmanifest','/icons/app.svg','/catalog/index.json','/fonts/fonts.css',...[25,68,197,9,282,59,609,491,94].flatMap(id=>[`/pokemon/${id}-art.png`,`/pokemon/${id}-sprite.png`]),...Array.from({length:12},(_,i)=>`/fonts/font-${i}.woff2`)];
+const CACHE='ghost-shift-industrial-decisions-5c';
+const ESSENTIAL=['/','/play','/manifest.webmanifest','/icons/app.svg','/industrial-corners.svg','/catalog/index.json','/fonts/fonts.css',...[25,68,197,9,282,59,609,491,94].flatMap(id=>[`/pokemon/${id}-art.png`,`/pokemon/${id}-sprite.png`]),...Array.from({length:12},(_,i)=>`/fonts/font-${i}.woff2`)];
 self.addEventListener('install',event=>{event.waitUntil((async()=>{const cache=await caches.open(CACHE);await cache.addAll(ESSENTIAL);const assetsList=await(await fetch('/catalog/asset-files.json')).json();await cache.addAll(assetsList);const html=await(await fetch('/')).text();const assets=[...html.matchAll(/(?:src|href)="(\/assets\/[^\"]+)"/g)].map(m=>m[1]);await cache.addAll(assets);await self.skipWaiting();})());});
 self.addEventListener('activate',event=>{event.waitUntil((async()=>{for(const name of await caches.keys())if((name.startsWith('jigsaw-shell-')||name.startsWith('ghost-shift-'))&&name!==CACHE)await caches.delete(name);await self.clients.claim();})());});
 self.addEventListener('fetch',event=>{const request=event.request,url=new URL(request.url);if(request.method!=='GET'||url.origin!==self.location.origin)return;

@@ -2,6 +2,10 @@
 
 A runnable cooperative research game for two real trainers and one operator. Players use a first-person WebGL facility view (with a labeled compatibility fallback); the operator watches a separate overhead facility map and manually introduces encounters and emergencies. The Node HTTP/WebSocket server owns collision, timers, team validation, resources, previews and outcomes. React/TypeScript/Vite supply the clients; SQLite stores the session history.
 
+## Red industrial / visible analytics revision
+
+The current experience includes a player manual, required illustrated briefing, real power/calibration choices, contextual encounter help, consequence receipts and visible Field Analyst guidance. See [revision and verification](docs/INDUSTRIAL-REVISION.md) and the [task QA matrix](docs/TASK-QA-MATRIX.md). Both trainers acknowledge the briefing after finalizing their teams; the operator starts afterward.
+
 ## Open-space facility revision
 
 The open-room organization, edge-mounted room equipment, controlled yaw/pitch, shared wing layout, upper-right minimap, full player settings, handheld scanner, confirmed-action animation and optional spatial procedural audio are documented in [docs/PRESENTATION.md](docs/PRESENTATION.md). Player Settings provides sensitivity, render quality, reduced motion/flashing, post-processing and separate Master/Effects/Ambience controls. Audio starts muted and requires an explicit interaction. The latest room-by-room before/after audit is in [open-space verification](docs/OPEN-SPACE-VERIFICATION.md).
@@ -30,7 +34,7 @@ For development, `npm.cmd run dev` starts the backend and Vite; use http://local
 
 Host and all three browsers must share a reachable LAN. On the host, use `ipconfig` to find its LAN address, then open `http://HOST-IP:8787/operator` on the operator device and `http://HOST-IP:8787/play` on each player device. Permit Node/port 8787 through the host firewall. HOST defaults to 0.0.0.0. Configure ALLOWED_ORIGINS for additional split frontend origins; same-origin host URLs work directly. Trusted HTTPS certificates may be configured with TLS_CERT/TLS_KEY. Fullscreen, pointer lock, audio and installability depend on browser permissions and secure-context rules; keyboard/touch gameplay remains available without fullscreen.
 
-The operator creates a room. A joins slot A; B joins slot B. Each selects exactly three distinct catalog entries, finalizes the team and marks ready. Both real player sockets must be connected before the operator starts. Briefing and the three-second countdown are outside active mission time. A round starts with no threats and does not require any injection to be completable.
+The operator creates a room. A joins slot A; B joins slot B. Each selects exactly three distinct catalog entries, finalizes the team and marks ready. Both real player sockets and current briefing acknowledgments are required before the operator starts. Briefing and the three-second countdown are outside active mission time. A round starts with no threats and does not require any injection to be completable.
 
 ## Player controls and objectives
 
@@ -90,7 +94,7 @@ Solo mechanisms support A, B or either trainer, and a both-control variant. Reac
 
 ## Persistence and recovery
 
-`server/migrations/002-ghost-shift.sql` adds catalog records, selected teams, normal tasks, incident instances, director commands and Ghost Shift metrics. Migration is automatic on server/CLI startup and idempotent. Schema 3 / scenario ghost-shift-wings-v4-collision / protocol 5 supersede the old scenario. Previous sessions are archived and remain exportable; old scenario forecasts/evaluations are excluded from Ghost Shift analytics. Existing operators, hashed passwords, login records and historical rows are preserved.
+`server/migrations/002-ghost-shift.sql` adds catalog records, selected teams, normal tasks, incident instances, director commands and Ghost Shift metrics. Migration is automatic on server/CLI startup and idempotent. Schema 3 / scenario ghost-shift-wings-v5-decisions / protocol 6 supersede the old scenario. Previous sessions are archived and remain exportable; old scenario forecasts/evaluations are excluded from Ghost Shift analytics. Existing operators, hashed passwords, login records and historical rows are preserved.
 
 The existing `data/jigsaw.sqlite` filename is retained deliberately to avoid abandoning your database; it is a compatibility path, not the current product name. `npm.cmd run db:backup` creates a consistent SQLite backup. Do not copy/delete live SQLite WAL files as a reset mechanism.
 
@@ -104,9 +108,9 @@ The checked-in complete PokéAPI `/pokemon` index currently contains 1,351 entri
 
 ## Analytics and evaluation
 
-Descriptive/diagnostic screens read persisted gameplay, actual incident response timestamps, movement/task interaction time, resources, event traces and intervention cohorts. Task interaction seconds count successful terminal input actions at one modeled second per action; movement seconds count actual server displacement. Coordination delay is a union of active approval/cooperative waiting seconds; individual categories may overlap. Blocked-route input seconds are reported separately. Response time is activation until first qualifying response; resolution time is activation until successful resolution. Deadline misses and cancellations remain distinct. Completion-time averages and observed forecast MAE use successful outcomes; deadline-success denominators retain incomplete outcomes.
+Descriptive/diagnostic screens read persisted gameplay, actual incident response timestamps, movement/task interaction time, resources, event traces and intervention cohorts. Task interaction seconds count server-accepted terminal attempts (including logged calibration mismatches) at one modeled second per attempt; movement seconds count actual server displacement. Coordination delay is a union of active approval/cooperative waiting seconds; individual categories may overlap. Blocked-route input seconds are reported separately. Response time is activation until first qualifying response; resolution time is activation until successful resolution. Deadline misses and cancellations remain distinct. Completion-time averages and observed forecast MAE use successful outcomes; deadline-success denominators retain incomplete outcomes.
 
-Predictive uses seeded Monte Carlo **legal continuations through the actual reducer and collision map**, with bounded reaction delay and movement pace. `ghost-shift-wings-v4-collision-mc1` assumes **no further unknown manual injections**. It reports successful remaining mean and central 80% range, deadline success, incomplete samples, emergency resolution time and shortage risk. It does not predict arbitrary operator behavior. An estimate of 100% is a small generated sample result, not a guarantee.
+Predictive uses seeded Monte Carlo **legal continuations through the actual reducer and collision map**, with bounded reaction delay and movement pace. `ghost-shift-wings-v5-decisions-mc1` assumes **no further unknown manual injections**. It reports successful remaining mean and central 80% range, deadline success, incomplete samples, emergency resolution time and shortage risk. It does not predict arbitrary operator behavior. An estimate of 100% is a small generated sample result, not a guarantee.
 
 Prescriptive compares responder/priority routes, battle versus containment, selected/strongest/stamina companion strategies and balanced/priority power using matched random seeds. It reports Best Plan Found, not a proven global optimum. Accepting guidance requires a fresh authorized plan and consequence confirmation; it logs replanning latency and leaves actual movement/actions to the humans. What-if computes on cloned state and explicitly preserves the live round. Jobs are bounded, cancellable and owned by their requester.
 

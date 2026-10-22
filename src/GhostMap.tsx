@@ -17,7 +17,7 @@ export default function GhostMap({ state, onPlace, placement }: {
             canvas.height = h * dpr;
             c.scale(dpr, dpr);
             const z = Math.min((w - 34) / WORLD.w, (h - 48) / WORLD.h), ox = (w - WORLD.w * z) / 2, oy = (h - WORLD.h * z) / 2 + 8;
-            c.fillStyle = '#202d26';
+            c.fillStyle = '#171218';
             c.fillRect(0, 0, w, h);
             c.strokeStyle = '#b6c49d08';
             for (let x = 0; x < w; x += 20) {
@@ -32,17 +32,17 @@ export default function GhostMap({ state, onPlace, placement }: {
                 c.lineTo(w, y);
                 c.stroke();
             }
-            c.font = '8px monospace';
-            c.fillStyle = '#8fa17e';
+            c.font = '11px monospace';
+            c.fillStyle = '#b794a4';
             c.textAlign = 'left';
-            c.fillText('ASTER / WING PLAN V2', 14, 19);
+            c.fillText('ASTER / LIVE FACILITY', 14, 19);
             c.textAlign = 'right';
             c.fillText('A FIELD  /  B FIELD  /  ! INCIDENT', w - 14, h - 11);
             c.save();
             c.translate(ox, oy);
             c.scale(z, z);
             for (const corridor of corridors) {
-                c.fillStyle = '#43523e';
+                c.fillStyle = '#41373d';
                 c.fillRect(corridor.x, corridor.y, corridor.w, corridor.h);
                 c.strokeStyle = '#7e8b6755';
                 c.lineWidth = 1 / z;
@@ -50,9 +50,9 @@ export default function GhostMap({ state, onPlace, placement }: {
             }
             for (const [index, room] of rooms.entries()) {
                 const occupied = Object.values(state.players).some(p => p.room === room.id);
-                c.fillStyle = occupied ? '#4c6045' : '#344432';
+                c.fillStyle = occupied ? '#61404b' : '#302a31';
                 c.fillRect(room.x, room.y, room.w, room.h);
-                c.strokeStyle = occupied ? '#aebe8e' : '#788563';
+                c.strokeStyle = occupied ? '#e6a3b5' : '#8b6b7c';
                 c.lineWidth = (occupied ? 1.5 : 1) / z;
                 c.strokeRect(room.x, room.y, room.w, room.h);
                 c.fillStyle = '#81906c';
@@ -61,15 +61,15 @@ export default function GhostMap({ state, onPlace, placement }: {
                 c.fillText(String(index + 1).padStart(2, '0'), room.x + 10, room.y + 19);
                 const words = room.name.split(' '), lines: string[] = [];
                 for (const word of words) {
-                    if (lines.length && ((lines.at(-1)!.length + word.length) < 17))
+                    if (lines.length && ((lines.at(-1)!.length + word.length) < Math.max(7,Math.floor((room.w*z-12)/6.6))))
                         lines[lines.length - 1] += ' ' + word;
                     else
                         lines.push(word);
                 }
-                c.fillStyle = '#c3cbb0';
-                c.font = `${Math.min(22, 9 / z)}px monospace`;
+                c.fillStyle = '#f4e5ec';
+                c.font = `${11 / z}px monospace`;
                 c.textAlign = 'center';
-                lines.forEach((line, i) => c.fillText(line.toUpperCase(), room.x + room.w / 2, room.y + 46 + i * 24, room.w - 16));
+                lines.forEach((line,i)=>{const text=line.toUpperCase(),width=c.measureText(text).width,y=room.y+(25+i*13)/z;c.fillStyle='#171017ee';c.fillRect(room.x+room.w/2-width/2-3/z,y-11/z,width+6/z,14/z);c.fillStyle='#f3e5ed';c.fillText(text,room.x+room.w/2,y,room.w-10);});
             }
             for (const obstacle of colliders) {
                 c.fillStyle='#829174';if(obstacle.shape==='circle'){c.beginPath();c.arc(obstacle.x,obstacle.y,obstacle.r,0,Math.PI*2);c.fill();}else{c.fillRect(obstacle.x,obstacle.y,obstacle.w,obstacle.h);c.fillStyle='#b5bb9b';c.fillRect(obstacle.x,obstacle.y,obstacle.w,Math.min(3,obstacle.h));}

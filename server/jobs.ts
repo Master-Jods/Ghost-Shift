@@ -1,7 +1,7 @@
 import {Worker} from 'node:worker_threads';
 import {randomUUID} from 'node:crypto';
 import type {State} from '../src/engine';
-export type Job={id:string;status:'queued'|'running'|'complete'|'failed'|'cancelled';progress:number|null;context?:{sessionId:string;stateVersion:number;elapsed:number;materialVersion?:string};result?:any;error?:string;createdAt:number;owner:string;forecast?:{sessionId:string;stateVersion:number;elapsed:number;features:unknown};cancel:()=>void};
+export type Job={id:string;status:'queued'|'running'|'complete'|'failed'|'cancelled';progress:number|null;context?:{sessionId:string;stateVersion:number;elapsed:number;materialVersion?:string;fieldKey?:string};result?:any;error?:string;createdAt:number;owner:string;forecast?:{sessionId:string;stateVersion:number;elapsed:number;features:unknown};cancel:()=>void};
 export class Jobs{
  jobs=new Map<string,Job>();private running=0;private queue:(()=>void)[]=[];private cache=new Map<string,any>();
  submit(owner:string,kind:string,state:State|null,options:Record<string,unknown>={}):Job{

@@ -1,43 +1,45 @@
-﻿# Project handoff - latest request completed
+# Project handoff — Ghost Shift industrial revision
 
-Updated 2026-10-20. The user resumed the collision/minimap/task-journal request. Implementation and verification are complete; no implementation remains paused.
+Updated 2026-10-22. Current repository: `C:\Pokemon Day - Among Us` (renamed from `C:\Jigsaw Trials`).
 
-Latest specification: C:\Users\USER\.codex\attachments\e612a781-231f-4e76-ba36-fc75e0bcf020\Pasted text.txt
+Latest specification: `C:\Users\USER\.codex\attachments\bd5db95c-9b89-4c56-980c-29e5a573e67d\Pasted text.txt`.
 
-## Current result
+## Implemented
 
-- Exact shared wall boundaries and solid-piece equipment colliders replace oversized empty-bay blockers. Walls and locked gates remain solid; followers do not collide.
-- Map signature / protocol agreement, service-worker cache update and missing-asset handling protect against stale client/server geometry.
-- Readable 440px desktop minimap, screen-space room labels, size setting and expanded view.
-- Collapsible left normal-task tracker with persistent separate active emergencies.
-- Detailed server-derived task journal via TAB / Tasks, tracked map/world objective, real progress, prerequisites, equipment, resources, partner and deadline information.
-- Safe overlay input stops movement, releases pointer lock and gates look; mission and partner continue. Controls retain normal Tab traversal. Close with Escape, visible Close or TAB from the journal surface.
-- Development-only F9 collision inspection, disabled by default and unavailable in production.
+- Shared red industrial presentation across player entry, team selection, lobby, HUD, tasks, encounters, settings, results and operator pages, with original decorative SVG and responsive layouts.
+- Landing/lobby/in-game manual and eight illustrated briefing steps. Server requires both current acknowledgments before starting; reconnect preserves them, configuration/team changes invalidate them. Briefing time is outside the active clock.
+- Real circuit restoration and signal calibration alternatives with different authoritative energy, stamina, timing and access effects; preview, confirmation and persisted consequence receipts.
+- Contextual encounter explanations, counterplay, disabled-action reasons and server action feedback.
+- Visible Field Analyst WHY / WHAT NEXT / BEST ACTION, current evidence, bounded Monte Carlo comparisons, concrete joint next steps, acceptance/override records and stale markers. Matching operator intelligence. No autoplay.
+- Correct task/incident assignment release, corruption carrier delivery, cooperative priority overload rounds, cancellation cleanup, resource reservations and cost-once guards.
+- Stale-preview recovery keeps the error in the active decision dialog; a duplicate global toast can no longer cover Refresh preview. Browser regression exercises partner-selection invalidation, no spending on rejection and normal refresh/confirmation.
+- Player evidence and forecasts exclude undisclosed remote threats, including event/broadcast details.
+- Preserved first-person multiplayer, all-catalog selection, three companions, manual operator injections, 300-second active deadline, shared collision, task journal and joint extraction.
 
-## Verification
+## Verification and evidence
 
-- npm.cmd test: 31 passed.
-- npm.cmd run build: TypeScript and production bundling passed; nonfatal WebGL vendor chunk-size advisory remains.
-- npm.cmd run test:e2e: 5 passed (2.8 minutes) in the final sequential suite: entry, journal/debug, three-browser multiplayer/extraction, emulated touch/settings and all 16 rooms/control approaches.
-- An earlier concurrent room audit missed a steering target; isolated audit and final sequential suite passed. Expensive browser files now run sequentially; multiplayer still uses three independent clients.
-- Actual HUD, journal, expanded map, touch journal, room captures and development debug overlay were inspected.
-- Fresh evaluation: reports/wings-v4-collision-evaluation.json. Generated scenarios, not visitor calibration; no recommendation improvement claimed.
+- `npm.cmd test`: 77 passing unit/integration tests.
+- Generated task QA: 44 passing cases across normal alternatives, emergency scopes/allocations, briefing, assignment, feasibility and analysis; snapshot continuation plus real SQLite restart/rejoin and socket reconnect coverage.
+- `npm.cmd run build`: passed; existing nonfatal WebGL vendor chunk-size advisory remains.
+- `npm.cmd run test:e2e`: 6/6 passed in the final sequential suite (3.4 minutes), including all 16 rooms, three-client joint extraction, stale-preview recovery and emulated landscape touch. See `docs/INDUSTRIAL-REVISION.md`. Fixtures use real keyboard movement and terminal controls; material-stale decisions follow the visible Refresh preview flow.
+- Fresh evaluation: `reports/industrial-v5-evaluation.json`, 16 held-out generated scenarios, 13 successful time pairs, Brier 0.1484375, remaining-time MAE 5.31 seconds. Generated checks are not visitor calibration or proof of human performance improvement.
+- Full report: [Industrial revision](docs/INDUSTRIAL-REVISION.md).
+- QA inventory: [Task QA matrix](docs/TASK-QA-MATRIX.md).
 
-Full findings and evidence: [Collision and journal verification](docs/COLLISION-JOURNAL-VERIFICATION.md).
+## Run
 
-## Running the project
-
-Workspace: C:\Jigsaw Trials, Windows PowerShell, Node 22.14. Stop an existing host with Ctrl+C, then:
+Stop the existing host with Ctrl+C, then:
 
 ```powershell
+Set-Location 'C:\Pokemon Day - Among Us'
 npm.cmd run build
 npm.cmd start
 ```
 
-Open http://localhost:8787/operator and create a NEW shift code. Use separate player browsers/contexts at /play; each chooses three companions and readies before the operator starts. Development: npm.cmd run dev. Development F9 toggles collision inspection.
+Open `http://localhost:8787/operator` and create a NEW shift. Both players join `/play`, select three companions, finalize, read the briefing and acknowledge **I understand — Ready** before the operator starts.
 
-Map: aster-wings-v4-collision. Scenario: ghost-shift-wings-v4-collision. Protocol: 5. Analytics: ghost-shift-wings-v4-collision-mc1. Older-map sessions are archived on host startup, preserving snapshots/history and credentials. Do not reset the production database or operator password.
+Map `aster-wings-v4-collision`, scenario `ghost-shift-wings-v5-decisions`, protocol **6**, model `ghost-shift-wings-v5-decisions-mc1`, service-worker cache `ghost-shift-industrial-decisions-5c`. Old scenario sessions are archived on startup; stored history remains. Do not reset the production database or operator credentials.
 
-No production database, private settings or credentials were modified during this revision. No deployment, agents or background host were started for the user; test servers close after verification.
+Private `.env`, production database and operator password were not modified. The user authorized committing and pushing this revision to `origin/main` on 2026-10-22. Previous pushed base is `c44fe5a`; use `git log -1` and `git status -sb` for the resulting revision and sync state. No deployment was requested. No user host is left running by this task; test servers close after verification.
 
-Physical phones/tablets, intended booth LAN, audio listening, sustained performance and visitor pacing remain on-site acceptance work. See docs/ACCEPTANCE.md. No specific stale build from the user's original live session was proven; reproduced code defects are distinguished from that uncertainty in the report.
+Physical phones/tablets, booth LAN, packet loss, audio listening, sustained performance and first-time visitor pacing remain on-site acceptance work. Existing Pokémon companions remain depth-tested billboards. Older reports are historical and do not validate the revised model.

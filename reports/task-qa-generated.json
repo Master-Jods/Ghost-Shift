@@ -1,0 +1,859 @@
+{
+  "generatedAt": "2026-10-21T16:10:46.569Z",
+  "scenario": "ghost-shift-wings-v5-decisions",
+  "source": "Isolated reducer fixtures; not visitor sessions or browser traversal",
+  "passed": 44,
+  "total": 44,
+  "rows": [
+    {
+      "name": "normal / circuit / full",
+      "category": "normal",
+      "kind": "circuit",
+      "option": "full",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "role",
+        "invalid input",
+        "reachability",
+        "completion",
+        "duplicate",
+        "resources",
+        "companion",
+        "receipt",
+        "extraction"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "normal / circuit / essential",
+      "category": "normal",
+      "kind": "circuit",
+      "option": "essential",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "role",
+        "invalid input",
+        "reachability",
+        "completion",
+        "duplicate",
+        "resources",
+        "companion",
+        "receipt",
+        "extraction"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "normal / signal / boost",
+      "category": "normal",
+      "kind": "signal",
+      "option": "boost",
+      "room": "comms",
+      "checks": [
+        "range",
+        "role",
+        "invalid input",
+        "reachability",
+        "completion",
+        "duplicate",
+        "resources",
+        "companion",
+        "receipt",
+        "extraction"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "normal / signal / standard",
+      "category": "normal",
+      "kind": "signal",
+      "option": "standard",
+      "room": "comms",
+      "checks": [
+        "range",
+        "role",
+        "invalid input",
+        "reachability",
+        "completion",
+        "duplicate",
+        "resources",
+        "companion",
+        "receipt",
+        "extraction"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "normal / calibrate / standard mechanism",
+      "category": "normal",
+      "kind": "calibrate",
+      "option": null,
+      "room": "containment",
+      "checks": [
+        "range",
+        "role",
+        "invalid input",
+        "reachability",
+        "completion",
+        "duplicate",
+        "resources",
+        "companion",
+        "receipt",
+        "extraction"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "normal / valves / standard mechanism",
+      "category": "normal",
+      "kind": "valves",
+      "option": null,
+      "room": "cooling",
+      "checks": [
+        "range",
+        "role",
+        "invalid input",
+        "reachability",
+        "completion",
+        "duplicate",
+        "resources",
+        "companion",
+        "receipt",
+        "extraction"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "normal / upload / standard mechanism",
+      "category": "normal",
+      "kind": "upload",
+      "option": null,
+      "room": "archive",
+      "checks": [
+        "range",
+        "role",
+        "invalid input",
+        "reachability",
+        "completion",
+        "duplicate",
+        "resources",
+        "companion",
+        "receipt",
+        "extraction"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "normal / access / standard mechanism",
+      "category": "normal",
+      "kind": "access",
+      "option": null,
+      "room": "security",
+      "checks": [
+        "range",
+        "role",
+        "invalid input",
+        "reachability",
+        "completion",
+        "duplicate",
+        "resources",
+        "companion",
+        "receipt",
+        "extraction"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "normal / fuse / standard mechanism",
+      "category": "normal",
+      "kind": "fuse",
+      "option": null,
+      "room": "workshop",
+      "checks": [
+        "range",
+        "role",
+        "invalid input",
+        "reachability",
+        "completion",
+        "duplicate",
+        "resources",
+        "companion",
+        "receipt",
+        "extraction"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "normal / containment / standard mechanism",
+      "category": "normal",
+      "kind": "containment",
+      "option": null,
+      "room": "reactor",
+      "checks": [
+        "range",
+        "role",
+        "invalid input",
+        "reachability",
+        "completion",
+        "duplicate",
+        "resources",
+        "companion",
+        "receipt",
+        "extraction"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / blackout / A / none",
+      "category": "emergency",
+      "kind": "blackout",
+      "scope": "A",
+      "plan": "none",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / blackout / B / none",
+      "category": "emergency",
+      "kind": "blackout",
+      "scope": "B",
+      "plan": "none",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / blackout / either / none",
+      "category": "emergency",
+      "kind": "blackout",
+      "scope": "either",
+      "plan": "none",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / blackout / both / none",
+      "category": "emergency",
+      "kind": "blackout",
+      "scope": "both",
+      "plan": "none",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / comms / A / none",
+      "category": "emergency",
+      "kind": "comms",
+      "scope": "A",
+      "plan": "none",
+      "room": "comms",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / comms / B / none",
+      "category": "emergency",
+      "kind": "comms",
+      "scope": "B",
+      "plan": "none",
+      "room": "comms",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / comms / either / none",
+      "category": "emergency",
+      "kind": "comms",
+      "scope": "either",
+      "plan": "none",
+      "room": "comms",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / comms / both / none",
+      "category": "emergency",
+      "kind": "comms",
+      "scope": "both",
+      "plan": "none",
+      "room": "comms",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / reactor / both / none",
+      "category": "emergency",
+      "kind": "reactor",
+      "scope": "both",
+      "plan": "none",
+      "room": "reactor",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / coolant / A / none",
+      "category": "emergency",
+      "kind": "coolant",
+      "scope": "A",
+      "plan": "none",
+      "room": "cooling",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / coolant / B / none",
+      "category": "emergency",
+      "kind": "coolant",
+      "scope": "B",
+      "plan": "none",
+      "room": "cooling",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / coolant / either / none",
+      "category": "emergency",
+      "kind": "coolant",
+      "scope": "either",
+      "plan": "none",
+      "room": "cooling",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / coolant / both / none",
+      "category": "emergency",
+      "kind": "coolant",
+      "scope": "both",
+      "plan": "none",
+      "room": "cooling",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / leak / both / none",
+      "category": "emergency",
+      "kind": "leak",
+      "scope": "both",
+      "plan": "none",
+      "room": "containment",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / lockdown / A / none",
+      "category": "emergency",
+      "kind": "lockdown",
+      "scope": "A",
+      "plan": "none",
+      "room": "security",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / lockdown / B / none",
+      "category": "emergency",
+      "kind": "lockdown",
+      "scope": "B",
+      "plan": "none",
+      "room": "security",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / lockdown / either / none",
+      "category": "emergency",
+      "kind": "lockdown",
+      "scope": "either",
+      "plan": "none",
+      "room": "security",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / lockdown / both / none",
+      "category": "emergency",
+      "kind": "lockdown",
+      "scope": "both",
+      "plan": "none",
+      "room": "security",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / corruption / A / none",
+      "category": "emergency",
+      "kind": "corruption",
+      "scope": "A",
+      "plan": "none",
+      "room": "archive",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / corruption / B / none",
+      "category": "emergency",
+      "kind": "corruption",
+      "scope": "B",
+      "plan": "none",
+      "room": "archive",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / corruption / either / none",
+      "category": "emergency",
+      "kind": "corruption",
+      "scope": "either",
+      "plan": "none",
+      "room": "archive",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / corruption / both / none",
+      "category": "emergency",
+      "kind": "corruption",
+      "scope": "both",
+      "plan": "none",
+      "room": "archive",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / overload / A / balanced",
+      "category": "emergency",
+      "kind": "overload",
+      "scope": "A",
+      "plan": "balanced",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / overload / A / priority",
+      "category": "emergency",
+      "kind": "overload",
+      "scope": "A",
+      "plan": "priority",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / overload / B / balanced",
+      "category": "emergency",
+      "kind": "overload",
+      "scope": "B",
+      "plan": "balanced",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / overload / B / priority",
+      "category": "emergency",
+      "kind": "overload",
+      "scope": "B",
+      "plan": "priority",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / overload / either / balanced",
+      "category": "emergency",
+      "kind": "overload",
+      "scope": "either",
+      "plan": "balanced",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / overload / either / priority",
+      "category": "emergency",
+      "kind": "overload",
+      "scope": "either",
+      "plan": "priority",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / overload / both / balanced",
+      "category": "emergency",
+      "kind": "overload",
+      "scope": "both",
+      "plan": "balanced",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "incident / overload / both / priority",
+      "category": "emergency",
+      "kind": "overload",
+      "scope": "both",
+      "plan": "priority",
+      "room": "electrical",
+      "checks": [
+        "range",
+        "scope",
+        "wrong input",
+        "partner",
+        "resource once",
+        "coordination retry",
+        "carrier",
+        "resolution",
+        "expiry",
+        "cancellation"
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "briefing is authoritative, time-free, and retained across reconnect snapshots",
+      "category": "briefing",
+      "status": "passed"
+    },
+    {
+      "name": "assistance cannot be repeated and assignment releases on completion or cancellation",
+      "category": "assignment",
+      "status": "passed"
+    },
+    {
+      "name": "free choices remain feasible with zero energy and unavailable or fatigued companions",
+      "category": "feasibility",
+      "status": "passed"
+    },
+    {
+      "name": "analysis refresh keys ignore frame/look churn and player forecasts exclude unseen remote threats",
+      "category": "analysis",
+      "status": "passed"
+    }
+  ]
+}

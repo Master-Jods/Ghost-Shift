@@ -1,3 +1,5 @@
+import {BRIEFING_VERSION} from '../src/engine';
+import {acknowledgeBriefing} from './helpers';
 import {test,expect} from '@playwright/test';
 import {createServer,type ViteDevServer} from 'vite';
 import react from '@vitejs/plugin-react';
@@ -17,8 +19,8 @@ test('live journal, TAB ownership, tracked markers and development collision ins
   let seq=1;const command=(role:'B'|'control',type:string,value?:unknown)=>app.command(room,{id:role==='B'?joined.participantId:'journal-fixture',role,sessionId:room.state.id},{id:randomUUID(),seq:seq++,type,value});
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(base+`play?role=A&code=${room.state.code}`);await page.getByRole('button',{name:'JOIN SERVER SESSION',exact:true}).click();
   for(const id of [25,7,94]){await page.getByRole('textbox',{name:/Search Pok/}).fill(String(id));await page.locator('.catalog-grid').getByRole('button',{name:'Select',exact:true}).click();}
-  await page.getByRole('button',{name:'Finalize three companions'}).click();await page.getByRole('button',{name:/M READY/,exact:true}).click();
-  expect(command('B','TEAM',[1,4,7]).ok).toBe(true);expect(command('B','READY').ok).toBe(true);expect(command('control','START').ok).toBe(true);
+  await page.getByRole('button',{name:'Finalize three companions'}).click();await page.getByRole('button',{name:'Read field briefing',exact:true}).click();await acknowledgeBriefing(page);
+  expect(command('B','TEAM',[1,4,7]).ok).toBe(true);expect(command('B','ACK_BRIEFING',BRIEFING_VERSION).ok).toBe(true);expect(command('control','START').ok).toBe(true);
   const canvas=page.locator('.first-person');await expect.poll(()=>room.state.phase).toBe('playing');await expect(canvas).toHaveAttribute('data-renderer','webgl');
   await expect(page.getByLabel('Development collision debug')).toHaveCount(0);await page.keyboard.press('F9');await expect(page.getByLabel('Development collision debug')).toBeVisible();await expect(page.locator('[data-debug-player="A"]')).toHaveAttribute('r','11');await page.screenshot({path:'.qa/collision-debug-v4.png'});await page.keyboard.press('F9');
   const map=page.locator('.player-minimap:not(.expanded)');expect((await map.boundingBox())!.width).toBeGreaterThanOrEqual(435);expect(await map.locator('text').count()).toBe(16);expect(await map.locator('text').first().evaluate(el=>getComputedStyle(el).fontSize)).toBe('10.5px');

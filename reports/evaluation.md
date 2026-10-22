@@ -1,4 +1,4 @@
-> Historical v1 report. Current geometry/model evidence: [v4 collision evaluation](wings-v4-collision-evaluation.json) and [interpretation](../docs/ANALYTICS.md).
+> Historical v1 report. Current model evidence: [v5 industrial evaluation](industrial-v5-evaluation.json) and [interpretation](../docs/ANALYTICS.md).
 
 # Actual Ghost Shift evaluation
 

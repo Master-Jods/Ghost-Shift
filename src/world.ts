@@ -15,7 +15,7 @@ export type MapState = {
         disabledEffect: boolean;
         doorId?: string;
     }[];
-    tasks?: {
+    systems?:{wingPower:string|null};tasks?: {
         complete: boolean;
         unlock?: string;
     }[];
@@ -171,7 +171,7 @@ export const gateDefinitions = [
     { id: 'hub-shortcut', x: 650, y: 365, w: 14, h: 70, unlock: 'access', name: 'Medical / central research shortcut' },
     { id: 'east-shortcut', x: 995, y: 630, w: 70, h: 14, unlock: 'containment', name: 'Eastern service bypass' }
 ];
-export function doors(state?: MapState | number, _allocation?: string | null, _ready?: boolean) { const s = typeof state === 'object' ? state : {}; return gateDefinitions.map(d => ({ ...d, locked: !!s.threats?.some(t => t.status === 'active' && (s.worldTime ?? 0) >= t.activeAt && t.behavior === 'seal' && !t.disabledEffect && t.doorId === d.id) || !!s.emergencies?.some(e => e.status === 'active' && e.kind === 'lockdown' && e.doorId === d.id) || !!s.tasks?.some(t => t.unlock === d.unlock && !t.complete) })); }
+export function doors(state?: MapState | number, _allocation?: string | null, _ready?: boolean) { const s = typeof state === 'object' ? state : {}; return gateDefinitions.map(d => ({ ...d, locked: !!s.threats?.some(t => t.status === 'active' && (s.worldTime ?? 0) >= t.activeAt && t.behavior === 'seal' && !t.disabledEffect && t.doorId === d.id) || !!s.emergencies?.some(e => e.status === 'active' && e.kind === 'lockdown' && e.doorId === d.id) || !!s.tasks?.some(t => t.unlock === d.unlock && !t.complete)&&!(d.id==='hub-shortcut'&&s.systems?.wingPower==='full') })); }
 export const spawn = { A: { x: 265, y: 195 }, B: { x: 335, y: 195 } };
 export const contains = (r: Rect, p: Vec, pad = 0) => p.x >= r.x - pad && p.x <= r.x + r.w + pad && p.y >= r.y - pad && p.y <= r.y + r.h + pad;
 export const distance = (a: Vec, b: Vec) => Math.hypot(a.x - b.x, a.y - b.y);

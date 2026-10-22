@@ -1,5 +1,7 @@
 # Ghost Shift verification and physical acceptance
 
+Current 2026-10-21 revision: [industrial interface, tradeoffs and analytics](INDUSTRIAL-REVISION.md), [task QA matrix](TASK-QA-MATRIX.md). Older dated results below are historical.
+
 Current revision: 2026-10-20, Windows / Node 22.14. See [collision and task journal verification](COLLISION-JOURNAL-VERIFICATION.md) for current geometry, cache agreement, journal/input behavior and screenshots. The 2026-10-19 checks below remain historical evidence.
 
 ## Automated checks

@@ -1,3 +1,5 @@
+import {BRIEFING_VERSION} from '../src/engine';
+import {acknowledgeBriefing} from './helpers';
 import {MAP_SIGNATURE} from '../src/world';
 import { test, expect, type Page } from '@playwright/test';
 import { WebSocket } from 'ws';
@@ -26,10 +28,10 @@ test('landscape touch movement/look, mixer, accessibility, quality and overlay i
         await page.locator('.catalog-grid').getByRole('button', { name: 'Select', exact: true }).click();
     }
     await page.getByRole('button', { name: 'Finalize three companions' }).click();
-    await expect(page.getByRole('button', { name: 'I’M READY', exact: true })).toBeEnabled();
-    await page.getByRole('button',{name:'Replace team slot 1',exact:true}).click();await page.getByRole('textbox',{name:'Search Pokémon by name or ID'}).fill('1');await page.getByRole('button',{name:'Replace slot 1',exact:true}).click();await expect(page.getByRole('button',{name:'I’M READY',exact:true})).toBeDisabled();await page.getByRole('button',{name:'Finalize three companions'}).click();await expect(page.getByRole('button',{name:'I’M READY',exact:true})).toBeEnabled();await page.getByRole('button', { name: 'I’M READY', exact: true }).click();
+    await expect(page.getByRole('button', { name:'Read field briefing', exact: true })).toBeEnabled();
+    await page.getByRole('button',{name:'Replace team slot 1',exact:true}).click();await page.getByRole('textbox',{name:'Search Pokémon by name or ID'}).fill('1');await page.getByRole('button',{name:'Replace slot 1',exact:true}).click();await expect(page.getByRole('button',{name:'Read field briefing',exact:true})).toBeDisabled();await page.getByRole('button',{name:'Finalize three companions'}).click();await expect(page.getByRole('button',{name:'Read field briefing',exact:true})).toBeEnabled();await page.getByRole('button', { name:'Read field briefing', exact: true }).click();await acknowledgeBriefing(page);
     expect(command('B', 'TEAM', [1, 4, 7]).ok).toBe(true);
-    expect(command('B', 'READY').ok).toBe(true);
+    expect(command('B','ACK_BRIEFING',BRIEFING_VERSION).ok).toBe(true);
     expect(command('control', 'START').ok).toBe(true);
     await expect(page.locator('.first-person')).toBeVisible();
     await expect(page.locator('.first-person')).toHaveAttribute('data-renderer','webgl');await page.keyboard.press('F9');await expect(page.getByLabel('Development collision debug')).toHaveCount(0);
@@ -82,6 +84,7 @@ test('landscape touch movement/look, mixer, accessibility, quality and overlay i
     await expect(page.locator('.fps-counter')).toContainText('FPS');
     const marker=page.locator('[data-map-player="A"]');expect(Math.abs(Number(await marker.getAttribute('data-world-x'))-room.state.players.A.position.x)).toBeLessThan(12);
     await page.getByRole('button',{name:'Tasks',exact:true}).tap();await expect(page.getByRole('dialog',{name:'journal overlay'})).toBeVisible();await page.screenshot({path:'.qa/journal-touch-v4.png'});await page.getByRole('button',{name:'Close overlay',exact:true}).tap();await page.screenshot({path:'.qa/wings-touch.png'});await page.getByRole('button',{name:'Objectives',exact:true}).click();await expect(page.locator('.player-minimap.expanded')).toBeVisible();await page.screenshot({path:'.qa/wings-expanded-map.png'});await page.getByRole('button',{name:'Close overlay',exact:true}).click();
+    await page.setViewportSize({width:844,height:390});await expect(page.locator('.task-tracker')).toHaveClass(/collapsed/);const trackerBox=await page.getByLabel('Task tracker').boundingBox(),stickBox=await page.getByLabel('Touch movement joystick').boundingBox();expect(trackerBox!.y+trackerBox!.height).toBeLessThanOrEqual(stickBox!.y);await page.screenshot({path:'.qa/industrial-phone.png',animations:'disabled'});await page.getByRole('button',{name:'Tasks',exact:true}).tap();await expect(page.getByRole('dialog',{name:'journal overlay'})).toBeVisible();await page.screenshot({path:'.qa/industrial-phone-journal.png',animations:'disabled'});await page.getByRole('button',{name:'Close overlay',exact:true}).tap();
     expect(errors).toEqual([]);
 }
 finally {
