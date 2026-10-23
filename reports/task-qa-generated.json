@@ -1,10 +1,30 @@
 {
-  "generatedAt": "2026-10-21T16:10:46.569Z",
-  "scenario": "ghost-shift-wings-v5-decisions",
+  "generatedAt": "2026-10-22T07:41:46.071Z",
+  "scenario": "ghost-shift-wings-v6-third-person",
   "source": "Isolated reducer fixtures; not visitor sessions or browser traversal",
-  "passed": 44,
-  "total": 44,
+  "passed": 45,
+  "total": 45,
   "rows": [
+    {
+      "name": "normal / wiring / standard mechanism",
+      "category": "normal",
+      "kind": "wiring",
+      "option": null,
+      "room": "electrical",
+      "checks": [
+        "range",
+        "role",
+        "invalid input",
+        "reachability",
+        "completion",
+        "duplicate",
+        "resources",
+        "companion",
+        "receipt",
+        "extraction"
+      ],
+      "status": "passed"
+    },
     {
       "name": "normal / circuit / full",
       "category": "normal",

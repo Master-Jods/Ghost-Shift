@@ -4,3 +4,6 @@ export function journalTabIntent({playing,typing,modified,overlay,gameSurface,jo
  if(overlay==='journal')return journalSurface?'close':null;
  return overlay===null&&gameSurface?'open':null;
 }
+
+/** Fixed north-up camera movement shared by keyboard and touch. */
+export function cameraInput(forward:number,strafe:number){const length=Math.max(1,Math.hypot(forward,strafe));return {x:strafe/length,y:-forward/length};}

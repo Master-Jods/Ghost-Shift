@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import * as T from 'three';
 import { buildFacility } from './facility3d';
-import LegacyFirstPerson from './LegacyFirstPerson';
+import {directionRow,animationState,trainerFrame,pokemonPose,attackColor} from './animation';
+import GhostMap from './GhostMap';
 import { rooms, doors, center, walkable, distance, type Vec } from './world';
 import { art, sprite, backSprite } from './data';
 import type { State } from './engine';
@@ -11,12 +12,9 @@ type Props = {
     state: State;
     role: 'A' | 'B';
     yaw: number;
-    pitch: number;
     inputEnabled: boolean;
     flashlight: boolean;
     reduced: boolean;
-    onLook: (dx: number, dy: number) => void;
-    onLock: (value: boolean) => void;
     settings?: PresentationSettings;
     tracked?: {id:string;position:Vec};
     focus?: {
@@ -26,7 +24,7 @@ type Props = {
         kind: string;
     };
 };
-export default function FirstPerson(props: Props) { const [failed, setFailed] = useState(false); return failed ? <><LegacyFirstPerson {...props}/><div className="renderer-warning">WebGL unavailable: compatibility renderer · vertical look and 3D shadows unavailable</div></> : <WorldView {...props} onFailure={() => setFailed(true)}/>; }
+export default function ThirdPerson(props: Props) { const [failed,setFailed]=useState(false);return failed?<div className="compat-world"><GhostMap state={props.state}/><div className="renderer-warning">WebGL unavailable. Labeled overhead compatibility view; keyboard and touch movement remain active.</div></div>:<WorldView {...props} onFailure={()=>setFailed(true)}/>; }
 function WorldView(props: Props & {
     onFailure: () => void;
 }) {
@@ -49,7 +47,7 @@ function WorldView(props: Props & {
         const scene = new T.Scene();
         scene.background = new T.Color('#263238');
         scene.fog = new T.FogExp2('#263238', .00105);
-        const facility = buildFacility(scene), camera = new T.PerspectiveCamera(65, 1, 1, 2000);
+        const facility = buildFacility(scene,true), camera = new T.PerspectiveCamera(48, 1, 1, 2000);
         camera.rotation.order = 'YXZ';
         const hemi = new T.HemisphereLight('#d8e6e4', '#6c6552', 2.1);
         scene.add(hemi);
@@ -117,8 +115,9 @@ function WorldView(props: Props & {
             catch {
                 entryRef.ready = true;
             } };
-            img.onerror = () => { if (fallback++ < 2)
-                img.src = fallback === 1 ? sprite(id) : art(id); };
+            img.onerror=()=>{if(disposed)return;if(fallback++<2){img.src=fallback===1?sprite(id):art(id);return;}
+              const ctx=c.getContext('2d')!;ctx.clearRect(0,0,256,256);ctx.fillStyle='#1c3338';ctx.fillRect(20,46,216,164);ctx.strokeStyle='#a8b8a1';ctx.lineWidth=4;ctx.strokeRect(20,46,216,164);ctx.textAlign='center';ctx.fillStyle='#eee0bd';ctx.font='bold 25px monospace';ctx.fillText('POKÉMON #'+id,128,112);ctx.font='17px monospace';ctx.fillText('ART UNAVAILABLE',128,151);entryRef.width=216;entryRef.height=164;entryRef.ready=true;tx.needsUpdate=true;
+            };
             img.src = back ? backSprite(id) : art(id);
             if (textureCache.size > 64) {
                 for (const [oldKey, old] of textureCache) {
@@ -154,7 +153,7 @@ function WorldView(props: Props & {
         const gateMat = new T.MeshStandardMaterial({ color: '#596d6d', metalness: .5, roughness: .6 });
         dynamicMaterials.push(gateMat);
         for (const d of doors()) {
-            const geo = new T.BoxGeometry(d.w, 100, d.h), mesh = new T.Mesh(geo, gateMat);
+            const geo = new T.BoxGeometry(d.w, 32, d.h), mesh = new T.Mesh(geo, gateMat);
             dynamicGeometry.push(geo);
             mesh.position.set(d.x + d.w / 2, 50, d.y + d.h / 2);
             mesh.castShadow = mesh.receiveShadow = true;
@@ -171,41 +170,22 @@ function WorldView(props: Props & {
         fxGeo.rotateX(-Math.PI / 2);
         dynamicGeometry.push(fxGeo);
         const fx = Array.from({ length: 24 }, () => { const m = new T.MeshBasicMaterial({ color: '#a6e4d1', transparent: true, depthWrite: false, side: T.DoubleSide }); dynamicMaterials.push(m); const mesh = new T.Mesh(fxGeo, m); scene.add(mesh); mesh.visible = false; return mesh; });
-        // Original solid scanner, glove and sleeve, rendered in a camera-attached tool scene.
-        const toolScene = new T.Scene(), toolCamera = new T.PerspectiveCamera(60, 1, .01, 10), tool = new T.Group();
-        toolScene.add(tool);
-        toolScene.add(new T.HemisphereLight('#e8e2d0', '#22312e', 3));
-        const toolLight = new T.DirectionalLight('#fff4d7', 2);
-        toolLight.position.set(1, 2, 2);
-        toolScene.add(toolLight);
-        const toolMat = new T.MeshStandardMaterial({ color: '#52645c', roughness: .8, metalness: .25 }), gloveMat = new T.MeshStandardMaterial({ color: '#7b7960', roughness: .9 }), darkMat = new T.MeshStandardMaterial({ color: '#1d2d2e', roughness: .8 });
-        dynamicMaterials.push(toolMat, gloveMat, darkMat);
-        function part(w: number, h: number, d: number, x: number, y: number, z: number, m: T.Material) { const geo = new T.BoxGeometry(w, h, d); dynamicGeometry.push(geo); const mesh = new T.Mesh(geo, m); mesh.position.set(x, y, z); tool.add(mesh); return mesh; }
-        part(.17, .24, .12, 0, 0, 0, toolMat);
-        part(.13, .1, .01, 0, .04, .065, darkMat);
-        part(.06, .16, .08, -.015, -.17, .03, gloveMat);
-        part(.1, .28, .11, .02, -.32, -.01, toolMat);
-        part(.1, .02, .15, 0, .13, 0, darkMat);
-        const screenCanvas = document.createElement('canvas');
-        screenCanvas.width = 256;
-        screenCanvas.height = 128;
-        const stx = new T.CanvasTexture(screenCanvas);
-        stx.colorSpace = T.SRGBColorSpace;
-        dynamicTextures.push(stx);
-        const screenMat = new T.MeshBasicMaterial({ map: stx });
-        dynamicMaterials.push(screenMat);
-        part(.115, .075, .005, 0, .043, .073, screenMat);
-        let frame = 0, last = performance.now(), fpsAt = last, frames = 0, lastScreen = '', visual = { ...latest.current.state.players[latest.current.role].position }, previous = { ...visual }, lookYaw = latest.current.yaw, lookPitch = latest.current.pitch, walk = 0, steps = 0, travelled = 0, cpu = 0, samples = 0, quality = '', w = 0, h = 0;
+        const trainerTextures = new Map<string,T.Texture>();
+        for(const role of ['A','B']){const tx=new T.TextureLoader().load('/trainers/'+role.toLowerCase()+'-atlas.svg');tx.colorSpace=T.SRGBColorSpace;tx.minFilter=T.LinearFilter;tx.magFilter=T.NearestFilter;tx.repeat.set(1/30,1/4);trainerTextures.set(role,tx);dynamicTextures.push(tx);}
+        const attackTrails=new Map<string,T.Line<T.BufferGeometry,T.LineBasicMaterial>>();
+        const threatMemory=new Map<string,{hp:number;hitAt:number}>();
+        const billboardUp=new T.Vector3();
+        const groundBillboard=(mesh:T.Mesh,x:number,z:number,height:number,pivot=1)=>{billboardUp.set(0,1,0).applyQuaternion(camera.quaternion);mesh.position.set(x,.5,z).addScaledVector(billboardUp,height*(pivot-.5));};
+        const motionData=new Map<string,{position:Vec;travel:number;speed:number}>();
+        const effectMaterial=new T.MeshBasicMaterial({color:'#b9a0e7',transparent:true,opacity:.5,depthWrite:false,side:T.DoubleSide});dynamicMaterials.push(effectMaterial);
+        const effects=new Map<string,T.Mesh<T.RingGeometry,T.MeshBasicMaterial>>();
+        let frame = 0, last = performance.now(), fpsAt = last, frames = 0, lastScreen = '', visual = { ...latest.current.state.players[latest.current.role].position }, previous = { ...visual }, walk = 0, steps = 0, travelled = 0, cpu = 0, samples = 0, quality = '', w = 0, h = 0;
         const unlock = () => void audio.unlock(latest.current.settings || defaultPresentation), unlockSettings = (e: Event) => void audio.unlock((e as CustomEvent<PresentationSettings>).detail);
         const enabled = () => latest.current.inputEnabled && !document.hidden && document.hasFocus();
-        const mouse = (e: MouseEvent) => { if (document.pointerLockElement === canvas && enabled())
-            latest.current.onLook(e.movementX, e.movementY); };
-        const lock = () => latest.current.onLock(document.pointerLockElement === canvas);
         const blur = () => audio.configure(latest.current.settings || defaultPresentation, false);
         const contextLost = (e: Event) => { e.preventDefault(); latest.current.onFailure(); };
         const intent = () => { const v = latest.current, p = v.state.players[v.role]; audio.play('submitted', p.position, p.position, v.yaw); timeline.push('submitted', p.position, 'Transmitting', performance.now()); };
-        document.addEventListener('mousemove', mouse);
-        document.addEventListener('pointerlockchange', lock);
+
         document.addEventListener('pointerdown', unlock);
         document.addEventListener('keydown', unlock);
         window.addEventListener('ghost-audio-unlock', unlockSettings);
@@ -223,8 +203,8 @@ function WorldView(props: Props & {
                 h = nextH;
                 renderer.setSize(w, h, false);
                 camera.aspect = w / h;
-                toolCamera.aspect = w / h;
-                toolCamera.updateProjectionMatrix();
+
+
                 canvas.dataset.renderResolution = w + 'x' + h;
             }
             const q = o.quality + ':' + o.shadows;
@@ -236,7 +216,7 @@ function WorldView(props: Props & {
                 flash.shadow.map?.dispose();
                 flash.shadow.map = null;
             }
-            camera.fov = 2 * Math.atan(Math.tan(o.fov * Math.PI / 360) / camera.aspect) * 180 / Math.PI;
+            camera.fov = 48;
             camera.updateProjectionMatrix();
             for(const fixture of facility.fixtures)fixture.rotation.z=o.reducedMotion?0:Math.sin(now*.0007)*.045;
             const moved = distance(previous, p.position);
@@ -251,24 +231,18 @@ function WorldView(props: Props & {
             const blend = 1 - Math.exp(-25 * dt);
             visual.x += (p.position.x - visual.x) * blend;
             visual.y += (p.position.y - visual.y) * blend;
-            if (!o.smoothing || !v.inputEnabled) {
-                lookYaw = v.yaw;
-                lookPitch = v.pitch;
-            }
-            else {
-                lookYaw += Math.atan2(Math.sin(v.yaw - lookYaw), Math.cos(v.yaw - lookYaw)) * (1 - Math.exp(-32 * dt));
-                lookPitch += (v.pitch - lookPitch) * (1 - Math.exp(-32 * dt));
-            }
             const cues = timeline.observe(s, v.role, now);
             for (const cue of cues) {
                 audio.play(cue.kind, cue.position, p.position, v.yaw);
                 window.dispatchEvent(new CustomEvent('ghost-feedback', { detail: cue }));
             }
             const active = timeline.active(now), shake = !o.reducedMotion ? active.filter(c => c.kind === 'impact').reduce((n, c) => n + (1 - cueProgress(c, now)) * .3 * o.cameraShake, 0) : 0;
-            camera.position.set(visual.x, 42 + (!o.reducedMotion ? Math.sin(walk) * o.headBob * .8 : 0) + Math.sin(now * .1) * shake, visual.y);
-            camera.rotation.set(lookPitch, -lookYaw - Math.PI / 2, 0, 'YXZ');
-            canvas.dataset.yaw = String(v.yaw);
-            canvas.dataset.pitch = String(v.pitch);
+            // Fixed north-up elevated camera. Roofs are omitted; walls use a 24-unit cutaway.
+            // The camera stays above every installation, so it never collides or snaps at doorways.
+            camera.position.set(visual.x,340,visual.y+260);
+            camera.lookAt(visual.x,0,visual.y-20);
+            canvas.dataset.camera='third-person';
+            canvas.dataset.yaw=String(v.yaw);canvas.dataset.pitch='fixed';
             const black = s.emergencies.some(e => e.status === 'active' && e.kind === 'blackout' && ['either', 'both', v.role].includes(e.scope)), danger = s.threats.find(t => t.status === 'active' && s.worldTime >= t.activeAt && !t.disabledEffect && distance(t.position, p.position) < 210);
             hemi.intensity = black ? .55 : 1.8;
             sun.intensity = black ? .12 : .6;
@@ -280,8 +254,8 @@ function WorldView(props: Props & {
             const nearest = [...rooms].sort((a, b) => distance(center(a.id), p.position) - distance(center(b.id), p.position)).slice(0, 3);
             pools.forEach((light, i) => { const r = nearest[i]; light.position.set(r.x + r.w / 2, 88, r.y + r.h / 2); light.intensity = black ? 150 : 3100; });
             flash.visible = v.flashlight;
-            flash.position.copy(camera.position);
-            flash.target.position.set(visual.x + Math.cos(v.yaw) * 180, 42 + Math.tan(v.pitch) * 180, visual.y + Math.sin(v.yaw) * 180);
+            flash.position.set(visual.x,70,visual.y);
+            flash.target.position.set(visual.x + Math.cos(v.yaw) * 180, 0, visual.y + Math.sin(v.yaw) * 180);
             audio.configure(o, !document.hidden && document.hasFocus());
             canvas.dataset.audio = audio.ready ? 'running' : 'locked-or-muted';
             if (steps > 70) {
@@ -290,7 +264,7 @@ function WorldView(props: Props & {
             }
             for (const d of doors(s)) {
                 const mesh = gateMeshes.get(d.id)!;
-                const target = d.locked ? 50 : 158;
+                const target = d.locked ? 16 : -80;
                 mesh.position.y += (target - mesh.position.y) * (1 - Math.exp(-12 * dt));
             }
             const visibleObjectives = s.tasks.filter(t => !t.complete && (t.role === v.role || t.role === 'both'));
@@ -312,50 +286,34 @@ function WorldView(props: Props & {
                 ent = { mesh, shadow, id, pos: { ...pos } };
                 entities.set(key, ent);
             } const tex = pokemonTexture(id, back); if (distance(ent.pos, pos) > 120)
-                ent.pos = { ...pos }; ent.pos.x += (pos.x - ent.pos.x) * blend; ent.pos.y += (pos.y - ent.pos.y) * blend; ent.mesh.material.map = tex.texture; ent.mesh.material.opacity = alpha; ent.mesh.material.emissive.set(alpha < 1 ? '#569d9c' : '#000000'); ent.mesh.material.emissiveIntensity = alpha < 1 ? .5 : 0; ent.mesh.visible = tex.ready; ent.mesh.position.set(ent.pos.x, height / 2, ent.pos.y); ent.mesh.rotation.y = -v.yaw + Math.PI / 2; ent.mesh.scale.set(height * tex.width / tex.height, height, 1); ent.shadow.position.set(ent.pos.x, .55, ent.pos.y); ent.shadow.visible = o.shadows && alpha > .1; };
-            for (const r of ['A', 'B'] as const) {
-                const player = s.players[r];
-                const away = Math.cos(player.yaw) * (visual.x - player.follower.x) + Math.sin(player.yaw) * (visual.y - player.follower.y) < 0;
-                if (r !== v.role || distance(player.follower, p.position) > 50)
-                    show('companion-' + r, player.selected, player.follower, 27, away, r === v.role ? Math.min(1, (distance(player.follower, p.position) - 50) / 20) : 1);
-                if (r !== v.role && player.position.x >= 0) {
-                    // Other trainer uses original simple volumetric equipment silhouette, not a Pokemon asset.
-                    const key = 'trainer-' + r;
-                    desired.add(key);
-                    let ent = entities.get(key);
-                    if (!ent) {
-                        const c = document.createElement('canvas');
-                        c.width = 128;
-                        c.height = 256;
-                        const ctx = c.getContext('2d')!;
-                        ctx.fillStyle = '#9aab9c';
-                        ctx.fillRect(43, 15, 43, 43);
-                        ctx.fillStyle = '#4c6668';
-                        ctx.fillRect(32, 60, 65, 105);
-                        ctx.fillStyle = '#243b3e';
-                        ctx.fillRect(35, 165, 23, 90);
-                        ctx.fillRect(73, 165, 23, 90);
-                        const texture = new T.CanvasTexture(c);
-                        dynamicTextures.push(texture);
-                        const m = new T.MeshStandardMaterial({ map: texture, transparent: true, alphaTest: .1, side: T.DoubleSide });
-                        dynamicMaterials.push(m);
-                        const mesh = new T.Mesh(plane, m), shadow = new T.Mesh(plane, shadowMat);
-                        shadow.rotation.x = -Math.PI / 2;
-                        shadow.scale.set(30, 22, 1);
-                        scene.add(mesh, shadow);
-                        ent = { mesh, shadow, id: 0, pos: { ...player.position } };
-                        entities.set(key, ent);
-                    }
-                    ent.mesh.position.set(player.position.x, 25, player.position.y);
-                    ent.mesh.rotation.y = -v.yaw + Math.PI / 2;
-                    ent.mesh.scale.set(25, 50, 1);
-                    ent.shadow.position.set(player.position.x, .5, player.position.y);
-                    ent.shadow.visible = o.shadows;
-                }
+                ent.pos = { ...pos }; ent.pos.x += (pos.x - ent.pos.x) * blend; ent.pos.y += (pos.y - ent.pos.y) * blend; ent.mesh.material.map = tex.texture; ent.mesh.material.opacity = alpha; ent.mesh.material.emissive.set(alpha < 1 ? '#569d9c' : '#000000'); ent.mesh.material.emissiveIntensity = alpha < 1 ? .5 : 0; ent.mesh.visible = tex.ready; ent.mesh.position.set(ent.pos.x, height / 2, ent.pos.y); ent.mesh.quaternion.copy(camera.quaternion); const width=Math.min(height*1.7,height*tex.width/tex.height),boundedHeight=width*tex.height/tex.width;ent.mesh.scale.set(width,boundedHeight,1);groundBillboard(ent.mesh,ent.pos.x,ent.pos.y,boundedHeight); ent.shadow.position.set(ent.pos.x, .55, ent.pos.y); ent.shadow.visible = o.shadows && alpha > .1; };
+            const moving=(key:string,pos:Vec)=>{let m=motionData.get(key);if(!m){m={position:{...pos},travel:0,speed:0};motionData.set(key,m);}const d=distance(pos,m.position);if(d<80){m.travel+=d;m.speed+=(d/Math.max(dt,.001)-m.speed)*(1-Math.exp(-14*dt));}else{m.travel=0;m.speed=0;}m.position={...pos};return m;};
+            for (const r of ['A','B'] as const) {
+                const player=s.players[r],m=moving('trainer-'+r,player.position),state=animationState(player,s.worldTime,s.paused?0:m.speed,s.phase==='success');
+                const key='trainer-'+r;desired.add(key);let ent=entities.get(key);
+                if(!ent){const mat=new T.MeshStandardMaterial({map:trainerTextures.get(r),transparent:true,alphaTest:.1,roughness:1,side:T.DoubleSide});dynamicMaterials.push(mat);const mesh=new T.Mesh(plane,mat),shadow=new T.Mesh(plane,shadowMat);shadow.rotation.x=-Math.PI/2;shadow.scale.set(25,19,1);scene.add(mesh,shadow);ent={mesh,shadow,id:0,pos:{...player.position}};entities.set(key,ent);}
+                ent.pos.x+=(player.position.x-ent.pos.x)*blend;ent.pos.y+=(player.position.y-ent.pos.y)*blend;
+                const f=trainerFrame(state,s.worldTime,m.travel,player.motion?.at),row=directionRow(player.yaw),tx=trainerTextures.get(r)!;tx.offset.set(f.column/30,(3-row)/4);
+                groundBillboard(ent.mesh,ent.pos.x,ent.pos.y,52,120/128);ent.mesh.rotation.set(0,0,0);ent.mesh.quaternion.copy(camera.quaternion);ent.mesh.scale.set(39,52,1);ent.mesh.visible=true;
+                ent.shadow.position.set(ent.pos.x,.6,ent.pos.y);ent.shadow.visible=o.shadows;
+                canvas.dataset['trainer'+r]=f.state+':'+row+':'+f.frame;
+                const away=Math.sin(player.yaw)<-.5;
+                show('companion-'+r,player.selected,player.follower,31,away,1);
+                const mon=entities.get('companion-'+r),mm=moving('companion-'+r,player.follower),ms=animationState(player,s.worldTime,s.paused?0:mm.speed,s.phase==='success'),pose=pokemonPose(ms,s.worldTime-(player.motion?.at||0),mm.travel,o.reducedMotion);
+                if(mon){mon.mesh.quaternion.copy(camera.quaternion);const baseHeight=mon.mesh.scale.y;mon.mesh.scale.y*=pose.squash;groundBillboard(mon.mesh,mon.pos.x+Math.cos(player.yaw)*pose.x,mon.pos.y+Math.sin(player.yaw)*pose.x,baseHeight*pose.squash);mon.mesh.rotateZ(pose.lean);canvas.dataset['pokemon'+r]=ms+':procedural';}
+                let trail=attackTrails.get(r);if(!trail){const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(new Float32Array(36),3));dynamicGeometry.push(geometry);const material=new T.LineBasicMaterial({color:'#eee4c8',transparent:true,opacity:.85});dynamicMaterials.push(material);trail=new T.Line(geometry,material);attackTrails.set(r,trail);scene.add(trail);}
+                const target=s.threats.find(t=>t.instanceId===player.encounterId&&t.status==='active'),types=player.team[player.selected]?.record?.types||[],age=s.worldTime-(player.motion?.at||0);
+                trail.visible=ms==='attack'&&!!target&&age<.85;
+                if(target&&trail.visible){const positions=trail.geometry.getAttribute('position');for(let j=0;j<12;j++){const u=j/11,flare=Math.sin(u*Math.PI),zig=types.includes('electric')?(j%2?5:-5)*flare:types.includes('fire')?Math.sin(j*2+age*24)*flare*5:0;positions.setXYZ(j,player.follower.x+(target.position.x-player.follower.x)*u+zig,12+flare*(types.includes('water')?24:types.includes('grass')?9:15),player.follower.y+(target.position.y-player.follower.y)*u+zig);}positions.needsUpdate=true;trail.material.color.set(attackColor(types));trail.material.opacity=Math.max(0,1-age/.85);}
+                let effect=effects.get(r);if(!effect){const mat=effectMaterial.clone();dynamicMaterials.push(mat);effect=new T.Mesh(fxGeo,mat);effects.set(r,effect);scene.add(effect);}
+                effect.visible=!!pose.effect&&!!mon;effect.position.set(player.follower.x,1,player.follower.y);effect.scale.setScalar(pose.effect==='shield'?2.2:1.4+pose.intensity*2);effect.material.color.set(pose.effect==='attack'?attackColor(player.team[player.selected]?.record?.types):pose.effect==='rest'?'#94dfaf':pose.effect==='shield'?'#88d5f2':'#cf9be9');effect.material.opacity=.25+pose.intensity*.4;
             }
             for (const t of s.threats.filter(t => t.status === 'active')) {
                 const telegraph = Math.max(.2, Math.min(1, 1 - (t.activeAt - s.worldTime) / 3));
                 show(t.instanceId, t.id, t.position, 52, false, telegraph);
+                const ent=entities.get(t.instanceId);let memory=threatMemory.get(t.instanceId);if(!memory){memory={hp:t.hp,hitAt:-10};threatMemory.set(t.instanceId,memory);}if(t.hp<memory.hp)memory.hitAt=s.worldTime;memory.hp=t.hp;
+                if(ent){const age=s.worldTime-memory.hitAt,pose=pokemonPose(age<.6?'hit':'idle',age,0,o.reducedMotion);ent.mesh.rotateZ(pose.lean);ent.mesh.material.emissive.set(age<.35?'#783f3f':'#000000');ent.mesh.material.emissiveIntensity=age<.35?.5:0;}
+
             }
             for (const [key, ent] of entities)
                 if (!desired.has(key)) {
@@ -370,28 +328,8 @@ function WorldView(props: Props & {
                 mesh.material.opacity = (1 - progress) * .65;
                 mesh.material.color.set(c.kind === 'impact' ? '#e8ac81' : c.kind === 'materialize' ? '#b9a0e7' : '#a6e4d1');
             } });
-            const near = walkable({ x: p.position.x + Math.cos(v.yaw) * 24, y: p.position.y + Math.sin(v.yaw) * 24 }, s, null, false, 0);
-            const raise = active.find(c => ['contain', 'attack', 'guard'].includes(c.kind));
-            tool.position.set(.28 + (!o.reducedMotion ? Math.sin(walk * .5) * .006 : 0), -.23 - (near ? 0 : .12) + (raise && !o.reducedMotion ? Math.sin(cueProgress(raise, now) * Math.PI) * .05 : 0), -.6);
-            tool.rotation.set(-.1, .08, -.06);
-            const label = p.selected + ' / ' + (v.focus ? 'LINK READY' : 'SCAN READY');
-            if (label !== lastScreen) {
-                lastScreen = label;
-                const ctx = screenCanvas.getContext('2d')!;
-                ctx.fillStyle = '#9aba91';
-                ctx.fillRect(0, 0, 256, 128);
-                ctx.fillStyle = '#284c3a';
-                ctx.font = 'bold 26px monospace';
-                ctx.fillText('FIELD / ' + p.selected, 12, 42);
-                ctx.font = '20px monospace';
-                ctx.fillText(v.focus ? 'LINK READY' : 'SCAN READY', 12, 83);
-                stx.needsUpdate = true;
-            }
-            renderer.autoClear = true;
-            renderer.render(scene, camera);
-            renderer.autoClear = false;
-            renderer.clearDepth();
-            renderer.render(toolScene, toolCamera);
+            renderer.autoClear=true;
+            renderer.render(scene,camera);
             cpu += performance.now() - begin;
             samples++;
             frames++;
@@ -409,8 +347,7 @@ function WorldView(props: Props & {
             frame = requestAnimationFrame(paint);
         };
         frame = requestAnimationFrame(paint);
-        return () => { disposed = true; cancelAnimationFrame(frame); audio.dispose(); facility.dispose(); dynamicGeometry.forEach(g => g.dispose()); dynamicMaterials.forEach(m => m.dispose()); dynamicTextures.forEach(t => t.dispose()); flash.shadow.dispose(); renderer.dispose(); document.removeEventListener('mousemove', mouse); document.removeEventListener('pointerlockchange', lock); document.removeEventListener('pointerdown', unlock); document.removeEventListener('keydown', unlock); window.removeEventListener('ghost-audio-unlock', unlockSettings); window.removeEventListener('ghost-intent', intent); window.removeEventListener('blur', blur); canvas.removeEventListener('webglcontextlost', contextLost); };
+        return () => { disposed = true; cancelAnimationFrame(frame); audio.dispose(); facility.dispose(); dynamicGeometry.forEach(g => g.dispose()); dynamicMaterials.forEach(m => m.dispose()); dynamicTextures.forEach(t => t.dispose()); flash.shadow.dispose(); renderer.dispose();  document.removeEventListener('pointerdown', unlock); document.removeEventListener('keydown', unlock); window.removeEventListener('ghost-audio-unlock', unlockSettings); window.removeEventListener('ghost-intent', intent); window.removeEventListener('blur', blur); canvas.removeEventListener('webglcontextlost', contextLost); };
     }, []);
-    return <><canvas ref={ref} className="first-person" aria-label="First-person research facility" tabIndex={0} onClick={() => { if (props.inputEnabled && !document.pointerLockElement)
-        void ref.current?.requestPointerLock(); }}/><div className="world-reticle"/><div className="fps-counter" aria-live="off"/></>;
+    return <><canvas ref={ref} className="third-person" aria-label="Third-person research facility" tabIndex={0} onClick={()=>ref.current?.focus({preventScroll:true})}/><div className="fps-counter" aria-live="off"/></>;
 }

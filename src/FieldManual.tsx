@@ -10,13 +10,13 @@ const lessons=[
  {Icon:TriangleAlert,title:'Emergencies',text:'Check the active emergency section for its room, deadline and responder. Both-control mechanisms need different trainers within 12 active seconds.'},
  {Icon:BrainCircuit,title:'Field Analyst',text:'WHY explains recorded facts. WHAT NEXT estimates possible outcomes. BEST ACTION compares feasible responses. Inspect costs before confirming; forecasts assume no further operator injections.'},
  {Icon:Radio,title:'Cooperation',text:'Use partner signals, share energy and items, approve power requests, and split solo assignments. One trainer cannot activate both sides of a paired mechanism.'},
- {Icon:Footprints,title:'Controls',text:'WASD / arrows: move. Click the world / Mouse look: turn. E: interact. Q: companions. TAB / Tasks: journal. M: map. F: flashlight. Escape: close. Settings: sensitivity, audio and accessibility. Touch: left stick, right drag, on-screen buttons.'}
+ {Icon:Footprints,title:'Controls',text:'WASD / arrows: move. Fixed elevated north-up camera; face by moving. E: interact. Q: companions. TAB / Tasks: journal. M: map. F: flashlight. Escape: close. Settings: sensitivity, audio and accessibility. Touch: left stick and on-screen buttons.'}
 ];
 export function FieldManual(){return <section className="field-manual" aria-label="How to play"><header><span className="eyebrow">ASTER / TRAINER FIELD MANUAL</span><h2>HOW TO PLAY</h2><p>You are a team. The facility is the problem.</p></header><div className="manual-grid">{lessons.map(({Icon,title,text},i)=><article key={title}><Icon aria-hidden="true"/><span className="manual-number">0{i+1}</span><h3>{title}</h3><p>{text}</p></article>)}</div><div className="manual-warning"><Shield/><p><b>Make the call together.</b> Choosing a plan records your intent. It never moves you, spends resources or performs a response without the required action and confirmation.</p></div></section>;}
 const briefing=[
  {Icon:Compass,title:'One shared objective',text:'Complete all required assignments and clear blocking incidents. You succeed together.'},
  {Icon:Timer,title:'Five minutes, maximum',text:'The active clock starts after the countdown. This briefing takes no mission time. Local menus do not pause your partner.'},
- {Icon:Footprints,title:'Move. Face. Interact.',text:'WASD + mouse look, or left-stick + right-side drag. Face a nearby mechanism and press E / Interact.'},
+ {Icon:Footprints,title:'Move. Face. Interact.',text:'WASD / arrows, or the left touch stick. Approach a nearby mechanism and press E / Interact.'},
  {Icon:PawPrint,title:'Three companions',text:'Use the companion buttons or Q to switch available companions. Assignments and recovery temporarily prevent switching.'},
  {Icon:ClipboardList,title:'Follow your assignments',text:'Left tracker: shared progress. TAB / Tasks: instructions. M: facility map. Emergency deadlines and paired controls are separate.'},
  {Icon:ScanEye,title:'Prepare each response',text:'Scout concealed Pokémon. Guard or Support before every Attack / Contain attempt. All companions have these actions.'},

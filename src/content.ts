@@ -23,10 +23,11 @@ export const EMERGENCIES=[
  {kind:'overload',name:'Power overload',room:'electrical',steps:2,objective:'Propose shared power, obtain partner approval, then stabilize the circuit.',failure:'The overload safely trips; no permanent resource lock is introduced.',scope:'either'},
 ] as const;
 export const TASK_TYPES=[
+ {kind:'wiring',name:'Reconnect electrical wiring',room:'electrical',mode:'sequence'},
  {kind:'circuit',name:'Route electrical circuits',room:'electrical',mode:'sequence',unlock:'power'},
  {kind:'signal',name:'Tune communication signal',room:'comms',mode:'dial'},
  {kind:'calibrate',name:'Calibrate laboratory equipment',room:'containment',mode:'dials'},
- {kind:'valves',name:'Balance coolant valves',room:'cooling',mode:'sequence'},
+ {kind:'valves',name:'Balance coolant valves',room:'cooling',mode:'dials'},
  {kind:'upload',name:'Upload research data',room:'archive',mode:'transfer'},
  {kind:'access',name:'Restore access permissions',room:'security',mode:'code',unlock:'access'},
  {kind:'fuse',name:'Replace damaged fuse',room:'workshop',mode:'choice'},

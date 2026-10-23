@@ -2,7 +2,7 @@ import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { WORLD, floors, wallSegments, rooms, roomWalls, roomPortals, roomEquipment, center, pathLength, pathDirection, contains, type Vec } from './world';
 /** Original procedural materials, lettering, posters and solid equipment. World units are shared with the server. */
-export function buildFacility(scene: T.Scene) {
+export function buildFacility(scene: T.Scene, cutaway = false) {
     const textures: T.Texture[] = [], materials: T.Material[] = [], geometries: T.BufferGeometry[] = [];
     const batches = new Map<T.Material, T.BufferGeometry[]>();
     const rng = (x: number, y: number) => { let n = Math.imul(x + 91, 374761393) ^ Math.imul(y + 13, 668265263); n = Math.imul(n ^ (n >>> 13), 1274126177); return ((n ^ (n >>> 16)) >>> 0) / 4294967295; };
@@ -59,17 +59,17 @@ export function buildFacility(scene: T.Scene) {
     const edges=wallSegments;
     for (const e of edges) {
         const horizontal = e.axis === 'x', x = e.x + (horizontal ? e.length / 2 : e.normal), z = e.z + (horizontal ? e.normal : e.length / 2);
-        const geo = new T.BoxGeometry(horizontal ? e.length : 2, 108, horizontal ? 2 : e.length);
+        const geo = new T.BoxGeometry(horizontal ? e.length : 2, cutaway ? 24 : 108, horizontal ? 2 : e.length);
         const uv = geo.getAttribute('uv');
         for (let i = 0; i < uv.count; i++)
             uv.setXY(i, uv.getX(i) * (horizontal ? e.length : 108) / 120, uv.getY(i));
-        geo.translate(x, 54, z);
+        geo.translate(x, cutaway ? 12 : 54, z);
         const list = batches.get(wall) || [];
         list.push(geo);
         batches.set(wall, list);
         box(x, 4, z, horizontal ? e.length : 3, 8, horizontal ? 3 : e.length, trim);
-        box(x, 101, z, horizontal ? e.length : 4, 5, horizontal ? 4 : e.length, trim);
-        if (e.length > 90) {
+        if(!cutaway) box(x, 101, z, horizontal ? e.length : 4, 5, horizontal ? 4 : e.length, trim);
+        if (!cutaway && e.length > 90) {
             const offset = -e.normal * 2;
             for (const h of [86, 93])
                 cylinder(horizontal ? x : x + offset, h, horizontal ? z + offset : z, 1.6, e.length, steel, horizontal ? 'x' : 'z');
@@ -77,7 +77,7 @@ export function buildFacility(scene: T.Scene) {
     }
     // Planar surfaces use fixed world UV scale rather than stretching one image over each room.
     for (const r of floors)
-        for (const top of [false, true]) {
+        for (const top of (cutaway ? [false] : [false, true])) {
             const geo = new T.PlaneGeometry(r.w, r.h);
             geo.rotateX(top ? Math.PI / 2 : -Math.PI / 2);
             geo.translate(r.x + r.w / 2, top ? 108 : 0, r.y + r.h / 2);
@@ -131,7 +131,12 @@ export function buildFacility(scene: T.Scene) {
         return m;
     }
     const fixtures: T.Object3D[] = [];
-    function planeAt(position: Vec, height: number, normal: Vec, width: number, h: number, m: T.Material) { const mesh = new T.Mesh(new T.PlaneGeometry(width, h), m); mesh.position.set(position.x, height, position.y); mesh.rotation.y = Math.atan2(normal.x, normal.y); scene.add(mesh); geometries.push(mesh.geometry); return mesh; }
+    function planeAt(position: Vec, height: number, normal: Vec, width: number, h: number, m: T.Material) {
+      const mesh=new T.Mesh(new T.PlaneGeometry(width,h),m);
+      if(cutaway&&height>75){mesh.position.set(position.x+normal.x*14,.75,position.y+normal.y*14);mesh.rotation.set(-Math.PI/2,0,normal.x?normal.x*Math.PI/2:normal.y<0?Math.PI:0);}
+      else {mesh.position.set(position.x,height,position.y);mesh.rotation.y=Math.atan2(normal.x,normal.y);}
+      scene.add(mesh);geometries.push(mesh.geometry);return mesh;
+    }
     function ringAt(position: Vec, height: number, normal: Vec, radius: number, m: T.Material) { const geo = new T.TorusGeometry(radius, 1, 6, 24), mesh = new T.Mesh(geo, m); mesh.position.set(position.x, height, position.y); mesh.rotation.y = Math.atan2(normal.x, normal.y); scene.add(mesh); geometries.push(geo); return mesh; }
     for (const [index, r] of rooms.entries()) {
         const eq = roomEquipment.find(e => e.roomId === r.id)!, { anchor, normal, tangent, length, depth } = eq;
@@ -144,14 +149,14 @@ export function buildFacility(scene: T.Scene) {
         face(0, 84, 1.2, Math.min(length, 106), 20, r.name, r.sub);
         b(0, 23, .8, length, 1, 1.6, accent);
         // Services stay above circulation, with one shallow tray and ceiling luminaire.
-        box(r.x + r.w / 2, 103, r.y + r.h / 2, 65, 4, 15, trim);
-        box(r.x + r.w / 2, 100.8, r.y + r.h / 2, 57, 1, 11, lamp);
-        b(0, 101, 9, length, 8, 12, steel);
-        for (let u = -length / 2 + 6; u < length / 2; u += 24)
+        if(!cutaway) box(r.x + r.w / 2, 103, r.y + r.h / 2, 65, 4, 15, trim);
+        if(!cutaway) box(r.x + r.w / 2, 100.8, r.y + r.h / 2, 57, 1, 11, lamp);
+        if(!cutaway) b(0, 101, 9, length, 8, 12, steel);
+        if(!cutaway) for (let u = -length / 2 + 6; u < length / 2; u += 24)
             b(u, 96.5, 9, 2, 1, 13, trim);
         // Vent lives on a separate solid edge, above head height and clear of all signs.
         const ventWall = roomWalls.filter(e => e.roomId === r.id && e !== eq.edge && e.length >= 50).sort((a, b) => b.length - a.length)[0];
-        if (ventWall) {
+        if (ventWall&&!cutaway) {
             const p = { x: ventWall.start.x + ventWall.tangent.x * ventWall.length / 2 + ventWall.normal.x * 2, y: ventWall.start.y + ventWall.tangent.y * ventWall.length / 2 + ventWall.normal.y * 2 };
             box(p.x,84,p.y,ventWall.tangent.x?28:3,14,ventWall.tangent.x?3:28,trim);
             for(let i=0;i<6;i++){const q={x:p.x+ventWall.normal.x*1.8,y:p.y+ventWall.normal.y*1.8};box(q.x,79.5+i*1.8,q.y,ventWall.tangent.x?24:1, .8,ventWall.tangent.x?1:24,lightMetal);}
@@ -267,9 +272,9 @@ export function buildFacility(scene: T.Scene) {
         const accent = make(r.color, .8, .1);
         for (const offset of [-2, length + 2]) {
             const p = { x: start.x + t.x * offset, y: start.y + t.y * offset };
-            box(p.x, 50, p.y, t.x ? 3 : 2, 92, t.x ? 2 : 3, accent);
+            box(p.x, cutaway?12:50, p.y, t.x ? 3 : 2, cutaway?24:92, t.x ? 2 : 3, accent);
         }
-        box(mid.x, 105, mid.y, t.x ? length : 3, 6, t.x ? 3 : length, trim);
+        if(!cutaway) box(mid.x, 105, mid.y, t.x ? length : 3, 6, t.x ? 3 : length, trim);
         const outside = { x: mid.x - n.x * 24, y: mid.y - n.y * 24 };
         const destinations = rooms.filter(v => v.id !== r.id).map(v => { const direction = pathDirection(outside, center(v.id)); return { room: v, length: pathLength(outside, center(v.id)), outward: direction.x * n.x + direction.y * n.y <= 1 }; }).filter(v => v.outward && Number.isFinite(v.length)).sort((a, b) => a.length - b.length);
         const destination = destinations[0]?.room;

@@ -5,7 +5,7 @@ import {neutralRecord,companionModifier} from '../src/data';
 import {distance,pathDirection,center,roomAt,roomName} from '../src/world';
 import type {ActorRole,ForecastResult,PlanResult} from '../src/protocol';
 export const METHOD='monte-carlo-actual-rules';
-export const MODEL_VERSION='ghost-shift-wings-v5-decisions-mc1';
+export const MODEL_VERSION='ghost-shift-wings-v6-third-person-mc1';
 export const SOURCE='generated_rollouts' as const;
 export const random=seeded;
 export function knowledgeState(state:State,role:ActorRole){const s=structuredClone(state);if(role!=='control'){const hiddenThreats=s.threats.filter(t=>t.status==='active'&&t.target!==role&&distance(t.position,s.players[role].position)>450),hiddenIds=new Set(hiddenThreats.map(t=>t.instanceId));s.events=s.events.filter(e=>!hiddenIds.has(String(e.data?.incidentId||'')));if(hiddenThreats.some(t=>s.broadcast.includes(t.name)))s.broadcast='Continue known assignments; undiscovered remote incident details are unavailable.';s.threats=s.threats.filter(t=>t.status!=='active'||t.target===role||distance(t.position,s.players[role].position)<=450);const other=role==='A'?'B':'A',p=s.players[other];if(distance(s.players[role].position,p.position)>450){p.position=center(p.room==='corridor'?'hub':p.room);p.follower={...p.position};}s.threats=s.threats.filter(t=>t.status==='active'||t.resolvedAt!==null);}return s;}

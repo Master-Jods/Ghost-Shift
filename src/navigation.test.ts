@@ -1,22 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { relativeLook } from './look';
+import {cameraInput} from './gameInput';
 import { defaultPresentation, sanitizePresentation } from './presentation';
 import { rooms, center, doors, pathDirection, pathLength, move, distance, walkable, spawn, roomEquipment, roomPortals, controlPoint, obstacles } from './world';
 import { initial, defaultConfig, injectionCheck, reduce } from './engine';
 import { prepared, rollout } from '../server/analytics';
-test('relative look preserves equal displacement across 30/60/144 input batches, clamps pitch and supports invert/touch', () => {
-    for (const count of [30, 60, 144]) {
-        let p = { yaw: 0, pitch: 0 };
-        for (let i = 0; i < count; i++)
-            p = relativeLook(p, 600 / count, 120 / count, defaultPresentation);
-        assert.ok(Math.abs(p.yaw - 1.8) < 1e-10);
-        assert.ok(Math.abs(p.pitch + .36) < 1e-10);
-    }
-    assert.equal(relativeLook({ yaw: 0, pitch: 0 }, 0, -9000, defaultPresentation).pitch, 1.15);
-    assert.equal(relativeLook({ yaw: 0, pitch: 0 }, 0, 9000, defaultPresentation).pitch, -1.15);
-    assert.ok(relativeLook({ yaw: 0, pitch: 0 }, 0, 10, { ...defaultPresentation, invertY: true }).pitch > 0);
-    assert.equal(relativeLook({ yaw: 0, pitch: 0 }, 10, 0, defaultPresentation, true).yaw, .06);
+test('fixed-camera keyboard and touch vectors are normalized and settings remain bounded',()=>{
+ assert.deepEqual(cameraInput(1,0),{x:0,y:-1});assert.equal(cameraInput(0,1).x,1);assert.ok(Math.abs(cameraInput(0,1).y)===0);assert.ok(Math.abs(Math.hypot(...Object.values(cameraInput(1,1)))-1)<1e-10);
     const safe = sanitizePresentation({ sensitivity: NaN, fov: 900, brightness: -1, minimapSize: 999 });
     assert.equal(safe.fov, 100);
     assert.equal(safe.brightness, .6);

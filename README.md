@@ -1,6 +1,10 @@
 # POKÉMON: GHOST SHIFT
 
-A runnable cooperative research game for two real trainers and one operator. Players use a first-person WebGL facility view (with a labeled compatibility fallback); the operator watches a separate overhead facility map and manually introduces encounters and emergencies. The Node HTTP/WebSocket server owns collision, timers, team validation, resources, previews and outcomes. React/TypeScript/Vite supply the clients; SQLite stores the session history.
+A runnable cooperative research game for two real trainers and one operator. Players use an elevated third-person WebGL facility view (with a labeled overhead compatibility fallback); the operator watches a separate overhead facility map and manually introduces encounters and emergencies. The Node HTTP/WebSocket server owns collision, timers, team validation, resources, previews and outcomes. React/TypeScript/Vite supply the clients; SQLite stores the session history.
+
+## Third-person horror revision
+
+The current player entry uses original haunted-facility artwork and a dedicated title asset. Both trainers have four-direction animated sprites; Pokémon use the documented species-preserving procedural fallback. See [current controls and rules](docs/THIRD-PERSON-REVISION.md), [asset sources and animation coverage](docs/HORROR-ASSETS.md), and [executed QA and screenshots](docs/OVERHAUL-QA.md). Earlier presentation documents below describe historical revisions.
 
 ## Red industrial / visible analytics revision
 
@@ -32,19 +36,19 @@ For development, `npm.cmd run dev` starts the backend and Vite; use http://local
 
 ## Three devices
 
-Host and all three browsers must share a reachable LAN. On the host, use `ipconfig` to find its LAN address, then open `http://HOST-IP:8787/operator` on the operator device and `http://HOST-IP:8787/play` on each player device. Permit Node/port 8787 through the host firewall. HOST defaults to 0.0.0.0. Configure ALLOWED_ORIGINS for additional split frontend origins; same-origin host URLs work directly. Trusted HTTPS certificates may be configured with TLS_CERT/TLS_KEY. Fullscreen, pointer lock, audio and installability depend on browser permissions and secure-context rules; keyboard/touch gameplay remains available without fullscreen.
+Host and all three browsers must share a reachable LAN. On the host, use `ipconfig` to find its LAN address, then open `http://HOST-IP:8787/operator` on the operator device and `http://HOST-IP:8787/play` on each player device. Permit Node/port 8787 through the host firewall. HOST defaults to 0.0.0.0. Configure ALLOWED_ORIGINS for additional split frontend origins; same-origin host URLs work directly. Trusted HTTPS certificates may be configured with TLS_CERT/TLS_KEY. Fullscreen, audio and installability depend on browser permissions and secure-context rules; keyboard/touch gameplay remains available without fullscreen.
 
 The operator creates a room. A joins slot A; B joins slot B. Each selects exactly three distinct catalog entries, finalizes the team and marks ready. Both real player sockets and current briefing acknowledgments are required before the operator starts. Briefing and the three-second countdown are outside active mission time. A round starts with no threats and does not require any injection to be completable.
 
 ## Player controls and objectives
 
-- WASD or arrows: movement relative to camera; mouse look via the world or Mouse look button.
-- E / Interact: face a nearby terminal or encounter. Q: companions. TAB / Tasks: detailed task journal. M: expanded map. F: flashlight. Escape: release pointer lock and close local panels.
-- Touch: left movement joystick, drag right side to turn, on-screen Interact and utility buttons. Use landscape. Settings include reduced camera motion and optional encounter sound cues.
+- WASD or arrows: movement relative to camera; fixed north-up camera; facing follows movement.
+- E / Interact: approach a nearby visible terminal or encounter. Q: companions. TAB / Tasks: detailed task journal. M: expanded map. F: flashlight. Escape: close local panels.
+- Touch: left movement joystick, on-screen Interact and utility buttons. Use landscape. Settings include reduced camera motion and optional encounter sound cues.
 - One companion follows visibly; two stay in reserve. Switch available companions through the HUD or team panel. Engaged, assigned, recovering or exhausted companions cannot be freely swapped into conflicting work.
 - Every species can Assist, Scout, Guard, Battle and Contain. Official base-stat metadata gives only a bounded 0.85–1.15 custom modifier; offline metadata uses 1.0. No species, type or exact roster is required.
 
-The shared facility has 16 rooms arranged around a central hub, western reactor/medical wing, eastern lab/navigation wing and southern storage/extraction loops, with optional task gates and temporary seals. The first-person renderer, overhead map, legal movement, pathfinder and incident placement use `src/world.ts`. Wall-mounted entrance signs, the upper-right geometry-based minimap, expanded M map and objective tracker guide players.
+The shared facility has 16 rooms arranged around a central hub, western reactor/medical wing, eastern lab/navigation wing and southern storage/extraction loops, with optional task gates and temporary seals. The third-person renderer, overhead map, legal movement, pathfinder and incident placement use `src/world.ts`. Wall-mounted entrance signs, the upper-right geometry-based minimap, expanded M map and objective tracker guide players.
 
 Each round selects 3–6 normal objectives from circuit sequences, signal tuning, gauge calibration, valve sequences, data transport/upload, access-code restoration, fuse selection and dual stabilization. Terminal target values are explicit. Errors can be retried. Cooperative stabilization uses separate trainer controls within a 12-active-second window and resets safely if missed. Companion assistance advances a sequence step where applicable but never replaces its final terminal interaction.
 
@@ -94,7 +98,7 @@ Solo mechanisms support A, B or either trainer, and a both-control variant. Reac
 
 ## Persistence and recovery
 
-`server/migrations/002-ghost-shift.sql` adds catalog records, selected teams, normal tasks, incident instances, director commands and Ghost Shift metrics. Migration is automatic on server/CLI startup and idempotent. Schema 3 / scenario ghost-shift-wings-v5-decisions / protocol 6 supersede the old scenario. Previous sessions are archived and remain exportable; old scenario forecasts/evaluations are excluded from Ghost Shift analytics. Existing operators, hashed passwords, login records and historical rows are preserved.
+`server/migrations/002-ghost-shift.sql` adds catalog records, selected teams, normal tasks, incident instances, director commands and Ghost Shift metrics. Migration is automatic on server/CLI startup and idempotent. Schema 3 / scenario ghost-shift-wings-v6-third-person / protocol 6 supersede the old scenario. Previous sessions are archived and remain exportable; old scenario forecasts/evaluations are excluded from Ghost Shift analytics. Existing operators, hashed passwords, login records and historical rows are preserved.
 
 The existing `data/jigsaw.sqlite` filename is retained deliberately to avoid abandoning your database; it is a compatibility path, not the current product name. `npm.cmd run db:backup` creates a consistent SQLite backup. Do not copy/delete live SQLite WAL files as a reset mechanism.
 
@@ -110,7 +114,7 @@ The checked-in complete PokéAPI `/pokemon` index currently contains 1,351 entri
 
 Descriptive/diagnostic screens read persisted gameplay, actual incident response timestamps, movement/task interaction time, resources, event traces and intervention cohorts. Task interaction seconds count server-accepted terminal attempts (including logged calibration mismatches) at one modeled second per attempt; movement seconds count actual server displacement. Coordination delay is a union of active approval/cooperative waiting seconds; individual categories may overlap. Blocked-route input seconds are reported separately. Response time is activation until first qualifying response; resolution time is activation until successful resolution. Deadline misses and cancellations remain distinct. Completion-time averages and observed forecast MAE use successful outcomes; deadline-success denominators retain incomplete outcomes.
 
-Predictive uses seeded Monte Carlo **legal continuations through the actual reducer and collision map**, with bounded reaction delay and movement pace. `ghost-shift-wings-v5-decisions-mc1` assumes **no further unknown manual injections**. It reports successful remaining mean and central 80% range, deadline success, incomplete samples, emergency resolution time and shortage risk. It does not predict arbitrary operator behavior. An estimate of 100% is a small generated sample result, not a guarantee.
+Predictive uses seeded Monte Carlo **legal continuations through the actual reducer and collision map**, with bounded reaction delay and movement pace. `ghost-shift-wings-v6-third-person-mc1` assumes **no further unknown manual injections**. It reports successful remaining mean and central 80% range, deadline success, incomplete samples, emergency resolution time and shortage risk. It does not predict arbitrary operator behavior. An estimate of 100% is a small generated sample result, not a guarantee.
 
 Prescriptive compares responder/priority routes, battle versus containment, selected/strongest/stamina companion strategies and balanced/priority power using matched random seeds. It reports Best Plan Found, not a proven global optimum. Accepting guidance requires a fresh authorized plan and consequence confirmation; it logs replanning latency and leaves actual movement/actions to the humans. What-if computes on cloned state and explicitly preserves the live round. Jobs are bounded, cancellable and owned by their requester.
 

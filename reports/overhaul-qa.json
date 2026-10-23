@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-22",
+  "timezone": "Asia/Manila",
+  "scenario": "ghost-shift-wings-v6-third-person",
+  "build": "passed",
+  "automatedTests": {
+    "passed": 84,
+    "failed": 0
+  },
+  "taskIncidentMatrix": {
+    "passed": 45,
+    "failed": 0,
+    "source": "reports/task-qa-generated.json"
+  },
+  "browserAcceptance": {
+    "passed": 7,
+    "failed": 0,
+    "log": ".qa/browser-acceptance.log"
+  },
+  "finalVisualAndTouchRecheck": {
+    "passed": 2,
+    "failed": 0,
+    "log": ".qa/visual-final.log"
+  },
+  "jointExtraction": {
+    "activeSeconds": 79,
+    "normalTasks": 4,
+    "operatorInterventions": 2,
+    "bothExtracted": true
+  },
+  "roomTraversal": {
+    "rooms": 16,
+    "input": "keyboard",
+    "teleports": false,
+    "evidence": ".qa/room-audit-after/audit.json"
+  },
+  "screenshots": "reports/third-person-screenshots",
+  "limitations": [
+    "Pok\u00e9mon use species-preserving procedural fallback, not complete species-specific frame sheets.",
+    "Physical-device, LAN, Safari and visitor-comprehension checks remain.",
+    "Uncached remote Pok\u00e9mon art requires internet; unavailable art is labeled.",
+    "Separate WebGL bundle exceeds the default Vite size warning."
+  ]
+}

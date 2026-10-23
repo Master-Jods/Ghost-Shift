@@ -6,12 +6,13 @@ test('regression: empty coolant-pipe gap and reactor bay corner are walkable whi
  assert.ok(walkable(local('cooling',0,25)));assert.ok(walkable(local('reactor',-50,32)));
  assert.equal(walkable(local('cooling',28,7)),false);assert.equal(walkable(local('reactor',0,14)),false);
  const box={id:'corner',roomId:'test',shape:'box' as const,x:0,y:0,w:10,h:10};assert.equal(colliderIntersects(box,{x:20,y:20},11),false);assert.equal(colliderIntersects(box,{x:17,y:17},11),true);
- assert.ok(wallSegments.some(w=>w.axis==='z'&&w.x===165&&w.z===880));assert.ok(walkable({x:177,y:886}));assert.equal(walkable({x:175,y:886}),false);
+ // The old edge is gone after widening; both former correction positions are now usable.
+ assert.equal(wallSegments.some(w=>w.axis==='z'&&w.x===165&&w.z===880),false);assert.ok(walkable({x:177,y:886}));assert.ok(walkable({x:175,y:886}));
 });
 test('authoritative movement for A and B crosses the formerly invisible bay with no correction; real gate states remain solid',()=>{
  let s=prepared(defaultConfig);for(let i=0;i<12;i++)s=reduce(s,{type:'FRAME',value:.25});for(const role of ['A','B'] as const){s.players[role].position=local('cooling',0,25);s=reduce(s,{type:'INPUT',role,value:{x:1,y:0}});}s=reduce(s,{type:'FRAME',value:.05});for(const role of ['A','B'] as const)assert.ok(s.players[role].position.x>local('cooling',0,25).x+8);
  const d=gateDefinitions[0],p={x:d.x+d.w/2,y:d.y+d.h/2},locked={tasks:[{unlock:d.unlock,complete:false}]};assert.equal(walkable(p,locked),false);assert.ok(walkable(p,{}));const start={x:d.x-22,y:p.y};assert.ok(move(start,{x:1,y:0},.3,locked).x<d.x-10);assert.ok(move(start,{x:1,y:0},.3,{}).x>d.x+d.w);
- assert.match(MAP_SIGNATURE,/aster-wings-v4-collision:[0-9a-f]+/);
+ assert.match(MAP_SIGNATURE,/aster-wings-v5-spacious:[0-9a-f]+/);
 });
 test('journal follows actual transfer/cooperative progress and emergency lifecycle without changing snapshots',()=>{
  let s=initial(),base=s.tasks[0];s.tasks=[{...base,id:'transfer',mode:'transfer',position:center('archive'),destination:center('comms'),complete:false,carrier:undefined},{...base,id:'cooperative',mode:'cooperative',role:'both',position:center('reactor'),secondPosition:{x:center('reactor').x+60,y:center('reactor').y},complete:false,activated:{A:12}}];
@@ -30,3 +31,5 @@ test('journal instructions distinguish cooperative power controls and carried co
  s.emergencies[0].scope='either';const solo=objectives(s,'A').find(o=>o.category==='emergency')!;assert.match(solo.instructions,/reset channels/);assert.match(solo.resources,/extra reset/);
  s.emergencies[0].scope='both';s.emergencies[0].kind='corruption';s.emergencies[0].destination=center('comms');s.emergencies[0].carrier='A';const transfer=objectives(s,'B').find(o=>o.category==='emergency')!;assert.equal(transfer.room,'Communications');assert.match(transfer.partner,/Both trainers respond at Communications/);assert.match(transfer.instructions,/12 active seconds/);
 });
+import {floors,colliders,wallDistanceSquared,WORLD} from './world';
+test('collision broad phase agrees with the complete canonical geometry, including gate states',()=>{for(const state of [{},{tasks:[{unlock:'access',complete:false}]}])for(const radius of [0,11,18,40])for(let y=13;y<WORLD.h;y+=37)for(let x=17;x<WORLD.w;x+=37){const p={x,y},floor=floors.some(r=>x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h),wall=radius>0&&wallSegments.some(w=>wallDistanceSquared(p,w)<radius*radius-1e-8),equipment=colliders.some(c=>colliderIntersects(c,p,radius)),gate=doors(state).some(d=>d.locked&&colliderIntersects({...d,shape:'box',roomId:'door'},p,radius));assert.equal(walkable(p,state,null,false,radius),floor&&!wall&&!equipment&&!gate,JSON.stringify({p,radius}));}});

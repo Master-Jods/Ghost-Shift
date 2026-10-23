@@ -1,5 +1,5 @@
 export const RULES={
- scenario:{id:'ghost-shift',version:'ghost-shift-wings-v5-decisions',name:'Pokémon: Ghost Shift',facility:'Aster Research Facility'},
+ scenario:{id:'ghost-shift',version:'ghost-shift-wings-v6-third-person',name:'Pokémon: Ghost Shift',facility:'Aster Research Facility'},
  countdownSeconds:3,initialItems:2,guardianHP:100,finalWindowSeconds:12,approvalSeconds:25,previewSeconds:20,interactionRange:85,
  recovery:{durationSeconds:12,readyStamina:60,itemStamina:40,maxStamina:100},
  defaults:{duration:300,budget:10,severity:'Standard',seed:482,scouting:true,variant:'Manual director',preset:'Standard',roster:[] as number[],taskCount:4,maxThreats:2,maxEmergencies:2,eventBudget:6,eventCooldown:5},

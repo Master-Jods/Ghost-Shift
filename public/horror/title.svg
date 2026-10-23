@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="430" viewBox="0 0 960 430" role="img" aria-label="Pokémon: Ghost Shift">
+<defs>
+ <linearGradient id="gold" x2="0" y2="1"><stop stop-color="#f6e3a4"/><stop offset=".5" stop-color="#dbc87e"/><stop offset="1" stop-color="#8d8d69"/></linearGradient>
+ <linearGradient id="bone" x2="0" y2="1"><stop stop-color="#fff4d9"/><stop offset="1" stop-color="#a99e86"/></linearGradient>
+ <filter id="rough"><feTurbulence baseFrequency=".038 .14" numOctaves="3" seed="9" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5"/></filter>
+ <filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="5" flood-opacity=".8"/></filter>
+ <clipPath id="letters"><text x="480" y="170" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-weight="900" font-size="170" letter-spacing="-5" transform="rotate(-4 480 110)">Pokémon</text></clipPath>
+ <pattern id="scratches" width="89" height="63" patternUnits="userSpaceOnUse"><path d="M3 52l50-38m-18 42L74 25M6 6l8 9m52 40l16-11" stroke="#111e24" stroke-width="1" opacity=".6"/></pattern>
+</defs>
+<g filter="url(#shadow)">
+ <text x="483" y="177" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-weight="900" font-size="170" letter-spacing="-5" transform="rotate(-4 480 110)" fill="#16232c" stroke="#142a39" stroke-width="20" paint-order="stroke">Pokémon</text>
+ <text x="480" y="170" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-weight="900" font-size="170" letter-spacing="-5" transform="rotate(-4 480 110)" fill="url(#gold)" stroke="#536677" stroke-width="11" paint-order="stroke" filter="url(#rough)">Pokémon</text>
+ <g clip-path="url(#letters)"><path d="M55 102q80 23 106-27l17 39 42-28 57 45 59-12 40 54 28-68 34 8 28 57 39-35 49 14 32-62 71-8 19 39 91-14 65 39v105H55z" fill="#691d25"/><path d="M191 26l26 43-15 6-28-33zm462 58l9 28 22-12-8-31zM343 54l14 18 18-14-13-21" fill="#9e3435"/><rect width="960" height="220" fill="url(#scratches)"/></g>
+ <path d="M191 157q4 27 1 47t6 22q8-3 3-22l1-47m176-5l-2 53q-2 17 5 18t5-17l-1-54m209 0l-3 37q-2 15 5 17t5-17l-1-39m145-16l3 51q-1 13 5 13t4-14l-3-50" fill="#79212a"/>
+ <text x="480" y="232" text-anchor="middle" font-family="monospace" font-size="16" letter-spacing="12" fill="#b9a993">ASTER RESEARCH FACILITY</text>
+ <g filter="url(#rough)" fill="url(#bone)" stroke="#191516" stroke-width="4" paint-order="stroke"><text x="480" y="339" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-stretch="condensed" font-size="112" letter-spacing="7">GHOST SHIFT</text></g>
+ <path d="M102 353l46-5 11 2 33-3 54 5 43-3 20 2 71-3 53 4 31-3 51 2 28-4 58 5 71-4 24 3 64-2 51 4-23 5-62-1-29 4-86-3-28 5-65-3-44 4-79-4-36 5-67-3-59 3z" fill="#7e2630"/>
+ <path d="M155 352l3 30q-2 15 4 17t5-18l-2-27m143 0l-2 49q0 16 7 14t3-16l1-47m334 0l2 24q-1 14 5 14t4-15l-2-23m105-2l-2 39q0 14 6 14t4-15l-1-38" fill="#7e2630"/>
+</g></svg>

@@ -27,7 +27,7 @@ export type MapState = {
 };
 const names = [['arrival', 'Arrival', 'CREW CHECK-IN', '#83c9bb'], ['hub', 'Central Hub', 'ASTER RESEARCH', '#5db5da'], ['electrical', 'Electrical', 'POWER GRID', '#e6c75e'], ['comms', 'Communications', 'RELAY ARRAY', '#80c6e5'], ['medical', 'Medical Bay', 'COMPANION CARE', '#69ceb0'], ['reactor', 'Reactor', 'DUAL STABILIZERS', '#ef9768'], ['cooling', 'Cooling Station', 'COOLANT MANIFOLD', '#75c7ef'], ['containment', 'Containment Lab', 'FIELD RESEARCH', '#b19ae8'], ['archive', 'Research Archive', 'DATA VAULT', '#baa272'], ['security', 'Security', 'ACCESS CONTROL', '#748dd5'], ['storage', 'Storage', 'SUPPLY LOCKERS', '#c9a078'], ['workshop', 'Maintenance Workshop', 'SERVICE BENCH', '#d1b552'], ['west', 'West Service Corridor', 'WEST CONNECTOR', '#82a5b1'], ['emergency', 'Emergency Control', 'MANUAL OVERRIDE', '#d57878'], ['east', 'East Service Corridor', 'EAST CONNECTOR', '#82a5b1'], ['exit', 'Extraction Airlock', 'BOTH TRAINERS REQUIRED', '#7fe5bb']];
 /** Original Aster wing layout, inspired by the supplied schematic's adjacency. */
-export const MAP_VERSION = 'aster-wings-v4-collision';
+export const MAP_VERSION = 'aster-wings-v5-spacious';
 export const WORLD = { w: 1480, h: 1160 };
 const layout: Record<string, [
     number,
@@ -41,6 +41,11 @@ const layout: Record<string, [
     electrical: [430, 650, 180, 180], storage: [680, 730, 260, 230], workshop: [220, 800, 180, 180],
     west: [80, 720, 120, 160], emergency: [1110, 710, 200, 180], comms: [970, 970, 200, 150], exit: [450, 950, 180, 160]
 };
+// Expand interiors into unused margins; centers and corridor lengths stay stable.
+for (const id of Object.keys(layout)) {
+ const r=layout[id], pad=['hub','storage'].includes(id)?15:['west','east'].includes(id)?10:20;
+ layout[id]=[r[0]-pad,r[1]-pad,r[2]+pad*2,r[3]+pad*2];
+}
 export const rooms = names.map(([id, name, sub, color]) => { const [x, y, w, h] = layout[id]; return { x, y, w, h, id, name, sub, color }; });
 export const center = (id: string): Vec => { const r = rooms.find(r => r.id === id)!; return { x: r.x + r.w / 2, y: r.y + r.h / 2 }; };
 // Explicit corridors share the exact same rectangles in every consumer. Width 70-80, player radius 11.
@@ -57,6 +62,8 @@ export const corridors: Rect[] = [
     { x: 940, y: 795, w: 170, h: 70 }, { x: 1000, y: 865, w: 70, h: 105 }, { x: 940, y: 995, w: 30, h: 70 },
     { x: 930, y: 525, w: 100, h: 70 }, { x: 995, y: 560, w: 70, h: 235 }
 ];
+// Widen narrow service passages without extending travel.
+for(const c of corridors){if(c.w<c.h&&c.w<90){c.x-=(90-c.w)/2;c.w=90;}else if(c.h<=c.w&&c.h<90){c.y-=(90-c.h)/2;c.h=90;}}
 export const floors: Rect[] = [...rooms, ...corridors];
 /** Room-edge intervals, cut by the actual floor union. Used for equipment and flush entrances. */
 export type RoomEdge = {
@@ -177,10 +184,16 @@ export const contains = (r: Rect, p: Vec, pad = 0) => p.x >= r.x - pad && p.x <=
 export const distance = (a: Vec, b: Vec) => Math.hypot(a.x - b.x, a.y - b.y);
 export const roomAt = (p: Vec) => rooms.find(r => contains(r, p))?.id || 'corridor';
 export const roomName = (id: string) => rooms.find(r => r.id === id)?.name || 'Service corridor';
+// Static broad phase only. Exact collision tests below still use canonical wall/equipment geometry.
+const collisionCell=64;
+function collisionBuckets<T>(items:T[],bounds:(item:T)=>Rect){const buckets=new Map<string,T[]>();for(const item of items){const b=bounds(item);for(let y=Math.floor((b.y-32)/collisionCell);y<=Math.floor((b.y+b.h+32)/collisionCell);y++)for(let x=Math.floor((b.x-32)/collisionCell);x<=Math.floor((b.x+b.w+32)/collisionCell);x++){const key=x+','+y,list=buckets.get(key)||[];list.push(item);buckets.set(key,list);}}return buckets;}
+const wallBuckets=collisionBuckets(wallSegments,w=>({x:w.x,y:w.z,w:w.axis==='x'?w.length:0,h:w.axis==='z'?w.length:0}));
+const equipmentBuckets=collisionBuckets(colliders,c=>c.shape==='box'?c:{x:c.x-c.r,y:c.y-c.r,w:c.r*2,h:c.r*2});
+const bucketKey=(p:Vec)=>Math.floor(p.x/collisionCell)+','+Math.floor(p.y/collisionCell);
 export function walkable(p:Vec,state?:MapState|number,_a?:string|null,_b?:boolean,radius=PLAYER_RADIUS){
  if(!floorHit(p))return false;
- if(radius>0&&wallSegments.some(w=>wallDistanceSquared(p,w)<radius*radius-1e-8))return false;
- if(colliders.some(c=>colliderIntersects(c,p,radius)))return false;
+ if(radius>0&&(radius<=32?wallBuckets.get(bucketKey(p))||[]:wallSegments).some(w=>wallDistanceSquared(p,w)<radius*radius-1e-8))return false;
+ if((radius<=32?equipmentBuckets.get(bucketKey(p))||[]:colliders).some(c=>colliderIntersects(c,p,radius)))return false;
  return !doors(state).some(d=>d.locked&&colliderIntersects({...d,shape:'box',roomId:'door'},p,radius));
 }
 export function move(p: Vec, v: Vec, dt: number, state?: MapState | number, _a?: string | null, _b?: boolean): Vec {
