@@ -1,0 +1,180 @@
+{
+  "tasks": [
+    {
+      "name": "Electrical Wiring",
+      "mode": "wiring",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Door Power Routing",
+      "mode": "routing",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Communications Calibration",
+      "mode": "signal",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Coolant Control",
+      "mode": "coolant",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Research Data Transport",
+      "mode": "transfer",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Dual Stabilization",
+      "mode": "cooperative",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "notes": "Actual Chrome controls and authoritative completion; fixture stages positions to isolate terminal interaction."
+}

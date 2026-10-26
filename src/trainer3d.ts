@@ -1,14 +1,40 @@
 import * as T from 'three';
 import type {MotionState} from './engine';
-/** Original articulated field researcher. Local +X is forward; feet remain grounded. */
-export function createTrainer(role:'A'|'B'){
- const root=new T.Group(),materials:T.MeshStandardMaterial[]=[],geometries:T.BufferGeometry[]=[];
- const mat=(color:string)=>{const m=new T.MeshStandardMaterial({color,roughness:.82,transparent:true});materials.push(m);return m;};
- const coat=mat(role==='A'?'#c9d5d1':'#d4b578'),identity=mat(role==='A'?'#9d394b':'#426a88'),skin=mat('#bfa189'),dark=mat('#1b2b32'),visor=mat('#486d74');
- function part(parent:T.Object3D,x:number,y:number,z:number,w:number,h:number,d:number,m:T.Material){const g=new T.BoxGeometry(w,h,d);geometries.push(g);const mesh=new T.Mesh(g,m);mesh.position.set(x,y,z);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);return mesh;}
- part(root,0,29,0,14,21,18,coat);part(root,-8,29,0,5,17,13,dark);part(root,-11,29,0,2,12,10,identity); // backpack
- part(root,7.2,31,-4,1,4,5,identity);part(root,0,44,0,12,12,13,skin);part(root,0,50,0,14,4,16,identity);part(root,8,49,0,6,1.5,16,identity);part(root,6.2,45,0,1,3,12,visor);
- const legs:T.Group[]=[],arms:T.Group[]=[];
- for(const side of [-1,1]){const leg=new T.Group();leg.position.set(0,19,side*5);root.add(leg);part(leg,0,-7,0,6,14,7,dark);part(leg,2,-16,0,10,4,8,dark);legs.push(leg);const arm=new T.Group();arm.position.set(0,37,side*12);root.add(arm);part(arm,0,-7,0,6,15,6,coat);part(arm,0,-16,0,5,5,5,skin);arms.push(arm);}
- return {root,update(yaw:number,state:MotionState,time:number,travel:number,fade=1,reduced=false){root.rotation.y=-yaw;const swing=state==='run'?Math.sin(travel*.18)*.65:0;legs.forEach((leg,i)=>leg.rotation.z=(i?-1:1)*swing);arms.forEach((arm,i)=>{arm.rotation.z=state==='interact'||state==='assist'?1.1:['reaction','hit'].includes(state)?.65:state==='victory'?(i?-2.5:2.5):(i?1:-1)*swing*.8;});root.position.y=state==='run'&&!reduced?Math.abs(Math.sin(travel*.18))*.8:0;for(const m of materials)m.opacity=fade;root.userData.state=state;root.userData.phase=Math.floor(travel/8)%6;},dispose(){geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());}};
+/** Original lightweight crewmate mesh. Reference/rights: docs/CREWMATE-AUDIO.md.
+ * Local +X is forward. The root is at floor level; no first-person hands.
+ */
+export function createTrainer(role:'A'|'B') {
+ const root=new T.Group(),rig=new T.Group(),body=new T.Group();root.add(rig);rig.add(body);
+ root.name='crewmate-'+role;root.userData.model='crewmate';
+ const materials:T.MeshStandardMaterial[]=[],geometries:T.BufferGeometry[]=[];
+ const mat=(color:string,roughness=.65,metalness=0)=>{const m=new T.MeshStandardMaterial({color,roughness,metalness,transparent:true});materials.push(m);return m;};
+ const suit=mat(role==='A'?'#cf3449':'#24bacb'),shade=mat(role==='A'?'#7e2135':'#14727f'),rim=mat('#172b36'),glass=mat('#9edfe9',.2,.35),shine=mat('#e4fbff',.15);
+ function mesh(parent:T.Object3D,g:T.BufferGeometry,m:T.Material,x:number,y:number,z:number,sx=1,sy=1,sz=1){geometries.push(g);const o=new T.Mesh(g,m);o.position.set(x,y,z);o.scale.set(sx,sy,sz);o.castShadow=o.receiveShadow=true;parent.add(o);return o;}
+ function capsule(parent:T.Object3D,x:number,y:number,z:number,r:number,length:number,m:T.Material,sx=1,sy=1,sz=1){return mesh(parent,new T.CapsuleGeometry(r,length,8,20),m,x,y,z,sx,sy,sz);}
+ capsule(body,0,31,0,12,16,suit,1,1,1.12);
+ capsule(body,-12,29,0,6,11,shade,.85,1,1.3); // actual backpack, not a human torso/arms
+ capsule(body,-13,30,0,5.2,10,suit,.85,1,1.3);
+ mesh(body,new T.SphereGeometry(1,24,16),rim,10.9,36,0,4.4,8.4,12.1);
+ mesh(body,new T.SphereGeometry(1,24,16),glass,12.8,36.6,0,3.8,7.1,10.8);
+ mesh(body,new T.SphereGeometry(1,16,10),shine,15.2,40,-2.3,.6,1.6,5.1);
+ const legs=[-1,1].map(side=>{
+   const foot=new T.Group();foot.position.set(0,9,side*7);rig.add(foot);
+   capsule(foot,0,0,0,5.4,7,suit,1.1,1,1);
+   mesh(foot,new T.SphereGeometry(1,20,12),shade,1.7,-5.5,0,6.5,3.2,5.5);
+   return foot;
+ });
+ let stride=0;
+ return {root,update(yaw:number,state:MotionState,time:number,travel:number,fade=1,reduced=false,dt=1/60){
+   root.rotation.y=-yaw;
+   stride+=(Number(state==='run')-stride)*(1-Math.exp(-18*Math.min(.1,dt)));
+   const phase=travel*Math.PI/70,amount=stride*(reduced?.45:1);
+   legs.forEach((foot,i)=>{const wave=Math.sin(phase+i*Math.PI);foot.position.x=wave*6*amount;foot.position.y=9+Math.max(0,-wave)*4*amount;foot.rotation.z=wave*.18*amount;});
+   body.position.y=(Math.abs(Math.cos(phase))*.9)*amount;
+   body.rotation.x=Math.sin(phase)*.035*amount;
+   body.rotation.z=state==='interact'||state==='assist'?-.10:state==='hit'||state==='reaction'?.14:-.035*amount;
+   rig.position.y=state==='victory'&&!reduced?Math.max(0,Math.sin(time*5))*3:0;
+   rig.rotation.x=state==='victory'&&!reduced?Math.sin(time*5)*.09:0;
+   for(const m of materials)m.opacity=fade;
+   root.userData.state=state;root.userData.phase=phase;root.userData.stride=stride;
+ },dispose(){geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());}};
 }

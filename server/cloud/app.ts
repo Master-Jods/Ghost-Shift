@@ -7,17 +7,21 @@ import { WebSocketServer, WebSocket } from "ws";
 import { randomUUID } from "node:crypto";
 import { readFileSync, existsSync, statSync } from "node:fs";
 import { resolve, extname, sep } from "node:path";
-import { CloudService, type Auth } from "./service";
-import { postgres, type Database } from "./store";
-import { CloudError, check } from "./types";
-import { PROTOCOL_VERSION } from "../../src/protocol";
-import { MAP_SIGNATURE, MAP_VERSION } from "../../src/world";
-import { RULES } from "../../src/rules";
-import { defaultConfig } from "../../src/engine";
-import { playerProfile, PROFILE_ERROR } from "../../src/playerProfile";
-import { catalog, validPokemon, publicRecord } from "../catalog";
-import { hashToken } from "../security";
-import { QUICK_MODEL } from "../quickAnalysis";
+import { CloudService, type Auth } from "./service.js";
+import { postgres, type Database } from "./store.js";
+import { CloudError, check } from "./types.js";
+import {
+  PROTOCOL_VERSION,
+  validateCommand,
+  type Command,
+} from "../../src/protocol.js";
+import { MAP_SIGNATURE, MAP_VERSION } from "../../src/world.js";
+import { RULES } from "../../src/rules.js";
+import { defaultConfig } from "../../src/engine.js";
+import { playerProfile, PROFILE_ERROR } from "../../src/playerProfile.js";
+import { catalog, validPokemon, publicRecord } from "../catalog.js";
+import { hashToken } from "../security.js";
+import { QUICK_MODEL } from "../quickAnalysis.js";
 export type CloudOptions = {
   db?: Database;
   databaseUrl?: string;
@@ -336,7 +340,7 @@ export function createCloudApp(options: CloudOptions = {}) {
             (tail === "field-analysis" || tail === "jobs") &&
             req.method === "POST"
           ) {
-            await service.limit("analysis-" + (a.bearer || a.cookie), 4, 5000);
+            await service.limit("analysis-" + (a.bearer || a.cookie), tail === "field-analysis" ? 8 : 4, 5000);
             const b = await body(req);
             json(
               res,
@@ -508,6 +512,12 @@ export function createCloudApp(options: CloudOptions = {}) {
               : "Shared state temporarily unavailable. Reconnecting.",
         });
     };
+    const motion = new Map<string, Command>();
+    const takeMotion=(before=Infinity)=>{const batch=[...motion.values()].filter(c=>c.seq<before);for(const c of batch)if(motion.get(c.type)===c)motion.delete(c.type);return batch;};
+    const flush=async(commands:Command[])=>{
+      if(a.bearer){const frame=await service.motionFrame(session,a,commands);for(const ack of frame.acknowledgements)send(ack);send(frame.snapshot);}
+      else send(await service.snapshot(session,a,true));
+    };
     const authTimer = setTimeout(() => {
       if (!authenticated) ws.close(4003, "Authentication timeout");
     }, 10000);
@@ -520,10 +530,47 @@ export function createCloudApp(options: CloudOptions = {}) {
         ws.close(4008, "Too many input messages");
         return;
       }
+      let message: any;
+      try {
+        message = JSON.parse(data.toString());
+      } catch {
+        send({ type: "error", message: "Invalid socket JSON." });
+        return;
+      }
+      if (
+        authenticated &&
+        message.type === "command" &&
+        ["INPUT", "LOOK"].includes(message.command?.type)
+      ) {
+        const v = validateCommand(message.command);
+        if (!v.ok) {
+          send({ type: "error", message: v.message });
+          return;
+        }
+        if (!a.bearer) {
+          send({
+            type: "error",
+            message: "Player movement requires a player slot.",
+          });
+          return;
+        }
+        const previous = motion.get(v.command.type);
+        if (previous) {
+          send({
+            type: "ack",
+            id: previous.id,
+            ok: true,
+            message: "Movement coalesced with newer input.",
+          });
+        }
+        motion.set(v.command.type, v.command);
+        return;
+      }
+      const priorMotion=authenticated?takeMotion(message.type==='command'?message.command?.seq:Infinity):[];
       queue = queue
         .then(async () => {
           if (closed) return;
-          const m = JSON.parse(data.toString());
+          const m = message;
           if (!authenticated) {
             check(
               m.type === "auth" &&
@@ -552,9 +599,10 @@ export function createCloudApp(options: CloudOptions = {}) {
             send(snapshot);
             return;
           }
-          if (m.type === "command")
+          if (m.type === "command") {
+            if (priorMotion.length) await flush(priorMotion);
             send(await service.command(session, a, m.command));
-          else if (m.type === "resync")
+          } else if (m.type === "resync")
             send(await service.snapshot(session, a, true));
           else throw new CloudError(400, "Unknown socket message.");
         })
@@ -570,9 +618,11 @@ export function createCloudApp(options: CloudOptions = {}) {
         return;
       }
       busy = true;
-      service
-        .snapshot(session, a, true)
-        .then(send)
+      const batch=takeMotion();
+      queue = queue
+        .then(async () => {
+          if (!closed) await flush(batch);
+        })
         .catch(failure)
         .finally(() => {
           busy = false;

@@ -1,4 +1,4 @@
-import {distance,lineOfSight,move,pathDirection,walkable,type Vec,type MapState} from './world';
+import {distance,lineOfSight,move,pathDirection,walkable,type Vec,type MapState} from './world.js';
 /** Companion navigation never contributes player collision. Ordinary catch-up uses legal swept move(). */
 export function followCompanion(current:Vec,trainer:Vec,facing:Vec,dt:number,state:MapState){
  const desired={x:trainer.x-facing.x*28+facing.y*52,y:trainer.y-facing.y*28-facing.x*52};

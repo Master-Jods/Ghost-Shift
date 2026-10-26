@@ -1,3 +1,5 @@
+> Current task UI QA (2026-10-26): all **6 normal tasks and 8 emergency types** were completed through browser controls, including coolant drag/retry, partner approval, three viewport layouts and a full keyboard-travel/joint-extraction round. See [current task equipment audit](TASK-EQUIPMENT-QA.md) and [machine-readable results](../reports/task-equipment-qa.json). The older inventory below is retained as historical documentation.
+
 > Historical pre-v8 report. Current gameplay, map measurements, resource-free rules and validation are documented in [Route Trials revision](ROUTE-TRIALS-REVISION.md). Earlier timing/accuracy claims are not current.
 
 # Industrial revision / task QA matrix

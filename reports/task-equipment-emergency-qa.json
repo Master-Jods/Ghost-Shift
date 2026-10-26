@@ -1,0 +1,238 @@
+{
+  "emergencies": [
+    {
+      "name": "Blackout",
+      "kind": "blackout",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Communications interference",
+      "kind": "comms",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Reactor instability",
+      "kind": "reactor",
+      "scope": "both",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Coolant failure",
+      "kind": "coolant",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Containment leak",
+      "kind": "leak",
+      "scope": "both",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Door lockdown",
+      "kind": "lockdown",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Research data corruption",
+      "kind": "corruption",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 687.453125,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 687.453125,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Power overload",
+      "kind": "overload",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "notes": "All eight actual injected emergency mechanisms resolved in Chrome. Fixture stages positions; no deadline or completion shortcut."
+}

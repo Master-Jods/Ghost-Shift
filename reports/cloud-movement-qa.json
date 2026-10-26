@@ -1,0 +1,40 @@
+{
+  "simulatedRoundTripMs": 360,
+  "perQueryDelayMs": 8,
+  "immediateMovement": 21.58949999999993,
+  "authoritativeMovementAt100ms": 0,
+  "eventualAuthoritativeMovement": 151.32999999999993,
+  "movingRenderFrames": 52,
+  "maximumFrameJump": 9.711389999999938,
+  "queries": 308,
+  "pageErrors": [],
+  "checks": [
+    "First and third person render no hands",
+    "No idle input packets",
+    "Local camera responds before delayed server receives input",
+    "Server remains authoritative",
+    "Movement continues on both independent app instances",
+    "No large per-frame correction jumps"
+  ],
+  "validation": {
+    "fullSuite": {
+      "passed": 143,
+      "failed": 0,
+      "skipped": 1
+    },
+    "focusedMovementAndCloud": 10,
+    "realPostgres": "passed with three TCP pools and combined movement frame",
+    "nativeNodeRuntime": "passed",
+    "cloudThreeTerminalBrowser": "passed",
+    "delayedMovementBrowser": "passed final rerun",
+    "cameraOverlayAudioAndCacheBrowser": 3,
+    "productionBuild": "passed",
+    "vercelSchema": "passed"
+  },
+  "deployment": {
+    "configuredFunctionRegion": "iad1",
+    "databaseRegionHint": "us-east-1",
+    "status": "Local changes; not deployed or pushed in this task",
+    "liveLatencyMeasuredAfterFix": false
+  }
+}

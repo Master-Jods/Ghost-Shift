@@ -1,3 +1,77 @@
+## Latest completed: crewmates, sustained alerts, recorded steps and live guidance
+
+- Two original 3D crewmates (red A / cyan B), distance-driven walking with smoothed stop, default first person and key9 toggle preserved; no hands. Reference and license details: docs/CREWMATE-AUDIO.md.
+- Danger loops persist for unresolved emergencies and unengaged active Pokemon. Emergency priority; battle engagement stops that Pokemon warning, retreat restores it. Mute/pause/hidden tabs silence and resume reconciles current state. One loop, no restart on snapshots.
+- Ten Kenney CC0 recorded footsteps with concrete/carpet surface variation replace synthetic walking noise. Included license/source hashes under public/audio/footsteps.
+- Shared live guidance uses current canonical paths/doors, current positions, remaining task work, carrier/paired constraints and urgent incidents. Always visible even if forecasting HTTP fails; completed tasks disappear immediately. Updates countdown text each active second. Position grid changes refresh forecasts without waiting for a room change. Clock refresh and bounded request throttling/retry retained.
+- Fast route/workload model mc2 no longer always forces the power task first. Predictive glance leads with ETA, interval, deadline risk/margin and raw sample counts; expanded view includes 30/60-second delay sensitivity. It remains a conditional timing model, not full battle replay or visitor calibration; no global optimality claim.
+- Dashboard tab explanation is saved at docs/OPERATOR-DASHBOARD-GUIDE.md. User requested this explanation urgently and received it in chat.
+- Verification: production build, native cloud ESM health/login runtime check, 148 regression tests passed / one optional PostgreSQL test skipped. Browser tests passed for crewmates/recorded footsteps, sustained alarm/battle entry/retreat/cancellation, real task completion while forecast API fails, dashboard forecasting/live battle/fatal deadline and emergency instructions.
+- Reports: reports/crewmates-audio-qa.json, reports/among-shadows-danger-qa.json, reports/live-guidance-qa.json, reports/v10-browser.json. Gameplay screenshots were inspected; audio output was measured, no human listening QA claim.
+- Not pushed or deployed. Current service-worker cache: among-shadows-crewmates-audio-26.
+
+## Latest completed: landing registration and replacement danger audio
+
+- Removed Group # from player landing form; Full Name and Block remain required. Shared server/client validation accepts an omitted/blank group, while retaining legacy group values in existing records.
+- Replaced the sweeping oscillator siren with original pre-rendered two-note warning pulses, a subdued low impact and quiet room reflections. Emergency and Pokemon alerts differ, start immediately without downloads, and preserve mute/cancellation/no-snapshot-replay behavior.
+- Bumped service worker cache to among-shadows-registration-alert-25.
+- Verification: production build, 12 local/cloud server tests, waveform bounds/envelope test, and both real-browser registration/log attribution and two-player injection-audio tests passed. Browser audio output was measured; no human listening review is claimed.
+- Changes are local, not pushed/deployed by this task.
+
+# Latest work: coolant controls + complete task UI QA (2026-10-26)
+
+User reported coolant slider/flow mismatch and requested UI/spacing QA of every task. Reworked TaskMechanism: separate coupled readings from named inlet/bypass/return valves, native immediate onInput + keyboard + exact0-3 buttons, fixed reading/control geometry, pinned gauges, persistent retry-feedback footprint (no mid-drag shift), structured target cards, clear wire/socket stages, real signal units, saved/pending/retry feedback and carrier restriction. TaskPanel now returns the input promise so repeated submissions are disabled until response. Completion state has a saved header/action. Extracted EmergencyMechanism with live timer, channel steps, paired readiness, approval plans, pending/rejection flow and resolved-safe status. New taskEquipment.css imported last; consistent spacing/width/scrolling/sticky close, foreground task notices for new emergencies, preview z-order preserved. No rule/DB/env changes. Cache ghost-shift-task-equipment-24.
+
+QA: all6normal +8emergency actual Chrome control completion, wrong answers/retries; layouts1366x768/1024x768/844x390 all no horizontal overflow or overlapping controls. Native coolant drag, coupled flow output, keyboard solution, preserved draft across snapshots, stable second drag after invalid validation verified. Non-carrier upload restriction, cooperative missed-window retry, overload local bypass rejection->approval and extra reset passed. New emergency notice remained visible with usable coolant controls. Separate full two-browser keyboard-travel round passed, including carried-data reload and joint extraction,145 active seconds. Form audits stage terminal positions; full round does actual travel. Unit/server143pass/0fail/1optional skip, finalbuildpassed, no browser pageerrors. Screenshots inspected. No human listening/visitor pacing or live-deployment claim.
+
+Artifacts: docs/TASK-EQUIPMENT-QA.md, reports/task-equipment-{qa,normal-qa,emergency-qa,variants-qa}.json, reports/route-trials-browser-run.json updated; screenshots docs/screenshots/task-equipment/. Tests tests/task-equipment.spec.ts (4 focused scenarios), helpers now use actual keyboard range input rather than fill. No commit/push/deploy performed; user must run npx.cmd vercel@latest --prod --archive=tgz and refresh.
+
+---
+
+# Latest work: remove hands + cloud movement (2026-10-26)
+
+User requested no hand and smoother cloud movement. Removed firstPersonHands.ts + obsolete unit test, all renderer hand creation/update/disposal; updated camera/audio browser checks for zero hands and retained key9. Added bounded MovementPrediction (shared collision, immediate local camera only, acknowledged server reconciliation, stalls stop at500ms, authority untouched). NetworkTransport exposes current input/last acknowledgement/RTT; local+cloud snapshots carry optional lastCommandSeq. PlayerApp sends immediate key transitions, held refresh10Hz, orientation only on change, no idle packets or keyboard autorepeat packets.
+
+Cloud socket coalesces latest pending INPUT/LOOK, captures batches at enqueue time to preserve consequential action order, combines frame/heartbeat/snapshot. Cloud room still row-locked; after-lock identity/player/DBclock read consolidated; save CTE persists sequence+heartbeat atomically with room. Basic frame3 SQL calls in transaction + BEGIN(settings) + COMMIT. No independent function room cache. Verified real PostgreSQL fast frame across3pools.
+
+Important observed region mismatch: private DATABASE_URL hostname region derived safely as us-east-1; earlier live logs sin1. Configured api/cloud.ts regions=[iad1] to match current Neon database; official Vercel schema passed. No credentials/host URL printed or env edited. No production DB writes, deployment, commit or push for this task. User must redeploy archive command and refresh clients. Cache ghost-shift-hand-free-movement-23.
+
+Validation: production build passed, full suite143pass/0fail/1optional skipped; focused10pass; realPG1pass; native emitted Node health/login smoke passed; cloud3-terminal Chrome smoke + delayed movement Chrome passed; camera toggle/audio/cache Chrome3pass. Delayed test360msRTT+8ms/query: camera21.59 units before server received input (server0 at100ms),52movingrenderframes,max9.71unit framejump, no idle traffic or pageerrors. No live post-deploy latency claim. docs/CLOUD-MOVEMENT.md, reports/cloud-movement-qa.json, docs/screenshots/movement/hand-free.png inspected. Follow-up local final build/browser pass checks may update numeric timings.
+
+---
+
+# Latest follow-up: stale title cache (2026-10-26)
+
+User screenshot still showed GHOST SHIFT. Direct live HTTP checks of /horror/title.svg and / returned Among the Shadows; live /sw.js already version21. Local fix: new title asset path /horror/among-the-shadows-title.svg; title/legacy path/manifest now network-first with cached offline fallback; optional preload failures cannot block new SW installation; cache ghost-shift-brand-cache-22. Production build passed; tests/brand-cache.spec.ts passed with seeded obsolete SVG entries and offline fallback. No deployment/push performed. Immediate user remedy: Ctrl+Shift+R/Incognito for already-live new branding; deploy local cache hardening via normal archive command.
+
+---
+
+# Latest work: Among the Shadows + global danger alarms (2026-10-26)
+
+User requested Ghost Shift -> Among the Shadows throughout the system and danger audio with Pok?mon/emergency injection red lights. Implemented shared branding.ts; player entry/lobby/HUD, operator sign-in/sidebar/history, browser title, PWA name, SVG title artwork, displayed scenario name and export filenames updated. Kept internal scenario IDs/versions, settings and session keys stable. Package display slug is among-the-shadows (package and lock root matched). SVG text fitted within original layout; actual title/player screenshots inspected.
+
+Added IncidentAlarmTracker and root mixer danger sirens: fresh authoritative incident IDs, once per client, global audible range, lower Pok?mon vs higher emergency pulses, master/effects/mute/hidden/paused/finished/resolution cancellation, no snapshot replay. Spatial renderer no longer duplicates old materialize/emergency beep; original issue was the 750-unit cutoff/distance attenuation. Existing battle foley unchanged. SW cache ghost-shift-among-shadows-danger-21. Public audio source notice includes original sirens.
+
+Validation: full suite 140 passed / 0 failed / 1 optional skipped; build passed; native compiled Node health/login smoke passed; two-player Chrome alarm/branding test passed with actual waveform, remote distance2097.9, mute/no replay, resolution, both alert types, no page errors. Added docs/AMONG-THE-SHADOWS.md, reports/among-shadows-danger-qa.json and docs/screenshots/among-shadows/{title,player}.png. Updated existing entry browser test title expectation. No human listening claim. No commit/push/deploy performed; user must redeploy with npx.cmd vercel@latest --prod --archive=tgz and refresh to see live changes. Private env/database untouched for this task.
+
+---
+
+# Latest live login recovery (2026-10-26)
+
+User's cloud password reset hit a 10s connection timeout. Safe connection diagnostics (secret values not printed) showed valid Neon pooled URL/DNS; initial TCP attempt timed out, subsequent authenticated query succeeded. Cloud CLI now allows a 30s connection timeout; runtime retains its existing 10s setting. No SSL verification was disabled.
+
+Actual cause of incorrect credentials was an absent account, not an existing password mismatch: configured username operator had no row; gs_operators was empty; live health setupRequired=true. Ran authorized cloud:operator using private local env values (not printed), then cloud:operator:check confirmed accountExists=true/passwordMatchesEnvironment=true. Live https://among-the-shadows.vercel.app/api/health returned200 and setupRequired=false. A real login request using those env values returned200; temporary verification login was immediately logged out. User can now log in with username operator and their local env password. No env file edited, existing accounts overwritten, sessions/logs cleared, or deployment/push performed. CLI/store change typechecked successfully.
+
+---
+
+# Latest deployment fix: native Node ESM imports (2026-10-26)
+
+Live Vercel Runtime Logs confirmed `ERR_MODULE_NOT_FOUND` for `/var/task/server/cloud/app` from `api/cloud.js`, causing both health and operator login to return platform 500 before any credential check. Corrected all relative imports in the transitive cloud dependency graph to explicit `.js` (TypeScript bundler resolution maps these to source .ts). Vercel function includeFiles now explicitly bundles public/catalog/pokemon-assets.json, required at Showdown module initialization. Prior config fixes remove UTF-8 BOM from vercel.json/.vercelignore and use string brace globs for includeFiles/excludeFiles. No private env/DB changed.
+
+Added `npm run test:cloud:runtime`: emits JavaScript, starts the native Node ESM app with isolated PGlite, checks catalog packaging, migrations, health and operator login without tsx or Vite. Native smoke passed. Redeploy with `npx.cmd vercel@latest --prod --archive=tgz` before retrying the live URL. No new deployment/push performed by this fix.
+
+---
+
 # Current handoff: Vercel + external PostgreSQL (2026-10-26)
 
 Implemented in `C:\Pokemon Day - Among Us`. `api/cloud.ts` exports a Node HTTP/ws server; `vercel.json` routes the frontend/API/upgrade requests. `server/cloud/` contains PostgreSQL schema, pooled store, shared room service, cloud API, CLI, read-only SQLite importer and isolated real-PostgreSQL test runner. The local SQLite/LAN entry point remains intact.

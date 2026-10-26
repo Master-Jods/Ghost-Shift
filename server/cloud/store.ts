@@ -8,14 +8,17 @@ export interface Database extends SqlClient {
   transaction<T>(work: (c: SqlClient) => Promise<T>): Promise<T>;
   close(): Promise<void>;
 }
-export function postgres(url: string): Database {
+export function postgres(
+  url: string,
+  options: { connectionTimeoutMs?: number } = {},
+): Database {
   if (!/^postgres(ql)?:\/\//.test(url))
     throw Error("DATABASE_URL must be a PostgreSQL connection URL.");
   const pool = new Pool({
     connectionString: url,
     max: 3,
     idleTimeoutMillis: 10000,
-    connectionTimeoutMillis: 10000,
+    connectionTimeoutMillis: options.connectionTimeoutMs ?? 10000,
     application_name: "ghost-shift-cloud",
   });
   pool.on("error", () => {
@@ -26,9 +29,9 @@ export function postgres(url: string): Database {
     async transaction(work) {
       const c = await pool.connect();
       try {
-        await c.query("BEGIN");
-        await c.query("SET LOCAL lock_timeout='5s'");
-        await c.query("SET LOCAL statement_timeout='15s'");
+        await c.query(
+          "BEGIN; SET LOCAL lock_timeout='5s'; SET LOCAL statement_timeout='15s'",
+        );
         const result = await work(c);
         await c.query("COMMIT");
         return result;

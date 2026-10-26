@@ -3,7 +3,7 @@
   "source": "https://github.com/PokeAPI/cries",
   "revision": "b3a9044bb839b5e3152aaa536c7b463a0fcf0140",
   "upstreamNote": "PokeAPI documents Showdown, Veekun and The Sounds Resource as original cry sources. Direct Showdown downloads returned HTTP403; no access bypass was attempted.",
-  "rights": "Pokemon cries remain original owner property; public distribution is not a separate grant of owner redistribution rights. Music/UI/typing are original procedural compositions. Replacement battle effects are Kenney CC0 recorded samples; see battle/SOURCES.json and included licenses.",
+  "rights": "Pokemon cries remain original owner property; public distribution is not a separate grant of owner redistribution rights. Music/UI/typing and incident danger sirens are original procedural compositions. Replacement battle effects are Kenney CC0 recorded samples; see battle/SOURCES.json and included licenses. Replacement recorded footsteps: Kenney Impact Sounds CC0-1.0, see footsteps/SOURCES.json and LICENSE.txt.",
   "entries": [
     {
       "id": 1,

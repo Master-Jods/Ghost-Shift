@@ -1,6 +1,6 @@
-import type { State } from "../../src/engine";
-import type { ActorRole, Proposal } from "../../src/protocol";
-import type { PlayerProfile } from "../../src/playerProfile";
+import type { State } from "../../src/engine.js";
+import type { ActorRole, Proposal } from "../../src/protocol.js";
+import type { PlayerProfile } from "../../src/playerProfile.js";
 export type Identity = {
   id: string;
   role: ActorRole;
@@ -25,6 +25,12 @@ export type Room = {
   rematch_code: string | null;
   parent_id: string | null;
   override_disconnect: boolean;
+  pendingPlayer?: {
+    id: string;
+    lastSeq: number;
+    leaseUntil: number;
+    lastSeen: number;
+  };
 };
 export type Player = {
   id: string;

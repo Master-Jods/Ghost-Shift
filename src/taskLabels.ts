@@ -1,4 +1,4 @@
-import {coolantReadings,type Task} from './engine';
+import {coolantReadings,type Task} from './engine.js';
 export const channelLabels=['A','B','C','D'];
 export const coolantLabels=['Pressure','Flow','Return temperature'];
 export const coolantValue=(index:number,value:number)=>`${value} ${['kPa','L/s','deg C'][index]}`;

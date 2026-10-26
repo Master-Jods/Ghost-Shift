@@ -1,0 +1,67 @@
+{
+  "author": "Kenney",
+  "license": "CC0-1.0",
+  "source": "https://kenney.nl/assets/impact-sounds",
+  "entries": [
+    {
+      "path": "/audio/footsteps/footstep_concrete_000.ogg",
+      "sourceFile": "Audio/footstep_concrete_000.ogg",
+      "sha256": "d7267e183067757c92c169de2a379abea592cfca6b39bb2e8feea15221ad79fe",
+      "bytes": 5808
+    },
+    {
+      "path": "/audio/footsteps/footstep_concrete_001.ogg",
+      "sourceFile": "Audio/footstep_concrete_001.ogg",
+      "sha256": "507a75eb19b897087855a3be3cf11a12d7fa37d143ad535eeebe0b8031c7325d",
+      "bytes": 6308
+    },
+    {
+      "path": "/audio/footsteps/footstep_concrete_002.ogg",
+      "sourceFile": "Audio/footstep_concrete_002.ogg",
+      "sha256": "b21fa546d74941196b25da8a20b7010abd8c05c4fcf93545d1f344e66a664e13",
+      "bytes": 6255
+    },
+    {
+      "path": "/audio/footsteps/footstep_concrete_003.ogg",
+      "sourceFile": "Audio/footstep_concrete_003.ogg",
+      "sha256": "8b513c2f0316324060b9174b8f28df6c2147418c506e6a53b77f18e149a5547b",
+      "bytes": 5805
+    },
+    {
+      "path": "/audio/footsteps/footstep_concrete_004.ogg",
+      "sourceFile": "Audio/footstep_concrete_004.ogg",
+      "sha256": "24dd8db2413e5b81ad181e1205c12a1c7801da5f85715d471b92a4b2f632e45e",
+      "bytes": 5912
+    },
+    {
+      "path": "/audio/footsteps/footstep_carpet_000.ogg",
+      "sourceFile": "Audio/footstep_carpet_000.ogg",
+      "sha256": "b9524658b52a99a20590f8feefc103088637fd13ea8ec35811aee785e1f2f330",
+      "bytes": 6353
+    },
+    {
+      "path": "/audio/footsteps/footstep_carpet_001.ogg",
+      "sourceFile": "Audio/footstep_carpet_001.ogg",
+      "sha256": "9af3c3f76705107339e72036e4053bdca3eaa50ad31c8c929f42ce8d40e5d781",
+      "bytes": 6411
+    },
+    {
+      "path": "/audio/footsteps/footstep_carpet_002.ogg",
+      "sourceFile": "Audio/footstep_carpet_002.ogg",
+      "sha256": "9af3c3f76705107339e72036e4053bdca3eaa50ad31c8c929f42ce8d40e5d781",
+      "bytes": 6411
+    },
+    {
+      "path": "/audio/footsteps/footstep_carpet_003.ogg",
+      "sourceFile": "Audio/footstep_carpet_003.ogg",
+      "sha256": "4ae7454338d57c7d102145919ae653c7d010eb542797c4f25a1c7470be3a7e4c",
+      "bytes": 6301
+    },
+    {
+      "path": "/audio/footsteps/footstep_carpet_004.ogg",
+      "sourceFile": "Audio/footstep_carpet_004.ogg",
+      "sha256": "4ae7454338d57c7d102145919ae653c7d010eb542797c4f25a1c7470be3a7e4c",
+      "bytes": 6301
+    }
+  ]
+}

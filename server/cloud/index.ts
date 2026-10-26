@@ -8,7 +8,7 @@ const app = createCloudApp({
 await app.service.ready;
 const port = await app.listen();
 console.log(
-  `Ghost Shift PostgreSQL authoritative server listening on port ${port}.`,
+  `Among the Shadows PostgreSQL authoritative server listening on port ${port}.`,
 );
 for (const signal of ["SIGINT", "SIGTERM"])
   process.once(signal, () => void app.close().then(() => process.exit(0)));

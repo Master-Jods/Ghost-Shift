@@ -1,12 +1,12 @@
 {
-  "name": "pokemon-ghost-shift",
+  "name": "among-the-shadows",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "node --env-file-if-exists=.env scripts/dev.mjs",
     "build": "tsc -b && tsc -p tsconfig.server.json && vite build",
-    "test": "tsx --test --test-concurrency=1 src/engine.test.ts src/animation.test.ts src/battlePresentation.test.ts src/battleAudio.test.ts src/pokemonCharacter.test.ts src/pokemonModels.test.ts src/runtimePokemonRig.test.ts src/firstPersonHands.test.ts src/chaseCamera.test.ts src/layoutGeometry.test.ts src/render-layout.test.ts src/presentation.test.ts src/navigation.test.ts src/collision-journal.test.ts src/task-matrix.test.ts server/*.test.ts",
+    "test": "tsx --test --test-concurrency=1 src/engine.test.ts src/animation.test.ts src/battlePresentation.test.ts src/battleAudio.test.ts src/dangerSound.test.ts src/pokemonCharacter.test.ts src/pokemonModels.test.ts src/runtimePokemonRig.test.ts src/chaseCamera.test.ts src/movementPrediction.test.ts src/layoutGeometry.test.ts src/render-layout.test.ts src/presentation.test.ts src/navigation.test.ts src/collision-journal.test.ts src/task-matrix.test.ts server/*.test.ts",
     "preview": "vite preview --host 127.0.0.1",
     "test:e2e": "playwright test",
     "dev:client": "vite --host 0.0.0.0",
@@ -31,7 +31,10 @@
     "cloud:operator": "node --env-file-if-exists=.env --import tsx server/cloud/cli.ts operator",
     "cloud:import": "node --env-file-if-exists=.env --import tsx server/cloud/cli.ts import",
     "test:cloud": "tsx --test --test-concurrency=1 server/cloud.test.ts",
-    "test:cloud:postgres": "tsx server/cloud/runPostgresTest.ts"
+    "test:cloud:postgres": "tsx server/cloud/runPostgresTest.ts",
+    "test:cloud:runtime": "node scripts/check-cloud-runtime.mjs",
+    "cloud:operator:check": "node --env-file-if-exists=.env --import tsx server/cloud/cli.ts operator-check",
+    "cloud:operator:reset-password": "node --env-file-if-exists=.env --import tsx server/cloud/cli.ts operator-reset"
   },
   "dependencies": {
     "@pkmn/sim": "0.10.11",

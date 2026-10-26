@@ -1,9 +1,8 @@
 {
   "samples": {
     "predictionRequestMs": [
-      24,
-      34,
-      43
+      160,
+      33
     ],
     "battle": {
       "before": {

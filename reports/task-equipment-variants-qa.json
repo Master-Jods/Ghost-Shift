@@ -1,0 +1,8 @@
+{
+  "carrierRestricted": true,
+  "cooperativeWindowRetry": true,
+  "localBypassRejectedThenApproved": true,
+  "extraResetRequired": true,
+  "resolved": true,
+  "errors": []
+}

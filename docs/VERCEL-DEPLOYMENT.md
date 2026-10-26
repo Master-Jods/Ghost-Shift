@@ -70,3 +70,23 @@ npx.cmd playwright test tests/cloud.spec.ts --workers=1
 Primary platform references: [Vercel WebSockets](https://vercel.com/docs/functions/websockets), [SQLite limitations](https://vercel.com/kb/guide/is-sqlite-supported-in-vercel), [Function limits](https://vercel.com/docs/functions/limitations). WebSockets are currently supported on Vercel; the problem addressed here is durable shared state and finite connection lifetime.
 
 Local verification on 2026-10-26: full suite 135 passed / 0 failed / 1 optional skipped; final focused cloud suite 5 passed; real PostgreSQL test 1 passed; three-terminal Chrome test 1 passed; production build passed. [Machine-readable record](../reports/vercel-cloud-qa.json), [player emergency screenshot](screenshots/vercel-cloud/player.png), [operator dashboard screenshot](screenshots/vercel-cloud/operator.png).
+
+## Runtime startup troubleshooting
+
+If health/login returns Vercel `FUNCTION_INVOCATION_FAILED`, inspect Runtime Logs before changing credentials. An `ERR_MODULE_NOT_FOUND` path ending in `server/cloud/app` means Node ESM could not resolve an extensionless import. All imports reachable from `api/cloud.ts` now specify `.js` so the emitted server runs directly in Node, without relying on tsx or Vite resolution. The function inclusion glob also explicitly includes `pokemon-assets.json`, required by the native battle engine. Run `npm run test:cloud:runtime` to compile and start the emitted JavaScript against an isolated PostgreSQL test engine, then verify health and operator login; this does not read the private `.env` or connect to the production database.
+
+The deployment config uses UTF-8 without BOM and string brace globs for `includeFiles`/`excludeFiles`, as required by the Vercel schema. For a CLI upload exceeding the file-count limit, use `npx.cmd vercel@latest --prod --archive=tgz`. Redeploy local fixes before retrying health/login; editing environment variables cannot repair an import failure in the deployed code.
+
+## Incorrect operator credentials after changing environment variables
+
+`OPERATOR_PASSWORD` bootstraps a new account. It does not overwrite the stored scrypt hash of an existing username, including an imported account. A changed Vercel environment value alone therefore does not reset an existing password. The exact cause can be checked with `npm run cloud:operator:check`; output contains only account-exists/password-match booleans, never credentials.
+
+To reset, privately set `DATABASE_URL`, `OPERATOR_USER` and `OPERATOR_PASSWORD` in the local `.env` to the same intended production database/user/password, then run `npm.cmd run cloud:operator:reset-password`. Use the pooled PostgreSQL URL, not SQLite's `DB_PATH`. This changes the cloud account's password hash, revokes existing operator logins and preserves account ID, rooms and logs. It does not require a redeployment to update the existing database account. The local SQLite `operator:reset-password` command targets a different store and will not fix a cloud login.
+
+Vercel variables marked Secret cannot be downloaded through `vercel env run`/pull. Retrieve the PostgreSQL connection URL from its provider and enter the intended password privately; never share it in chat or commit `.env`.
+
+If `cloud:operator:check` reports `accountExists: false` and live health reports `setupRequired: true`, create the missing account with `npm.cmd run cloud:operator` instead of resetting it. The cloud CLI permits 30 seconds for a database connection; SSL-mode advisory messages alone do not indicate an authentication failure.
+
+## Current movement/region configuration
+
+The existing Neon connection identifies AWS us-east-1. `vercel.json` explicitly places `api/cloud.ts` in iad1 to avoid the earlier Singapore-to-US database round trips. If moving to another PostgreSQL region, change this configuration to a nearby Vercel region. Do not choose a region solely by player location while keeping a remote database. Cloud movement now coalesces input with snapshots and uses bounded visual prediction; see [hand-free view, latency fix and measured verification](CLOUD-MOVEMENT.md). No new environment variable is required.

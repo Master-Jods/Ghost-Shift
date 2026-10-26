@@ -122,6 +122,9 @@ test(
         ),
         1,
       );
+      const motion=await b.motionFrame(id,aa,[cmd('LOOK',0),cmd('INPUT',{x:0,y:0})]);
+      assert(motion.acknowledgements.every(v=>v.ok));
+      assert.equal((await c.snapshot(id,aa)).net.lastCommandSeq,motion.snapshot.net.lastCommandSeq);
       let release!: () => void, locked!: () => void;
       const lockReady = new Promise<void>((r) => (locked = r)),
         gate = new Promise<void>((r) => (release = r));

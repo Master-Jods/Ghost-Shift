@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs';
-import type {Store} from './database';
-import {neutralRecord,type PokemonRecord} from '../src/data';
+import type {Store} from './database.js';
+import {neutralRecord,type PokemonRecord} from '../src/data.js';
 const fullCatalog=JSON.parse(readFileSync(new URL('../public/catalog/index.json',import.meta.url),'utf8')) as {count:number;fetchedAt:string;source:string;scope:string;entries:{id:number;name:string}[]};
 const models=JSON.parse(readFileSync(new URL('../public/catalog/pokemon-models.json',import.meta.url),'utf8'));const supported=new Set<number>(models.models.filter((m:any)=>m.verified&&m.representation==='gltf').map((m:any)=>m.id));
 export const catalog={...fullCatalog,entries:fullCatalog.entries.filter(p=>supported.has(p.id)),count:supported.size,scope:'Verified textured 3D models with native or runtime motion'};

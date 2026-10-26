@@ -1,0 +1,33 @@
+{
+  "audio": {
+    "footstepsPlayed": 3,
+    "decodedFootsteps": 10,
+    "dangerAlarms": 0,
+    "dangerKind": null,
+    "dangerActive": false,
+    "dangerIncident": null,
+    "ready": true,
+    "mode": "explore",
+    "notes": 24,
+    "clicks": 8,
+    "typing": 3,
+    "battleEffects": 0,
+    "battleSamplesPlayed": 0,
+    "decodedBattleSamples": 11,
+    "battleVolume": 0.7,
+    "cries": 0,
+    "decodedCries": 0,
+    "musicGain": 0,
+    "level": 0,
+    "muted": false,
+    "musicVolume": 0
+  },
+  "errors": [],
+  "checks": [
+    "Two crewmate models rendered",
+    "Walking pose while keyboard moving",
+    "10 decoded recorded footstep variants",
+    "Footsteps advance during movement, stop when idle",
+    "First/third-person toggle and no hands"
+  ]
+}

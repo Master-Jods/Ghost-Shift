@@ -1,0 +1,11 @@
+{
+  "afterTask": "PRESCRIPTIVE / DO NEXT\nRetrieve module for Research Data Transport at Professor Oak's Research Lab. About 8s walking via current doors. Use the current open corridors. Then carry it to Rotom Relay Station and verify the upload.",
+  "errors": [],
+  "checks": [
+    "Actual coolant submission completes task",
+    "Current-state prescription visible during failed API request",
+    "Completed task disappears from prescription",
+    "Forecast automatically retries and returns ETA",
+    "Sample success rate not presented as guaranteed extraction"
+  ]
+}

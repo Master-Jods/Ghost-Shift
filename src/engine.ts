@@ -1,10 +1,10 @@
-import type {BattleView} from './showdownTypes';
-import {followCompanion} from './companionNavigation';
-import {RULES} from './rules';
-import {commandId} from './ids';
-import {companionModifier,type PokemonRecord,type Role} from './data';
-import {TASK_TYPES,THREAT_LIBRARY,EMERGENCIES} from './content';
-import {spawn,center,controlPoint,gateControl,move,distance,roomAt,walkable,pathLength,lineOfSight,gateDefinitions,doors,invalidateDoorCache,colliderIntersects,type Vec} from './world';
+import type {BattleView} from './showdownTypes.js';
+import {followCompanion} from './companionNavigation.js';
+import {RULES} from './rules.js';
+import {commandId} from './ids.js';
+import {companionModifier,type PokemonRecord,type Role} from './data.js';
+import {TASK_TYPES,THREAT_LIBRARY,EMERGENCIES} from './content.js';
+import {spawn,center,controlPoint,gateControl,move,distance,roomAt,walkable,pathLength,lineOfSight,gateDefinitions,doors,invalidateDoorCache,colliderIntersects,type Vec} from './world.js';
 export type Config={duration:number;severity:string;seed:number;scouting:boolean;variant:string;preset:string;roster:number[];taskCount?:number;maxThreats?:number;maxEmergencies?:number;eventBudget?:number;eventCooldown?:number};
 export type Event={id:string;at:number;text:string;kind:string;data?:Record<string,unknown>};
 export type MonState='Following'|'Assigned'|'Battling'|'Reserve';

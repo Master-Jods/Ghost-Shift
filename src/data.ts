@@ -1,5 +1,5 @@
-import directional from './directional-manifest';
-import bundled from './asset-manifest';
+import directional from './directional-manifest.js';
+import bundled from './asset-manifest.js';
 export type Role='control'|'A'|'B';
 export type PokemonRecord={id:number;name:string;types:string[];stats:number[];isDefault:boolean;species:string;source:'pokeapi'|'offline-neutral'};
 export const art=(id:number)=>bundled.includes(id)?`/pokemon/${id}-art.png`:`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;

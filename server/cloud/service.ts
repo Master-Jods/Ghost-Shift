@@ -6,7 +6,7 @@ import {
   commitShowdown,
   type State,
   type Action,
-} from "../../src/engine";
+} from "../../src/engine.js";
 import {
   PROTOCOL_VERSION,
   validateCommand,
@@ -20,37 +20,37 @@ import {
   type Command,
   type Ack,
   type ActorRole,
-} from "../../src/protocol";
-import { RULES } from "../../src/rules";
-import { MAP_SIGNATURE, MAP_VERSION, distance } from "../../src/world";
+} from "../../src/protocol.js";
+import { RULES } from "../../src/rules.js";
+import { MAP_SIGNATURE, MAP_VERSION, distance } from "../../src/world.js";
 import {
   playerProfile,
   PROFILE_ERROR,
   type PlayerProfile,
-} from "../../src/playerProfile";
-import type { PokemonRecord } from "../../src/data";
-import { hashToken, token, hashPassword, checkPassword } from "../security";
-import { metrics } from "../metrics";
+} from "../../src/playerProfile.js";
+import type { PokemonRecord } from "../../src/data.js";
+import { hashToken, token, hashPassword, checkPassword } from "../security.js";
+import { metrics } from "../metrics.js";
 import {
   catalog,
   validPokemon,
   publicRecord,
   injectionRecord,
-} from "../catalog";
-import { quickPlans, quickForecast, QUICK_MODEL } from "../quickAnalysis";
-import { knowledgeState } from "../analytics";
-import { fieldFacts, fieldMaterialKey } from "../../src/fieldAnalysis";
-import { makePreview, feasibility, fingerprint } from "../decisions";
-import { startEncounter, battleChoice } from "../showdownBattle";
-import type { Jobs } from "../jobs";
-import { dbTime, migrate, type Database, type SqlClient } from "./store";
+} from "../catalog.js";
+import { quickPlans, quickForecast, QUICK_MODEL } from "../quickAnalysis.js";
+import { knowledgeState } from "../analytics.js";
+import { fieldFacts, fieldMaterialKey } from "../../src/fieldAnalysis.js";
+import { makePreview, feasibility, fingerprint } from "../decisions.js";
+import { startEncounter, battleChoice } from "../showdownBattle.js";
+import type { Jobs } from "../jobs.js";
+import { dbTime, migrate, type Database, type SqlClient } from "./store.js";
 import {
   check,
   CloudError,
   type Room,
   type Player,
   type Identity,
-} from "./types";
+} from "./types.js";
 export type Auth = { bearer?: string; cookie?: string; connectionId?: string };
 const js = (v: unknown) => JSON.stringify(v),
   numbers = (r: any) => {
@@ -99,6 +99,46 @@ export class CloudService {
       "INSERT INTO gs_operators VALUES($1,$2,$3,$4) ON CONFLICT(username) DO NOTHING",
       [randomUUID(), username, hashPassword(password), Date.now()],
     );
+  }
+  async checkOperatorEnvironment(username: string, password: string) {
+    const row = (
+      await this.db.query(
+        "SELECT password_hash FROM gs_operators WHERE username=$1",
+        [username],
+      )
+    ).rows[0];
+    return {
+      accountExists: !!row,
+      passwordMatchesEnvironment:
+        !!row && checkPassword(password, row.password_hash),
+    };
+  }
+  async resetOperatorPassword(username: string, password: string) {
+    check(
+      /^[a-zA-Z0-9_-]{3,32}$/.test(username) && password.length >= 10,
+      400,
+      "Use a valid operator username and a password of at least 10 characters.",
+    );
+    return this.db.transaction(async (c) => {
+      const row = (
+        await c.query(
+          "SELECT id FROM gs_operators WHERE username=$1 FOR UPDATE",
+          [username],
+        )
+      ).rows[0];
+      check(
+        row,
+        404,
+        "Operator account not found. Create the cloud operator first.",
+      );
+      await c.query("UPDATE gs_operators SET password_hash=$2 WHERE id=$1", [
+        row.id,
+        hashPassword(password),
+      ]);
+      await c.query("DELETE FROM gs_operator_sessions WHERE operator_id=$1", [
+        row.id,
+      ]);
+    });
   }
   async operator(auth: Auth, c: SqlClient = this.db) {
     check(auth.cookie, 401, "Operator login required.");
@@ -382,7 +422,7 @@ export class CloudService {
   async save(c: SqlClient, r: Room) {
     r.version++;
     await c.query(
-      "UPDATE gs_rooms SET state=$2::jsonb,version=$3,closed=$4,last_tick=$5,updated_at=$5,pause_reason=$6,proposal=$7::jsonb,rematch_code=$8,override_disconnect=$9 WHERE id=$1",
+      "WITH refreshed AS (UPDATE gs_players SET last_seq=GREATEST(last_seq,$11::bigint),lease_until=$12::bigint,last_seen=$13::bigint WHERE id=$10::text RETURNING id) UPDATE gs_rooms SET state=$2::jsonb,version=$3,closed=$4,last_tick=$5,updated_at=$5,pause_reason=$6,proposal=$7::jsonb,rematch_code=$8,override_disconnect=$9 WHERE id=$1",
       [
         r.id,
         js(r.state),
@@ -393,6 +433,10 @@ export class CloudService {
         js(r.proposal),
         r.rematch_code,
         r.override_disconnect,
+        r.pendingPlayer?.id || null,
+        r.pendingPlayer?.lastSeq || 0,
+        r.pendingPlayer?.leaseUntil || 0,
+        r.pendingPlayer?.lastSeen || 0,
       ],
     );
   }
@@ -414,8 +458,49 @@ export class CloudService {
           .rows[0],
       ) as Room;
       check(r, 404, "Session not found.");
-      const actor = await this.identity(c, r, auth),
-        now = await dbTime(c);
+      const access = (
+        await c.query(
+          "SELECT (extract(epoch from clock_timestamp())*1000)::bigint AS now, coalesce((SELECT jsonb_agg(p ORDER BY role) FROM gs_players p WHERE session_id=$1 AND NOT released),'[]'::jsonb) AS players, (SELECT jsonb_build_object('id',o.id,'username',o.username) FROM gs_operator_sessions os JOIN gs_operators o ON o.id=os.operator_id WHERE os.token_hash=$2 AND os.expires_at>(extract(epoch from clock_timestamp())*1000)::bigint) AS operator",
+          [id, auth.cookie ? hashToken(auth.cookie) : ""],
+        )
+      ).rows[0];
+      const players = (access.players as Player[]).map(numbers),
+        now = Number(access.now);
+      let actor: Identity;
+      if (auth.bearer) {
+        const player = players.find(
+          (p) => p.token_hash === hashToken(auth.bearer!),
+        );
+        check(player, 401, "Player slot credential is invalid or released.");
+        if (auth.connectionId)
+          check(
+            player.connection_id === auth.connectionId,
+            409,
+            "This slot is now controlled by another tab.",
+          );
+        actor = {
+          id: player.id,
+          role: player.role,
+          profile: player.profile,
+          sessionId: id,
+          connectionId: auth.connectionId,
+        };
+      } else {
+        const op = access.operator;
+        check(op, 401, "Operator login required.");
+        check(
+          r.owner === op.id || r.owner === null,
+          403,
+          "This operator does not own that session.",
+        );
+        actor = {
+          id: op.id,
+          username: op.username,
+          role: "control",
+          sessionId: id,
+          connectionId: auth.connectionId,
+        };
+      }
       if (!allowClosed) {
         check(
           !r.closed && r.expires_at > now,
@@ -428,8 +513,7 @@ export class CloudService {
           "Archived scenario: create a new shift.",
         );
       }
-      const players = await this.players(c, id),
-        before = r.state;
+      const before = r.state;
       if (
         !r.closed &&
         r.expires_at > now &&
@@ -693,6 +777,7 @@ export class CloudService {
       serverTime: r.last_tick,
       state,
       net: {
+        lastCommandSeq: players.find((p) => p.id === actor.id)?.last_seq || 0,
         mode: "server",
         protocol: PROTOCOL_VERSION,
         mapSignature: MAP_SIGNATURE,
@@ -717,23 +802,78 @@ export class CloudService {
       auth,
       async (c, r, actor, players) => {
         if (heartbeat && actor.role !== "control") {
-          await c.query(
-            "UPDATE gs_players SET lease_until=$2,last_seen=$3 WHERE id=$1 AND connection_id=$4",
-            [
-              actor.id,
-              r.last_tick + this.leaseMs,
-              r.last_tick,
-              auth.connectionId,
-            ],
-          );
           const p = players.find((v) => v.id === actor.id)!;
           p.lease_until = r.last_tick + this.leaseMs;
           p.last_seen = r.last_tick;
+          r.pendingPlayer = {
+            id: p.id,
+            lastSeq: p.last_seq,
+            leaseUntil: p.lease_until,
+            lastSeen: p.last_seen,
+          };
         }
         return this.project(r, actor, players);
       },
       true,
     );
+  }
+  /** Latest input + orientation + heartbeat + snapshot share one locked transaction. */
+  async motionFrame(id: string, auth: Auth, commands: Command[]) {
+    const validated = commands
+      .map((command) => {
+        const v = validateCommand(command);
+        check(v.ok, 400, v.ok ? "" : v.message);
+        check(
+          ["INPUT", "LOOK"].includes(command.type),
+          403,
+          "Only movement packets may use this path.",
+        );
+        return v.command;
+      })
+      .sort((a, b) => a.seq - b.seq);
+    return this.room(id, auth, async (_c, r, actor, players) => {
+      check(
+        actor.role !== "control",
+        403,
+        "Player movement requires a player slot.",
+      );
+      const player = players.find((p) => p.id === actor.id)!;
+      const acknowledgements: Ack[] = [];
+      for (const command of validated) {
+        if (command.seq <= player.last_seq) {
+          acknowledgements.push({
+            type: "ack",
+            id: command.id,
+            ok: false,
+            message: "Movement superseded by a newer sequence.",
+          });
+          continue;
+        }
+        const next = reduce(r.state, {
+          type: command.type,
+          role: actor.role,
+          value: command.value,
+        });
+        player.last_seq = command.seq;
+        r.state = next;
+        acknowledgements.push({
+          type: "ack",
+          id: command.id,
+          ok: true,
+          message: "Movement received.",
+          stateVersion: r.state.revision,
+        });
+      }
+      player.lease_until = r.last_tick + this.leaseMs;
+      player.last_seen = r.last_tick;
+      r.pendingPlayer = {
+        id: player.id,
+        lastSeq: player.last_seq,
+        leaseUntil: player.lease_until,
+        lastSeen: player.last_seen,
+      };
+      return { snapshot: this.project(r, actor, players), acknowledgements };
+    });
   }
   async context(r: Room, actor: Identity, players: Player[]) {
     return {

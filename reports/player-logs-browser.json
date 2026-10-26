@@ -1,26 +1,26 @@
 {
   "profiles": [
     {
-      "participantId": "1883f84c-0bf0-4410-b363-3f4d156de3de",
+      "participantId": "57af624f-5140-42be-ba63-58e97f02ee08",
       "role": "A",
       "fullName": "Maria Clara Santos",
       "block": "BSIT 3-1",
-      "groupNumber": "7",
-      "registeredAt": 1792982011214
+      "groupNumber": null,
+      "registeredAt": 1793020228800
     },
     {
-      "participantId": "cf6a58f4-9ae6-45e2-9a42-94e5b7b6e4b3",
+      "participantId": "9df58843-335c-4f8e-a317-adacaf2615d7",
       "role": "B",
       "fullName": "Juan Dela Cruz",
       "block": "BSIT 3-2",
-      "groupNumber": "8",
-      "registeredAt": 1792982013559
+      "groupNumber": null,
+      "registeredAt": 1793020234072
     }
   ],
   "rows": 157,
   "errors": [],
   "checks": [
-    "Required form fields and numeric group validation",
+    "Name and block required; group field removed",
     "Real two-player names on operator overview",
     "Actual task completion and Pokemon encounter attributed to participant",
     "Reload retains profile",

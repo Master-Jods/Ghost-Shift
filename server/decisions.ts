@@ -1,11 +1,11 @@
-import {stableJson}from '../src/stableJson';
+import {stableJson}from '../src/stableJson.js';
 import {createHash,randomUUID} from 'node:crypto';
-import {reduce,injectionCheck,type State,type Action} from '../src/engine';
-import {doors,gateDefinitions,roomName} from '../src/world';
-import {taskChoices} from '../src/taskChoices';
-import {needsPreview,type ActorRole,type DecisionPreview} from '../src/protocol';
-import {knowledgeState,MODEL_VERSION} from './analytics';
-import type {Jobs} from './jobs';
+import {reduce,injectionCheck,type State,type Action} from '../src/engine.js';
+import {doors,gateDefinitions,roomName} from '../src/world.js';
+import {taskChoices} from '../src/taskChoices.js';
+import {needsPreview,type ActorRole,type DecisionPreview} from '../src/protocol.js';
+import {knowledgeState,MODEL_VERSION} from './analytics.js';
+import type {Jobs} from './jobs.js';
 export function fingerprint(s:State,role:ActorRole,action:Action){return createHash('sha256').update(stableJson({phase:s.phase,paused:s.paused,config:s.config,keys:s.overrideKeys,route:s.route,teams:Object.values(s.players).map(p=>[p.selected,p.encounterId,Object.entries(p.team).map(([id,m])=>[id,m.state])]),request:s.request,tasks:s.tasks.map(t=>[t.id,t.progress,t.complete,t.option,t.connections,t.setup,t.activated,t.carrier]),threats:s.threats.map(t=>[t.instanceId,t.status,t.hp,t.containment,t.severity,t.doorId,t.blocking]),emergencies:s.emergencies.map(e=>[e.id,e.status,e.progress,e.allocated,e.responses]),spent:s.director.spent,role,action})).digest('hex').slice(0,24);}
 export function feasibility(s:State,role:ActorRole,action:Action){if(!needsPreview(action.type))return {ok:false,reason:'No preview is defined.'};if(role==='control')return action.type==='INJECT'?injectionCheck(s,action.value):{ok:false,reason:'Only the operator may inject events.'};if(action.type==='INJECT')return {ok:false,reason:'Director authority required.'};if(action.type==='ENCOUNTER'){const t=s.threats.find(t=>t.instanceId===action.value);if(t?.battle?.outcome==='active'&&t.battle.owner!==role&&s.players[t.battle.owner].encounterId===t.instanceId)return {ok:false,reason:'Your partner is handling this singles battle. Continue tasks or respond to emergencies.'};if(t?.battle?.outcome==='lost'&&t.battle.owner===role)return {ok:false,reason:'This party has fainted in this encounter. Your partner may respond, or retreat and continue the mission.'};}const after=reduce(s,{...action,role});return {ok:after!==s,reason:after!==s?'Current position, companion activity and door prerequisites permit this action.':'Recheck terminal proximity, companion activity, shared key, door occupancy or prerequisites.'};}
 export async function makePreview(s:State,role:ActorRole,action:Action,jobs:Jobs,owner:string):Promise<DecisionPreview>{const check=feasibility(s,role,action),after=check.ok?reduce(s,{...action,role}):s,changed=doors(after).filter(d=>d.locked!==doors(s).find(v=>v.id===d.id)?.locked),choice=action.type==='TASK_OPTION'?taskChoices(s.tasks.find(t=>t.id===action.value?.id)).find(c=>c.id===action.value.option):undefined;

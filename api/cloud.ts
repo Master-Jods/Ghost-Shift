@@ -1,4 +1,4 @@
-﻿import { createCloudApp } from "../server/cloud/app";
+import { createCloudApp } from "../server/cloud/app.js";
 const app = createCloudApp({
   databaseUrl: process.env.DATABASE_URL,
   bootstrapUser: process.env.OPERATOR_USER,

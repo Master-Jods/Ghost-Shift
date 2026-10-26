@@ -1,0 +1,746 @@
+﻿/* Equipment UI: stable slider geometry, readable targets and consistent task spacing. */
+.player-game
+  .equipment-terminal:has(.mechanism, .emergency-mechanism, .task-options) {
+  width: min(820px, 94vw);
+  max-height: calc(100dvh - 40px);
+  padding: 30px !important;
+  overflow: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.terminal-backdrop:has(.mechanism, .emergency-mechanism, .task-options) {
+  z-index: 140;
+  padding: 20px;
+  align-items: center;
+}
+.decision-backdrop {
+  z-index: 180;
+}
+.equipment-terminal:has(
+    .mechanism,
+    .emergency-mechanism,
+    .task-options
+  )::before {
+  padding-right: 38px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.equipment-terminal:has(.mechanism, .task-options) > h2 {
+  margin: 10px 42px 14px 0;
+  font-size: 34px;
+  line-height: 1.15;
+}
+.equipment-terminal .mechanism {
+  margin: 20px 0 0;
+  padding: 22px;
+  border: 1px solid #596366;
+  background: linear-gradient(135deg, #192428, #111a1d);
+  min-width: 0;
+}
+.equipment-terminal .mechanism p,
+.equipment-terminal .emergency-mechanism p {
+  font:
+    16px/1.55 Barlow,
+    sans-serif;
+  margin: 0 0 16px;
+  color: #d6d1cc;
+}
+.mechanism h3,
+.emergency-mechanism h3 {
+  font:
+    600 19px/1.4 "Barlow Condensed",
+    sans-serif;
+  margin: 20px 0 12px;
+  color: #f5e8d3;
+}
+.mechanism .mechanism-status {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 20px;
+  margin: 18px 0;
+  padding: 12px 14px;
+  font: 13px/1.5 monospace;
+  background: #101719;
+  border-left: 3px solid #9daaa1;
+  color: #c4d0c8;
+}
+.terminal-targets {
+  padding: 16px;
+  background: #101719;
+  border: 1px solid #465359;
+  margin: 20px 0;
+}
+.terminal-targets h3 {
+  margin: 0 0 12px;
+  font: 12px/1.5 monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #c5bca9;
+}
+.terminal-targets dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+.terminal-targets dl > div {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+}
+.terminal-targets dt {
+  font:
+    13px/1.4 Barlow,
+    sans-serif;
+  color: #bcb6af;
+}
+.terminal-targets dd {
+  margin: 0;
+  font:
+    600 21px/1.4 Barlow,
+    sans-serif;
+  color: #f4e5ce;
+  overflow-wrap: anywhere;
+  letter-spacing: 0.5px;
+}
+.task-selectors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 18px;
+  margin: 22px 0;
+}
+.task-selectors label {
+  display: grid;
+  min-width: 0;
+  gap: 9px;
+  font:
+    600 16px/1.4 Barlow,
+    sans-serif;
+}
+.task-selectors select {
+  width: 100%;
+  min-height: 48px;
+  font:
+    17px Barlow,
+    sans-serif;
+  padding: 10px 12px;
+}
+.task-selectors small {
+  font:
+    14px/1.5 Barlow,
+    sans-serif;
+  color: #c2baaa;
+}
+.equipment-terminal .task-buttons.wire-leads,
+.equipment-terminal .task-buttons.wire-sockets,
+.equipment-terminal .response-channels {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 14px 0 24px;
+}
+.equipment-terminal .wire-leads button {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 14px 10px;
+  font:
+    17px/1.4 Barlow,
+    sans-serif;
+  min-height: 90px;
+  height: auto;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.wire-leads b {
+  font-size: 17px;
+}
+.wire-leads small {
+  font: 11px/1.4 monospace !important;
+  overflow-wrap: anywhere;
+}
+.equipment-terminal .wire-sockets button,
+.equipment-terminal .response-channels button {
+  min-width: 0;
+  min-height: 52px;
+  height: auto;
+  font:
+    18px Barlow,
+    sans-serif;
+  padding: 12px;
+}
+.wire-leads button[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 2px #e7bc93;
+  background: #43352d;
+}
+.circuit-preview {
+  display: block;
+  width: 100%;
+  max-height: 96px;
+  margin: 18px 0;
+}
+.equipment-terminal .task-submit {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #526064;
+}
+.equipment-terminal .task-submit p {
+  margin: 0;
+}
+.equipment-terminal .task-submit > .primary {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 18px;
+  font:
+    600 17px/1.4 Barlow,
+    sans-serif;
+  white-space: normal;
+  height: auto;
+}
+.equipment-terminal .alignment-status {
+  padding: 12px 14px;
+  background: #2c2721;
+  border-left: 3px solid #c3a67c;
+  color: #e5cfb0;
+}
+.equipment-terminal .alignment-status[data-ready="true"] {
+  background: #1a332b;
+  border-color: #82c6a2;
+  color: #c2ebd1;
+}
+.coolant-readings {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 22px 0;
+}
+.coolant-reading {
+  min-width: 0;
+  padding: 16px 12px;
+  display: grid;
+  grid-template-rows: 42px 36px 24px 18px 38px 24px;
+  gap: 8px;
+  background: #121b20;
+  border: 1px solid #7b6550;
+  border-top: 3px solid #bb9368;
+  text-align: left;
+}
+.coolant-reading[data-safe="true"] {
+  border-color: #547d68;
+  border-top-color: #86bd9d;
+}
+.coolant-reading h3 {
+  margin: 0;
+  font:
+    600 16px/1.3 Barlow,
+    sans-serif;
+}
+.coolant-reading output {
+  font:
+    600 26px/1.3 "Barlow Condensed",
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: #f5ead5;
+  white-space: nowrap;
+}
+.coolant-reading span {
+  font:
+    14px/1.4 Barlow,
+    sans-serif;
+  white-space: nowrap;
+  color: #d6c9b6;
+}
+.coolant-reading meter {
+  width: 100%;
+  height: 16px;
+}
+.coolant-reading small {
+  font:
+    13px/1.4 Barlow,
+    sans-serif;
+  color: #b7b8b0;
+}
+.coolant-reading b {
+  font:
+    600 14px/1.4 Barlow,
+    sans-serif;
+  color: #e6bf90;
+}
+.coolant-reading[data-safe="true"] b {
+  color: #a1d2b2;
+}
+.mechanism .valve-heading {
+  margin-bottom: 8px;
+}
+.mechanism .valve-hint {
+  font-size: 14px;
+}
+.valve-bank {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+.valve-control {
+  min-width: 0;
+  margin: 0;
+  padding: 14px 12px 12px;
+  border: 1px solid #56676b;
+  background: #172125;
+}
+.valve-control legend {
+  padding: 0 6px;
+  font:
+    600 17px/1.4 Barlow,
+    sans-serif;
+  color: #ece3cf;
+}
+.mechanism .valve-control p {
+  height: 44px;
+  margin: 0 0 12px;
+  font:
+    13px/1.5 Barlow,
+    sans-serif;
+  color: #bbc3bd;
+}
+.valve-value {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 28px;
+  white-space: nowrap;
+}
+.valve-value label {
+  font:
+    13px Barlow,
+    sans-serif;
+}
+.valve-value output {
+  font: 13px/1.5 monospace;
+  font-variant-numeric: tabular-nums;
+  color: #e3d6b7;
+}
+.valve-control input[type="range"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 46px;
+  min-height: 46px;
+  margin: 10px 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  accent-color: #dcb891;
+  touch-action: none;
+  cursor: ew-resize;
+}
+.valve-stops {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+.equipment-terminal .valve-stops button {
+  padding: 5px;
+  min-width: 0;
+  min-height: 40px;
+  height: 40px;
+  font: 15px monospace;
+  border: 1px solid #637276;
+  background: #1c2a2d;
+  box-shadow: none;
+}
+.equipment-terminal .valve-stops button[aria-pressed="true"] {
+  background: #d7bd99;
+  color: #192022;
+  border-color: #efdab9;
+}
+.stabilizer-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.stabilizer-pair article {
+  display: grid;
+  align-content: start;
+  gap: 9px;
+  min-width: 0;
+  padding: 16px;
+  background: #152126;
+  border: 1px solid #546267;
+}
+.stabilizer-pair h3 {
+  margin: 0;
+}
+.stabilizer-pair span {
+  font:
+    14px/1.5 Barlow,
+    sans-serif;
+  color: #c9bba5;
+}
+.stabilizer-pair strong {
+  font: 14px/1.5 monospace;
+  color: #d1d4c0;
+}
+.stabilizer-pair article[data-ready="true"] {
+  border-color: #75a589;
+}
+.equipment-terminal .task-feedback {
+  padding: 13px 16px;
+  border-left: 3px solid #c3ae7e;
+  background: #292923;
+  color: #e1d1b5;
+  font:
+    15px/1.5 Barlow,
+    sans-serif;
+  margin: 16px 0;
+}
+.emergency-summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 4px 0 18px;
+  padding-right: 26px;
+}
+.emergency-summary h2 {
+  margin: 10px 0 0;
+  font-size: 34px;
+  line-height: 1.2;
+}
+.emergency-timer {
+  flex-shrink: 0;
+  display: grid;
+  gap: 6px;
+  padding: 12px 16px;
+  background: #431c23;
+  border: 1px solid #a65a64;
+  text-align: center;
+}
+.emergency-timer small {
+  font: 11px/1.4 monospace;
+  color: #eab9b9;
+}
+.emergency-timer strong {
+  font: 600 28px/1.2 monospace;
+  color: #ffe3cc;
+  font-variant-numeric: tabular-nums;
+}
+.emergency-mechanism .response-instructions {
+  margin: 18px 0;
+  padding-left: 24px;
+  display: grid;
+  gap: 12px;
+}
+.emergency-mechanism .response-instructions li {
+  font:
+    16px/1.6 Barlow,
+    sans-serif;
+  padding-left: 5px;
+  color: #d6c7bd;
+}
+.equipment-terminal .emergency-deadline {
+  padding: 14px 16px;
+  border-left: 3px solid #e5747f;
+  background: #411e2588;
+  color: #f5bdc4;
+}
+.response-plans {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 22px 0;
+}
+.response-plans article {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  background: #172226;
+  border: 1px solid #616b68;
+}
+.response-plans h3 {
+  margin: 0;
+}
+.response-plans p {
+  flex: 1;
+}
+.response-plans button {
+  min-height: 48px;
+  padding: 12px;
+  font:
+    600 16px/1.4 Barlow,
+    sans-serif;
+  white-space: normal;
+}
+.response-target,
+.response-progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  background: #18262a;
+  border: 1px solid #597076;
+  margin: 22px 0;
+}
+.response-target span,
+.response-progress span {
+  font: 14px/1.4 monospace;
+  color: #c7c0ad;
+}
+.response-target strong,
+.response-progress strong {
+  font:
+    600 21px/1.4 Barlow,
+    sans-serif;
+  color: #eee1c8;
+}
+.response-hint {
+  font-size: 14px !important;
+}
+@media (max-width: 700px) {
+  .player-game
+    .equipment-terminal:has(.mechanism, .emergency-mechanism, .task-options) {
+    width: 96vw;
+    padding: 20px !important;
+    max-height: calc(100dvh - 20px);
+  }
+  .terminal-backdrop:has(.mechanism, .emergency-mechanism, .task-options) {
+    padding: 10px;
+  }
+  .equipment-terminal .mechanism {
+    padding: 16px;
+  }
+  .coolant-readings,
+  .valve-bank {
+    grid-template-columns: 1fr;
+  }
+  .coolant-reading {
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 10px 16px;
+    padding: 16px;
+  }
+  .coolant-reading h3 {
+    margin: 0;
+  }
+  .coolant-reading meter {
+    grid-column: 1/-1;
+  }
+  .coolant-reading small {
+    grid-column: 1/-1;
+  }
+  .coolant-reading b {
+    grid-column: 1/-1;
+  }
+  .coolant-reading output {
+    text-align: right;
+  }
+  .valve-control {
+    padding: 14px 16px;
+  }
+  .mechanism .valve-control p {
+    height: auto;
+    min-height: 22px;
+  }
+  .valve-value {
+    margin-top: 10px;
+  }
+  .equipment-terminal .valve-stops button {
+    min-height: 44px;
+  }
+  .equipment-terminal .task-buttons.wire-leads {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .task-selectors {
+    grid-template-columns: 1fr;
+  }
+  .response-plans {
+    grid-template-columns: 1fr;
+  }
+  .emergency-summary {
+    flex-wrap: wrap;
+    padding-right: 28px;
+  }
+  .emergency-timer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .response-target {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .terminal-targets dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-height: 600px) {
+  .player-game
+    .equipment-terminal:has(.mechanism, .emergency-mechanism, .task-options) {
+    max-height: calc(100dvh - 16px);
+    padding: 18px !important;
+  }
+  .terminal-backdrop:has(.mechanism, .emergency-mechanism, .task-options) {
+    padding: 8px;
+  }
+  .equipment-terminal:has(.mechanism, .emergency-mechanism)::before {
+    margin-bottom: 14px;
+  }
+  .equipment-terminal .mechanism {
+    margin-top: 14px;
+  }
+  .mechanism .mechanism-status {
+    margin: 12px 0;
+  }
+}
+/* Keep status copy from shifting a valve while it is being dragged. */
+.task-coolant .task-submit .alignment-status {
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 700px) {
+  .task-coolant .task-submit .alignment-status {
+    min-height: 108px;
+  }
+  .task-choice-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* Readings stay visible while the valve bank scrolls beneath them. */
+.coolant-readings {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  padding: 8px 0;
+  background: #152023;
+  box-shadow: 0 8px 14px #0005;
+}
+.coolant-reading {
+  grid-template-rows: 22px 34px 22px 16px 20px 20px;
+  gap: 6px;
+  padding: 12px;
+}
+.coolant-reading h3 {
+  font-size: 14px;
+}
+.coolant-reading small {
+  white-space: nowrap;
+  font-size: 12px;
+}
+.equipment-terminal:has(.mechanism, .emergency-mechanism, .task-options)
+  > .close {
+  position: sticky;
+  top: 0;
+  float: right;
+  margin-top: -12px;
+  margin-right: -12px;
+  z-index: 10;
+}
+@media (max-width: 700px) {
+  .coolant-readings {
+    position: static;
+    box-shadow: none;
+  }
+  .coolant-reading {
+    grid-template-rows: auto;
+  }
+}
+@media (max-height: 600px) and (min-width: 701px) {
+  .coolant-reading {
+    grid-template-rows: 18px 26px 18px 10px 18px;
+    padding: 9px;
+    gap: 4px;
+  }
+  .coolant-reading output {
+    font-size: 22px;
+  }
+  .coolant-reading h3,
+  .coolant-reading span,
+  .coolant-reading b {
+    font-size: 12px;
+  }
+  .coolant-reading small {
+    display: none;
+  }
+  .coolant-reading meter {
+    height: 10px;
+  }
+}
+.task-completion {
+  display: grid;
+  gap: 16px;
+  padding: 12px 0;
+}
+.task-completion h2,
+.task-completion p {
+  margin: 0;
+}
+.task-completion > .eyebrow {
+  color: #a7d6b6;
+}
+.task-completion > .primary {
+  min-height: 50px;
+  font-size: 17px;
+}
+.task-completion .consequence-receipt:empty {
+  display: none;
+}
+/* Retry feedback keeps its footprint while controls are adjusted. */
+.mechanism .task-feedback {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 700px) {
+  .mechanism .task-feedback {
+    min-height: 120px;
+  }
+}
+/* A new emergency remains explicit even when a normal task owns the foreground. */
+.task-critical-notice {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  height: 64px;
+  padding: 10px 14px;
+  margin: 0 0 16px;
+  background: #571f28;
+  border: 1px solid #b86470;
+  color: #ffe2d3;
+  font:
+    14px/1.5 Barlow,
+    sans-serif;
+}
+.task-critical-notice span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.task-critical-notice strong {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.equipment-terminal:has(.task-critical-notice) .coolant-readings {
+  top: 64px;
+}
+@media (max-width: 700px) {
+  .task-critical-notice {
+    grid-template-columns: 1fr;
+    gap: 2px;
+    height: 72px;
+    font-size: 13px;
+  }
+}

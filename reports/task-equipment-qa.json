@@ -1,0 +1,476 @@
+{
+  "date": "2026-10-26",
+  "normalTasks": [
+    {
+      "name": "Electrical Wiring",
+      "mode": "wiring",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Door Power Routing",
+      "mode": "routing",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Communications Calibration",
+      "mode": "signal",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Coolant Control",
+      "mode": "coolant",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Research Data Transport",
+      "mode": "transfer",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Dual Stabilization",
+      "mode": "cooperative",
+      "wrongRejected": true,
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    }
+  ],
+  "emergencies": [
+    {
+      "name": "Blackout",
+      "kind": "blackout",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Communications interference",
+      "kind": "comms",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Reactor instability",
+      "kind": "reactor",
+      "scope": "both",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Coolant failure",
+      "kind": "coolant",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Containment leak",
+      "kind": "leak",
+      "scope": "both",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Door lockdown",
+      "kind": "lockdown",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Research data corruption",
+      "kind": "corruption",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 687.453125,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 687.453125,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    },
+    {
+      "name": "Power overload",
+      "kind": "overload",
+      "scope": "either",
+      "complete": true,
+      "layouts": {
+        "desktop": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "1024x768": {
+          "width": 820,
+          "height": 728,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        },
+        "844x390": {
+          "width": 793.359375,
+          "height": 374,
+          "horizontalOverflow": false,
+          "withinViewport": true,
+          "overlaps": []
+        }
+      }
+    }
+  ],
+  "additionalFlows": {
+    "carrierRestricted": true,
+    "cooperativeWindowRetry": true,
+    "localBypassRejectedThenApproved": true,
+    "extraResetRequired": true,
+    "resolved": true,
+    "errors": []
+  },
+  "fullRound": {
+    "phase": "success",
+    "elapsedActiveSeconds": 145,
+    "normalTasks": [
+      {
+        "name": "Electrical Wiring",
+        "complete": true
+      },
+      {
+        "name": "Door Power Routing",
+        "complete": true
+      },
+      {
+        "name": "Communications Calibration",
+        "complete": true
+      },
+      {
+        "name": "Coolant Control",
+        "complete": true
+      },
+      {
+        "name": "Research Data Transport",
+        "complete": true
+      },
+      {
+        "name": "Dual Stabilization",
+        "complete": true
+      }
+    ],
+    "bothExtracted": true,
+    "errors": []
+  },
+  "unitServer": {
+    "passed": 143,
+    "failed": 0,
+    "skipped": 1
+  },
+  "productionBuild": "passed",
+  "viewports": [
+    "1366x768",
+    "1024x768",
+    "844x390"
+  ],
+  "scope": "Real Chrome controls, pointer drag, keyboard sliders, retries, partner approval and authoritative completion. Isolated form audits stage player positions; separate full-round test uses keyboard travel, carried-data reload and joint extraction. No visitor playtesting or live production deployment claimed.",
+  "coolantChecks": [
+    "Native pointer drag updates the real coupled flow formula immediately",
+    "Keyboard Home/End/Arrow keys set all four valid valve positions",
+    "Draft positions survive live snapshots",
+    "Slider track stays fixed during drag and after wrong-answer feedback",
+    "Readings stay visible while scrolling to controls",
+    "Correct balance completes through server validation"
+  ],
+  "foregroundEmergencyNotice": "passed in Chrome while coolant slider remained usable",
+  "screenshotsInspected": true,
+  "deployment": "Not deployed or pushed; local changes require redeployment and refresh."
+}

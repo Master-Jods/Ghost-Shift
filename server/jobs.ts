@@ -1,6 +1,6 @@
 import {Worker} from 'node:worker_threads';
 import {randomUUID} from 'node:crypto';
-import type {State} from '../src/engine';
+import type {State} from '../src/engine.js';
 export type Job={id:string;status:'queued'|'running'|'complete'|'failed'|'cancelled';progress:number|null;context?:{sessionId:string;stateVersion:number;elapsed:number;materialVersion?:string;fieldKey?:string};result?:any;error?:string;createdAt:number;owner:string;background?:boolean;forecast?:{sessionId:string;stateVersion:number;elapsed:number;features:unknown};cancel:()=>void};
 export class Jobs{
  jobs=new Map<string,Job>();private running=0;private backgroundRunning=0;private queue:{run:()=>void;background:boolean}[]=[];

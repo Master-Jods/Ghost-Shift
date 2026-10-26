@@ -1,5 +1,6 @@
+import{GAME_TITLE}from './branding.js';
 export const RULES={
- scenario:{id:'ghost-shift',version:'ghost-shift-v10-critical-incidents',name:'Pok\u00e9mon: Ghost Shift',facility:'Aster Research Facility'},
+ scenario:{id:'ghost-shift',version:'ghost-shift-v10-critical-incidents',name:GAME_TITLE,facility:'Aster Research Facility'},
  countdownSeconds:3,guardianHP:100,finalWindowSeconds:12,approvalSeconds:25,previewSeconds:20,interactionRange:85,
  defaults:{duration:300,severity:'Standard',seed:482,scouting:true,variant:'Manual director',preset:'Standard',roster:[] as number[],taskCount:6,maxThreats:2,maxEmergencies:2,eventBudget:6,eventCooldown:5},
  presets:{Guided:{duration:300,severity:'Standard'},Standard:{duration:300,severity:'Standard'},Expert:{duration:300,severity:'Severe'}},

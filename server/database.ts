@@ -1,10 +1,10 @@
-import {RULES} from '../src/rules';
+import {RULES} from '../src/rules.js';
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync,mkdirSync} from 'node:fs';
 import {dirname,resolve} from 'node:path';
 import {randomBytes,scryptSync,timingSafeEqual,createHash,randomUUID} from 'node:crypto';
-import type {State} from '../src/engine';
-import {hashToken,token,hashPassword,checkPassword}from './security';export {hashToken,token,hashPassword,checkPassword}from './security';import {metrics}from './metrics';export {metrics}from './metrics';
+import type {State} from '../src/engine.js';
+import {hashToken,token,hashPassword,checkPassword}from './security.js';export {hashToken,token,hashPassword,checkPassword}from './security.js';import {metrics}from './metrics.js';export {metrics}from './metrics.js';
 export class Store{
  db:DatabaseSync;private movementCheckpoint=new Map<string,number>();private roomCheckpoint=new Map<string,string>();
  constructor(public path:string){if(path!==':memory:')mkdirSync(dirname(resolve(path)),{recursive:true});this.db=new DatabaseSync(path);this.db.exec('PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;');this.db.exec(readFileSync(new URL('./migrations/001-initial.sql',import.meta.url),'utf8'));this.db.prepare('INSERT OR IGNORE INTO schema_migrations VALUES(1,?)').run(Date.now());this.db.exec(readFileSync(new URL('./migrations/002-ghost-shift.sql',import.meta.url),'utf8'));this.db.prepare('INSERT OR IGNORE INTO schema_migrations VALUES(2,?)').run(Date.now());if(!this.db.prepare('SELECT version FROM schema_migrations WHERE version=3').get())this.db.exec(readFileSync(new URL('./migrations/003-player-activity.sql',import.meta.url),'utf8'));this.db.prepare("UPDATE sessions SET closed=1 WHERE id IN(SELECT session_id FROM session_snapshots WHERE coalesce(json_extract(state_json,'$.schema'),2)<>3 OR coalesce(json_extract(state_json,'$.scenarioVersion'),'')<>?)").run(RULES.scenario.version);}

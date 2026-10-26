@@ -1,3 +1,4 @@
+import {GAME_NAME}from './branding';
 import HorrorTitle from './HorrorTitle';
 import { useState, useEffect, useSyncExternalStore, type ReactNode } from 'react';
 import { network, transport } from './transport';
@@ -63,7 +64,7 @@ export function OperatorGate({ children }: {
         setBusy(false);
     } }
     if (checking)
-        return <div className="auth-shell"><h1>GHOST SHIFT</h1><p>Connecting to facility control…</p></div>;
+        return <div className="auth-shell"><h1>{GAME_NAME.toUpperCase()}</h1><p>Connecting to facility control…</p></div>;
     if (!operator)
         return <div className="auth-shell"><div className="auth-card"><span className="eyebrow">ASTER FACILITY / OPERATOR AUTHORITY</span><HorrorTitle/><p>Two trainers in the field. One live research director.</p><form onSubmit={login}><label>Username<input autoComplete="username" value={username} onChange={e => setUsername(e.target.value)}/></label><label>Password<input type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)}/></label>{error && <p role="alert" className="error">{error}</p>}<button className="primary" disabled={busy || !username || !password}>Sign in</button></form><a href="/play">Player entry →</a><details><summary>Host setup</summary>Create an account with npm run operator:create using the private .env. Existing accounts remain valid.</details></div></div>;
     return <><header className="server-toolbar"><span>◈ {operator.username} · AUTHENTICATED OPERATOR</span><label>Session<select aria-label="Server session" value={network.getNetSnapshot().sessionId || ''} onChange={e => void attach(e.target.value)}><option value="" disabled>Select room</option>{sessions.map(s => <option key={s.id} value={s.id} disabled={s.closed || s.state?.schema !== 3}>{s.code} · {s.state?.scenarioVersion === RULES.scenario.version ? s.state.phase : 'archived map version'}</option>)}</select></label><button onClick={create} disabled={busy}>Create session</button><button onClick={async () => { await network.api('/api/operator/logout', { method: 'POST', body: '{}' }); network.destroy(); location.assign('/operator'); }}>Sign out</button></header>{error && <div className="global-error" role="alert">{error}</div>}{attached ? children : <div className="auth-shell"><h1>Open the next shift.</h1><p>Start threat-free. Share the room code with two trainers.</p><button className="primary" onClick={create} disabled={busy}>Create the first session</button></div>}</>;

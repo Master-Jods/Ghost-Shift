@@ -1,3 +1,4 @@
+import {dangerSamples, type DangerKind} from './dangerSound';
 import {BATTLE_SAMPLES,battleSound,type BattleSample}from './battleAudio';
 import type { CueKind, PresentationSettings } from './presentation';
 import type { Vec } from './world';
@@ -9,9 +10,36 @@ export class FacilityAudio {
     private ambience: GainNode | null = null;
     private music: GainNode | null = null;private analyser:AnalyserNode|null=null;private musicTimer:ReturnType<typeof setInterval>|null=null;private nextBeat=0;private beat=0;private active=true;private mode:'menu'|'explore'|'danger'|'battle'|'off'='menu';private notes=0;private clicks=0;private typingCount=0;private battleCount=0;private playedCries=0;private lastTyping=-Infinity;
     setMusicMode(mode:typeof this.mode){this.mode=mode;}
-    get diagnostics(){let level=0;if(this.analyser){const a=new Float32Array(this.analyser.fftSize);this.analyser.getFloatTimeDomainData(a);level=Math.sqrt(a.reduce((n,v)=>n+v*v,0)/a.length);}return {ready:this.ready,mode:this.mode,notes:this.notes,clicks:this.clicks,typing:this.typingCount,battleEffects:this.battleCount,battleSamplesPlayed:this.battleSamplesPlayed,decodedBattleSamples:this.battleSamples.size,battleVolume:this.settings?.battleVolume??.7,cries:this.playedCries,decodedCries:this.cryBuffers.size,musicGain:this.music?.gain.value||0,level,muted:this.settings?.muted??true,musicVolume:this.settings?.music??0};}
+    get diagnostics(){let level=0;if(this.analyser){const a=new Float32Array(this.analyser.fftSize);this.analyser.getFloatTimeDomainData(a);level=Math.sqrt(a.reduce((n,v)=>n+v*v,0)/a.length);}return {footstepsPlayed:this.footstepsPlayed,decodedFootsteps:this.footsteps.size,dangerAlarms:this.dangerCount,dangerKind:this.dangerKind,dangerActive:!!this.dangerNodes,dangerIncident:this.dangerId,ready:this.ready,mode:this.mode,notes:this.notes,clicks:this.clicks,typing:this.typingCount,battleEffects:this.battleCount,battleSamplesPlayed:this.battleSamplesPlayed,decodedBattleSamples:this.battleSamples.size,battleVolume:this.settings?.battleVolume??.7,cries:this.playedCries,decodedCries:this.cryBuffers.size,musicGain:this.music?.gain.value||0,level,muted:this.settings?.muted??true,musicVolume:this.settings?.music??0};}
     async ui(kind:'click'|'change',settings:PresentationSettings){await this.unlock(settings);this.clicks++;this.play(kind==='click'?'selection':'switch',{x:0,y:0},{x:0,y:0},0);}
     typing(){const c=this.context;if(!c||!this.ready||this.settings?.muted||!this.active||c.currentTime-this.lastTyping<.025)return;this.lastTyping=c.currentTime;this.typingCount++;this.play('submitted',{x:0,y:0},{x:0,y:0},0,'typing');}
+    private dangerNodes:{source:AudioBufferSourceNode;gain:GainNode}|null=null;
+    private dangerBuffers=new Map<DangerKind,AudioBuffer>();
+    private dangerCount=0;private dangerKind:'emergency'|'pokemon'|null=null;private dangerId:string|null=null;
+    danger(kind:'emergency'|'pokemon',incidentId:string){
+        const c=this.context,s=this.settings;
+        if(!c||!this.ready||!this.active||!this.effects||!s||s.muted||s.master<=0||s.effects<=0)return false;
+        if(this.dangerNodes&&this.dangerId===incidentId)return true;
+        this.stopDanger();
+        const buffer=this.dangerBuffers.get(kind);if(!buffer)return false;
+        const source=c.createBufferSource(),gain=c.createGain();source.buffer=buffer;source.loop=true;
+        gain.gain.value=.7;source.connect(gain).connect(this.effects);
+        const nodes={source,gain};this.dangerNodes=nodes;this.dangerId=incidentId;this.dangerKind=kind;this.dangerCount++;
+        source.onended=()=>{source.disconnect();gain.disconnect();if(this.dangerNodes===nodes){this.dangerNodes=null;this.dangerId=null;}};
+        source.start();
+        return true;
+    }
+    stopDanger(){const nodes=this.dangerNodes;if(!nodes)return;this.dangerNodes=null;this.dangerId=null;try{nodes.source.stop();}catch{}nodes.gain.gain.value=0;}
+    reconcileDanger(active:Set<string>,allowed:boolean){if(!allowed||this.dangerId&&!active.has(this.dangerId))this.stopDanger();}
+    private footsteps=new Map<string,AudioBuffer>();private footstepsLoading=false;private footstepsPlayed=0;private stepIndex=0;private footVoices=new Set<AudioBufferSourceNode>();
+    private preloadFootsteps(){const c=this.context;if(!c||this.footstepsLoading)return;this.footstepsLoading=true;
+        for(const surface of ['concrete','carpet'])for(let i=0;i<5;i++){const key=surface+'_'+String(i).padStart(3,'0');void fetch('/audio/footsteps/footstep_'+key+'.ogg',{signal:AbortSignal.timeout(6000)}).then(r=>{if(!r.ok)throw Error('Footstep unavailable');return r.arrayBuffer();}).then(b=>c.decodeAudioData(b)).then(buffer=>{if(this.context===c)this.footsteps.set(key,buffer);}).catch(()=>{});}
+    }
+    private footstep(position:Vec,listener:Vec,yaw:number,surface:string){const c=this.context,s=this.settings;if(!c||!this.effects||!s||s.muted||!this.active||this.footVoices.size>=3)return;
+        const material=surface==='rubber'?'carpet':'concrete',index=this.stepIndex++%5,buffer=this.footsteps.get(material+'_'+String(index).padStart(3,'0'));if(!buffer)return;
+        const d=Math.hypot(position.x-listener.x,position.y-listener.y);if(d>400)return;
+        const source=c.createBufferSource(),filter=c.createBiquadFilter(),gain=c.createGain(),pan=c.createStereoPanner();source.buffer=buffer;source.playbackRate.value=[.97,1.02,.99,1.04,1][index];filter.type='lowpass';filter.frequency.value=surface==='rubber'?1800:3500;gain.gain.value=.55/(1+d/120);pan.pan.value=Math.sin(Math.atan2(position.y-listener.y,position.x-listener.x)-yaw)*Math.min(.65,d/150);source.connect(filter).connect(pan).connect(gain).connect(this.effects);this.footVoices.add(source);this.footstepsPlayed++;source.onended=()=>{source.disconnect();filter.disconnect();pan.disconnect();gain.disconnect();this.footVoices.delete(source);};source.start();
+    }
     private battleSamples=new Map<BattleSample,AudioBuffer>();private sampleLoading=false;private sampleReady:Promise<unknown>=Promise.resolve();private battleVoices=new Set<AudioBufferSourceNode>();private battleSamplesPlayed=0;
     private preloadBattle(){const c=this.context;if(!c||this.sampleLoading)return;this.sampleLoading=true;this.sampleReady=Promise.allSettled(BATTLE_SAMPLES.map(name=>fetch('/audio/battle/'+name+'.ogg',{signal:AbortSignal.timeout(6000)}).then(r=>{if(!r.ok)throw Error('Battle sample unavailable');return r.arrayBuffer();}).then(b=>c.decodeAudioData(b)).then(buffer=>{if(this.context===c)this.battleSamples.set(name,buffer);}).catch(()=>{})));}
     async previewBattle(kind:string){if(this.settings)await this.unlock(this.settings);await this.sampleReady;this.battle(kind,kind==='attack'?'fire':'normal','player');}
@@ -33,6 +61,7 @@ export class FacilityAudio {
         return; try {
         if (!this.context) {
             const ctx = this.context = new AudioContext(), master = this.master = ctx.createGain(), effects = this.effects = ctx.createGain(), ambience = this.ambience = ctx.createGain(), limiter = ctx.createDynamicsCompressor();
+            for(const kind of ['emergency','pokemon'] as const){const pcm=dangerSamples(kind,ctx.sampleRate),buffer=ctx.createBuffer(1,pcm.length,ctx.sampleRate);buffer.getChannelData(0).set(pcm);this.dangerBuffers.set(kind,buffer);}
             effects.connect(master);
             ambience.connect(master);
             master.connect(limiter);const analyser=this.analyser=ctx.createAnalyser();analyser.fftSize=256;limiter.connect(analyser).connect(ctx.destination);const music=this.music=ctx.createGain();music.connect(master);
@@ -62,17 +91,18 @@ export class FacilityAudio {
             motor.start();
             this.sources.push(air, motor);this.nextBeat=ctx.currentTime+.04;this.musicTimer=setInterval(()=>this.score(),40);
         }
-        this.preloadBattle();await this.context.resume();
+        this.preloadBattle();this.preloadFootsteps();await this.context.resume();
         this.configure(settings);
     }
     catch { /* Browsers may deny audio until another explicit gesture. */ } }
-    configure(settings: PresentationSettings, active = true) { this.settings = settings;this.active=active; if (!this.context)
+    configure(settings: PresentationSettings, active = true) { this.settings = settings;this.active=active;if(settings.muted||!active||settings.master<=0||settings.effects<=0)this.stopDanger(); if (!this.context)
         return; const key = JSON.stringify([settings.muted, settings.master, settings.effects, settings.ambience, settings.music, active]); if (key === this.lastConfig)
         return; this.lastConfig = key; const t = this.context.currentTime; this.master?.gain.setTargetAtTime(settings.muted || !active ? 0 : settings.master, t, .06); this.effects?.gain.setTargetAtTime(settings.effects, t, .04); this.ambience?.gain.setTargetAtTime(settings.ambience, t, .1);this.music?.gain.setTargetAtTime(settings.music*1.8, t, .15); }
     play(kind: CueKind, position: Vec, listener: Vec, yaw: number, surface = 'metal') {
         const ctx = this.context, s = this.settings;
         if (!ctx || ctx.state !== 'running' || !this.effects || s?.muted || this.voices > 12)
             return;
+        if(kind==='step'){this.footstep(position,listener,yaw,surface);return;}
         if (['materialize', 'emergency'].includes(kind)) {
             if (ctx.currentTime - this.lastAlarm < 1.2)
                 return;
@@ -92,10 +122,6 @@ export class FacilityAudio {
         const noise = (length: number, frequency: number, volume = .4) => { if (!this.noise)
             return; const source = ctx.createBufferSource(), filter = ctx.createBiquadFilter(), envelope = ctx.createGain(); source.buffer = this.noise; filter.type = 'bandpass'; filter.frequency.value = frequency; filter.Q.value = .65; envelope.gain.setValueAtTime(volume, t); envelope.gain.exponentialRampToValueAtTime(.001, t + length); source.connect(filter).connect(envelope).connect(pan); source.start(t, Math.random()); source.stop(t + length); source.onended = () => { source.disconnect(); filter.disconnect(); envelope.disconnect(); }; duration = Math.max(duration, length); };
         switch (kind) {
-            case 'step':
-                noise(.09, surface === 'rubber' ? 230 : surface === 'concrete' ? 480 : 1050, .65);
-                tone(surface === 'rubber' ? 75 : 115, .08, 'sine', 0, 40, .35);
-                break;
             case 'door':
                 noise(.5, 480, .35);
                 tone(70, .5, 'triangle', 0, 46, .2);
@@ -152,7 +178,7 @@ export class FacilityAudio {
         }
         setTimeout(() => { pan.disconnect(); gain.disconnect(); this.voices = Math.max(0, this.voices - 1); }, Math.ceil(duration * 1000) + 80);
     }
-    dispose() {if(this.musicTimer)clearInterval(this.musicTimer);this.musicTimer=null;this.lastConfig='';for(const source of this.battleVoices){try{source.stop();}catch{}}this.battleVoices.clear();this.battleSamples.clear();this.sampleLoading=false;for(const cry of this.cryActive){try{cry.stop();}catch{}}this.cryActive.clear();this.cryBuffers.clear();this.cryPending.clear();this.cryFailed.clear(); for (const source of this.sources) {
+    dispose() {for(const source of this.footVoices){try{source.stop();}catch{}}this.footVoices.clear();this.footsteps.clear();this.footstepsLoading=false;this.stopDanger();this.dangerBuffers.clear();if(this.musicTimer)clearInterval(this.musicTimer);this.musicTimer=null;this.lastConfig='';for(const source of this.battleVoices){try{source.stop();}catch{}}this.battleVoices.clear();this.battleSamples.clear();this.sampleLoading=false;for(const cry of this.cryActive){try{cry.stop();}catch{}}this.cryActive.clear();this.cryBuffers.clear();this.cryPending.clear();this.cryFailed.clear(); for (const source of this.sources) {
         try {
             source.stop();
             source.disconnect();

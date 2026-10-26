@@ -2,7 +2,8 @@ import {threatPresentation,threatFacingTarget,playerBattleMotion} from './battle
 import {createPokemonCharacter,characterAssets} from './pokemonCharacter';
 import {pokemonAsset,ensurePokemonAssets} from './pokemonAssets';
 import {firstPersonCompanionOpacity,firstPersonPose} from './firstPersonCamera';
-import {firstPersonHands}from './firstPersonHands';
+import {MovementPrediction}from './movementPrediction';
+import{network}from './transport';
 import {chasePose,CHASE} from './chaseCamera';
 import {createTrainer} from './trainer3d';
 import { useEffect, useRef, useState } from 'react';
@@ -58,7 +59,7 @@ function WorldView(props: Props & {
         scene.background = new T.Color('#263238');
         scene.fog = new T.FogExp2('#263238', .00105);
         const facility = buildFacility(scene,false), camera = new T.PerspectiveCamera(72, 1, 1, 1600);
-        camera.rotation.order = 'YXZ';scene.add(camera);const hands=firstPersonHands(camera);
+        camera.rotation.order = 'YXZ';scene.add(camera);const movementPrediction=new MovementPrediction();
         const hemi = new T.HemisphereLight('#b5d0da', '#222830', 1.35);
         scene.add(hemi);
         const sun = new T.DirectionalLight('#eee5cc', 1.1);
@@ -240,18 +241,16 @@ function WorldView(props: Props & {
             }
             previous = { ...p.position };
             walk += (moved < 50 ? moved : 0) * .085;
-            if (distance(visual, p.position) > 100)
-                visual = { ...p.position };
-            const blend = 1 - Math.exp(-25 * dt);
-            visual.x += (p.position.x - visual.x) * blend;
-            visual.y += (p.position.y - visual.y) * blend;
+            const blend=1-Math.exp(-25*dt);
+            visual=movementPrediction.step(s,v.role,network.getMovementStatus(),now,dt,enabled());
+            canvas.dataset.renderPlayerX=String(visual.x);canvas.dataset.renderPlayerY=String(visual.y);canvas.dataset.predictionError=String(movementPrediction.error);
             const cues = timeline.observe(s, v.role, now);
             for (const cue of cues) {
-                if(!(['impact','resolved'].includes(cue.kind)&&s.threats.some(t=>t.battle&&distance(t.position,cue.position)<1)))audio.play(cue.kind, cue.position, p.position, v.yaw);
+                if(!['materialize','emergency'].includes(cue.kind)&&!(['impact','resolved'].includes(cue.kind)&&s.threats.some(t=>t.battle&&distance(t.position,cue.position)<1)))audio.play(cue.kind, cue.position, p.position, v.yaw);
                 window.dispatchEvent(new CustomEvent('ghost-feedback', { detail: cue }));
             }
             const active = timeline.active(now), shake = !o.reducedMotion ? active.filter(c => c.kind === 'impact').reduce((n, c) => n + (1 - cueProgress(c, now)) * .3 * o.cameraShake, 0) : 0;
-            const first=v.cameraMode!=='third-person',rig=first?firstPersonPose(visual,v.yaw,v.pitch):chasePose(visual,v.yaw,v.pitch,o.cameraDistance,cameraDistance||CHASE.distance,dt,s);cameraDistance=rig.distance;hands.update(first,s.worldTime,Math.hypot(p.input.x,p.input.y)*185,o.reducedMotion);canvas.dataset.handsVisible=String(first);canvas.dataset.handCount=String(first?hands.root.children.length:0);camera.near=.8;camera.updateProjectionMatrix();
+            const first=v.cameraMode!=='third-person',rig=first?firstPersonPose(visual,v.yaw,v.pitch):chasePose(visual,v.yaw,v.pitch,o.cameraDistance,cameraDistance||CHASE.distance,dt,s);cameraDistance=rig.distance;canvas.dataset.handsVisible='false';canvas.dataset.handCount='0';camera.near=.8;camera.updateProjectionMatrix();
             camera.position.set(rig.position.x,rig.position.y,rig.position.z);camera.lookAt(rig.target.x,rig.target.y,rig.target.z);
             canvas.dataset.camera=first?'first-person':'third-person';canvas.dataset.cameraRig=first?'eye-level':'shoulder-chase';canvas.dataset.yaw=String(v.yaw);canvas.dataset.pitch=String(rig.pitch);canvas.dataset.cameraDistance=String(rig.distance);canvas.dataset.cameraHeight=String(rig.position.y);canvas.dataset.decor=JSON.stringify(facility.damage.stats);canvas.dataset.structure=JSON.stringify({walls:facility.structure.walls.length,floorTiles:facility.structure.floorTiles.length,decorativeDoorFrames:facility.structure.decorativeDoorFrames});
             facility.damage.update(s.worldTime,o.reducedMotion,o.reducedFlashes,o.quality);facility.identity.update(s.worldTime,o.reducedMotion||o.reducedFlashes);canvas.dataset.roomIdentity=JSON.stringify(facility.identity.stats);
@@ -308,10 +307,10 @@ function WorldView(props: Props & {
             };
             const moving=(key:string,pos:Vec)=>{let m=motionData.get(key);if(!m){m={position:{...pos},travel:0,speed:0,heading:0};motionData.set(key,m);}const d=distance(pos,m.position);if(d<80){if(d>.1)m.heading=Math.atan2(pos.y-m.position.y,pos.x-m.position.x);m.travel+=d;m.speed+=(d/Math.max(dt,.001)-m.speed)*(1-Math.exp(-14*dt));}else{m.travel=0;m.speed=0;}m.position={...pos};return m;};
             for (const r of ['A','B'] as const) {
-                const player=s.players[r],m=moving('trainer-'+r,player.position),state=animationState(player,s.worldTime,s.paused?0:m.speed,s.phase==='success');
+                const player=s.players[r],m=moving('trainer-'+r,r===v.role?visual:player.position),state=animationState(player,s.worldTime,s.paused?0:m.speed,s.phase==='success');
                 const trainer=trainers[r];trainer.root.visible=r!==v.role||!first;trainer.root.position.x=r===v.role?visual.x:player.position.x;trainer.root.position.z=r===v.role?visual.y:player.position.y;
-                trainer.update(player.yaw,state,s.worldTime,m.travel,r===v.role?Math.max(.12,Math.min(1,(cameraDistance-10)/24)):1,o.reducedMotion);
-                const f=trainerFrame(state,s.worldTime,m.travel,player.motion?.at);canvas.dataset['trainer'+r]=f.state+':3d:'+f.frame;
+                trainer.update(player.yaw,state,s.worldTime,m.travel,r===v.role?Math.max(.12,Math.min(1,(cameraDistance-10)/24)):1,o.reducedMotion,dt);
+                const f=trainerFrame(state,s.worldTime,m.travel,player.motion?.at);canvas.dataset['trainer'+r]=f.state+':3d:'+f.frame;canvas.dataset['avatar'+r]='crewmate';
                 const away=Math.cos(player.yaw)*Math.cos(v.yaw)+Math.sin(player.yaw)*Math.sin(v.yaw)>.2;
                 const activeEncounter=s.threats.find(t=>t.instanceId===player.encounterId&&t.battle);if(player.team[player.selected]?.state!=='Assigned')show('companion-'+r,activeEncounter?.battle?.active.renderId??player.selected,player.follower,31,away,1);
                 const mon=player.team[player.selected]?.state==='Assigned'?undefined:entities.get('companion-'+r),mm=moving('companion-'+r,player.follower),combat=s.threats.find(t=>t.instanceId===player.encounterId&&t.battle),combatMotion=combat?playerBattleMotion(s,combat):null,ms=combatMotion?.state||animationState(player,s.worldTime,s.paused?0:mm.speed,s.phase==='success'),pose=pokemonPose(ms,combatMotion?.age??s.worldTime-(player.motion?.at||0),mm.travel,o.reducedMotion);
@@ -360,7 +359,7 @@ function WorldView(props: Props & {
             frame = requestAnimationFrame(paint);
         };
         frame = requestAnimationFrame(paint);
-        return () => { disposed = true;imageTimers.forEach(clearTimeout);imageTimers.clear(); cancelAnimationFrame(frame); for(const ent of entities.values()){ent.character?.dispose();ent.mesh.material.dispose();}characterAssets.clearUnused(); trainers.A.dispose();trainers.B.dispose();facility.dispose(); dynamicGeometry.forEach(g => g.dispose()); dynamicMaterials.forEach(m => m.dispose()); dynamicTextures.forEach(t => t.dispose()); hands.dispose();flash.shadow.dispose(); renderer.dispose();  document.removeEventListener('pointerdown', unlock); document.removeEventListener('keydown', unlock); window.removeEventListener('ghost-audio-unlock', unlockSettings); window.removeEventListener('ghost-intent', intent); window.removeEventListener('blur', blur); canvas.removeEventListener('webglcontextlost', contextLost); };
+        return () => { disposed = true;imageTimers.forEach(clearTimeout);imageTimers.clear(); cancelAnimationFrame(frame); for(const ent of entities.values()){ent.character?.dispose();ent.mesh.material.dispose();}characterAssets.clearUnused(); trainers.A.dispose();trainers.B.dispose();facility.dispose(); dynamicGeometry.forEach(g => g.dispose()); dynamicMaterials.forEach(m => m.dispose()); dynamicTextures.forEach(t => t.dispose()); flash.shadow.dispose(); renderer.dispose();  document.removeEventListener('pointerdown', unlock); document.removeEventListener('keydown', unlock); window.removeEventListener('ghost-audio-unlock', unlockSettings); window.removeEventListener('ghost-intent', intent); window.removeEventListener('blur', blur); canvas.removeEventListener('webglcontextlost', contextLost); };
     }, []);
     return <><canvas ref={ref} className="third-person" aria-label="Third-person research facility" tabIndex={0} onClick={()=>ref.current?.focus({preventScroll:true})}/><div className="fps-counter" aria-live="off"/></>;
 }

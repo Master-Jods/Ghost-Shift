@@ -1,7 +1,7 @@
 {
   "id": "/play",
-  "name": "Pok\u00e9mon: Ghost Shift",
-  "short_name": "Ghost Shift",
+  "name": "Pok\u00e9mon: Among the Shadows",
+  "short_name": "Among the Shadows",
   "description": "First-person cooperative research with a live operator.",
   "start_url": "/play",
   "scope": "/",

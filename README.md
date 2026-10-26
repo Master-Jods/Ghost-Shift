@@ -1,6 +1,14 @@
-# Pokemon: Ghost Shift
+# Pokemon: Among the Shadows
+
+Display branding is now **Among the Shadows**, with global danger sirens for operator-injected Pok?mon and emergencies. [Current changes and verification](docs/AMONG-THE-SHADOWS.md).
+
+First-person hands are removed, and cloud movement now combines input/snapshot updates with bounded camera prediction. The function region matches the existing US East database. [Movement changes and verification](docs/CLOUD-MOVEMENT.md).
 
 Two networked trainers, six normal tasks and a maximum of 300 active seconds in an expanded horror research facility. Each trainer chooses three distinct catalog Pokemon. Any valid team can finish every mandatory puzzle. There is no stamina or shared-energy system.
+
+## Task equipment UI
+
+Coolant readings and valve controls are separated, with immediate local feedback, pinned readings and stable drag/retry layouts. All six normal tasks and eight emergencies have been exercised through real controls. [Current task UI audit and screenshots](docs/TASK-EQUIPMENT-QA.md).
 
 ## Current character and room revision
 

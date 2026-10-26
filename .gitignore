@@ -18,3 +18,5 @@ backups/
 # Asset pipeline Python bytecode
 __pycache__/
 *.pyc
+.vercel
+.env*

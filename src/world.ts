@@ -1,5 +1,5 @@
-import {ROOM_IDENTITIES} from './roomIdentity';
-import {deriveLayout,wallBounds,type Vec,type Rect,type RoomEdge,type WallSegment} from './layoutGeometry';
+import {ROOM_IDENTITIES} from './roomIdentity.js';
+import {deriveLayout,wallBounds,type Vec,type Rect,type RoomEdge,type WallSegment} from './layoutGeometry.js';
 export {wallBounds};export type {Vec,Rect,RoomEdge,WallSegment};
 export type MapState = {
     worldTime?: number;revision?:number;extractionBlocked?:boolean;unknownBlocking?:boolean;route?:{finalReleased?:boolean;configuration:'A'|'B';sealed?:string[];overridden:string[];repaired:string[];guardianClear:string[];holds:Record<string,{role:'A'|'B';pokemon:number}>};

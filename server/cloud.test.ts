@@ -16,7 +16,6 @@ import { WebSocket } from "ws";
 const profile = (role: string) => ({
   fullName: "Student " + role,
   block: "BSIT 4A",
-  groupNumber: "4",
 });
 async function fixture() {
   const db = memoryPostgres(),
@@ -363,4 +362,21 @@ test("Vercel rewrite targets preserve HTTP and WebSocket authentication routes",
     socket?.terminate();
     await app.close();
   }
+});
+test('cloud password reset preserves account/game records and revokes old logins without bootstrap overwrites',async()=>{
+ const f=await fixture();try{const op=await f.a.operator(f.op),before=(await f.a.snapshot(f.r.sessionId,f.op)).state;
+ assert.deepEqual(await f.a.checkOperatorEnvironment('operator','test-secret-12345'),{accountExists:true,passwordMatchesEnvironment:true});
+ assert.deepEqual(await f.a.checkOperatorEnvironment('operator','new-password-12345'),{accountExists:true,passwordMatchesEnvironment:false});
+ await f.a.createOperator('operator','new-password-12345');assert((await f.a.checkOperatorEnvironment('operator','test-secret-12345')).passwordMatchesEnvironment);
+ await f.a.resetOperatorPassword('operator','new-password-12345');await assert.rejects(()=>f.b.operator(f.op),/login required/);await assert.rejects(()=>f.b.login('operator','test-secret-12345'),/Incorrect/);
+ const login=await f.b.login('operator','new-password-12345');assert.equal(login.operator.id,op.id);const state=(await f.a.snapshot(f.r.sessionId,{cookie:login.token})).state;assert.equal(state.id,before.id);assert.equal(state.code,before.code);
+ assert((await f.a.checkOperatorEnvironment('operator','new-password-12345')).passwordMatchesEnvironment);await assert.rejects(()=>f.a.resetOperatorPassword('missing','new-password-12345'),/not found/);
+ }finally{await f.db.close();}
+});
+test('movement frames combine heartbeat, orientation and input with five SQL calls and retain shared authority',async()=>{
+ const f=await fixture();try{await start(f);const id=f.r.sessionId;const baseDb=f.db;let queries=0;const counted={...baseDb,transaction:<T>(fn:(c:any)=>Promise<T>)=>baseDb.transaction(c=>fn({query:async(sql:string,values?:any[])=>{queries++;return c.query(sql,values);}}))};const fast=new CloudService(counted);await fast.ready;queries=0;
+ const frame=await fast.motionFrame(id,f.aa,[cmd('LOOK',0),cmd('INPUT',{x:1,y:0})]);assert.equal(frame.acknowledgements.length,2);assert(frame.acknowledgements.every(v=>v.ok));assert.equal(frame.snapshot.net.lastCommandSeq,seq);assert(queries<=3,'Room lock, access and combined save should use three SQL calls, got '+queries);assert.equal((await f.b.snapshot(id,f.op)).state.players.A.input.x,1);
+ const player=(await f.db.query('SELECT last_seq,lease_until FROM gs_players WHERE id=$1',[f.pa.participantId])).rows[0];assert.equal(Number(player.last_seq),seq);assert(Number(player.lease_until)>0);
+ await assert.rejects(()=>fast.motionFrame(id,f.op,[cmd('INPUT',{x:1,y:0})]),/player slot/);await assert.rejects(()=>fast.motionFrame(id,f.aa,[cmd('FAIL')]),/Only movement/);await f.b.attach(id,{bearer:f.pa.credential},'replacement');await assert.rejects(()=>fast.motionFrame(id,f.aa,[]),/another tab/);
+ }finally{await f.db.close();}
 });
