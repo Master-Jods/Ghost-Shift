@@ -1,11 +1,14 @@
+import {buildRoomIdentity} from './roomDressing';
+import {buildDamage} from './facilityDamage';
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { WORLD, floors, wallSegments, rooms, roomWalls, roomPortals, roomEquipment, center, pathLength, pathDirection, contains, type Vec } from './world';
+import { floorTiles, wallSegments, wallBounds, rooms, roomWalls, roomEquipment, type Vec } from './world';
 /** Original procedural materials, lettering, posters and solid equipment. World units are shared with the server. */
 export function buildFacility(scene: T.Scene, cutaway = false) {
     const textures: T.Texture[] = [], materials: T.Material[] = [], geometries: T.BufferGeometry[] = [];
     const batches = new Map<T.Material, T.BufferGeometry[]>();
     const rng = (x: number, y: number) => { let n = Math.imul(x + 91, 374761393) ^ Math.imul(y + 13, 668265263); n = Math.imul(n ^ (n >>> 13), 1274126177); return ((n ^ (n >>> 16)) >>> 0) / 4294967295; };
+    const noise=(x:number,y:number,scale:number)=>{const ix=Math.floor(x/scale),iy=Math.floor(y/scale),fx=x/scale-ix,fy=y/scale-iy,u=fx*fx*(3-2*fx),v=fy*fy*(3-2*fy);return (rng(ix,iy)*(1-u)+rng(ix+1,iy)*u)*(1-v)+(rng(ix,iy+1)*(1-u)+rng(ix+1,iy+1)*u)*v;};
     function surface(kind: string) {
         const c = document.createElement('canvas');
         c.width = c.height = 512;
@@ -13,7 +16,7 @@ export function buildFacility(scene: T.Scene, cutaway = false) {
         for (let y = 0; y < 512; y++)
             for (let x = 0; x < 512; x++) {
                 const n = rng(x, y), i = (y * 512 + x) * 4;
-                let rgb = kind === 'floor' ? [96, 102, 101] : kind === 'wall' ? (y < 310 ? [163, 162, 149] : [73, 91, 91]) : [68, 77, 79];
+                let rgb = kind === 'floor' ? [58, 69, 72] : kind === 'wall' ? (y < 310 ? [91, 108, 108] : [40, 58, 62]) : [68, 77, 79];
                 let grain = (n - .5) * 9, stain = Math.sin(x * .03 + y * .007) * Math.sin(y * .017) * 4;
                 if (kind === 'floor' && (x % 128 < 2 || y % 128 < 2))
                     grain -= 33;
@@ -21,8 +24,12 @@ export function buildFacility(scene: T.Scene, cutaway = false) {
                     grain -= 28;
                 if (kind === 'ceiling' && (x % 256 < 4 || y % 128 < 3))
                     grain -= 24;
-                if (n > .999)
-                    grain -= 28;
+                // Low-contrast, irregular oxidation; avoid a repeating hard-edged camouflage pattern.
+                const wear=noise(x+113,y+79,64)*.7+noise(x,y,17)*.3,corrosion=Math.max(0,wear-.63)*2.7;
+                grain+=(wear-.5)*22;
+                if(kind==='wall')rgb=[rgb[0]+corrosion*18,rgb[1]-corrosion*6,rgb[2]-corrosion*13];
+                if(kind==='floor'&&Math.abs(Math.sin(x*.013+y*.017+Math.sin(y*.06)*.12))<.008)grain-=18;
+                if(n>.997)grain-=28;
                 for (let k = 0; k < 3; k++)
                     data.data[i + k] = rgb[k] + grain + stain;
                 data.data[i + 3] = 255;
@@ -56,9 +63,10 @@ export function buildFacility(scene: T.Scene, cutaway = false) {
         list.push(geo);
         batches.set(m, list);
     }
+    const podGlass = new T.MeshStandardMaterial({color:'#6997a5',transparent:true,opacity:.22,roughness:.16,metalness:.28,depthWrite:false});materials.push(podGlass);
     const edges=wallSegments;
     for (const e of edges) {
-        const horizontal = e.axis === 'x', x = e.x + (horizontal ? e.length / 2 : e.normal), z = e.z + (horizontal ? e.normal : e.length / 2);
+        const horizontal = e.axis === 'x', bounds=wallBounds(e),x=bounds.x+bounds.w/2,z=bounds.y+bounds.h/2;
         const geo = new T.BoxGeometry(horizontal ? e.length : 2, cutaway ? 24 : 108, horizontal ? 2 : e.length);
         const uv = geo.getAttribute('uv');
         for (let i = 0; i < uv.count; i++)
@@ -71,12 +79,12 @@ export function buildFacility(scene: T.Scene, cutaway = false) {
         if(!cutaway) box(x, 101, z, horizontal ? e.length : 4, 5, horizontal ? 4 : e.length, trim);
         if (!cutaway && e.length > 90) {
             const offset = -e.normal * 2;
-            for (const h of [86, 93])
+            for (const h of [98, 104])
                 cylinder(horizontal ? x : x + offset, h, horizontal ? z + offset : z, 1.6, e.length, steel, horizontal ? 'x' : 'z');
         }
     }
     // Planar surfaces use fixed world UV scale rather than stretching one image over each room.
-    for (const r of floors)
+    for (const r of floorTiles)
         for (const top of (cutaway ? [false] : [false, true])) {
             const geo = new T.PlaneGeometry(r.w, r.h);
             geo.rotateX(top ? Math.PI / 2 : -Math.PI / 2);
@@ -89,21 +97,21 @@ export function buildFacility(scene: T.Scene, cutaway = false) {
             list.push(geo);
             batches.set(m, list);
         }
-    function panel(text: string, sub: string, color: string, diagram = false) {
+    function panel(text: string, sub: string, color: string, diagram = false, compact = false) {
         const c = document.createElement('canvas');
         c.width = 768;
-        c.height = 384;
+        c.height = compact ? 192 : 384;
         const g = c.getContext('2d')!;
         g.fillStyle = diagram ? '#c8bda4' : '#223b3c';
-        g.fillRect(0, 0, 768, 384);
+        g.fillRect(0, 0, 768, c.height);
         g.strokeStyle = color;
         g.lineWidth = 12;
-        g.strokeRect(14, 14, 740, 356);
+        g.strokeRect(14, 14, 740, c.height-28);
         g.fillStyle = diagram ? '#293c3c' : '#e8e5d3';
-        g.font = 'bold 45px monospace';
-        g.fillText(text.toUpperCase(), 36, 84, 695);
-        g.font = '22px monospace';
-        g.fillText(sub.toUpperCase(), 36, 125, 690);
+        g.font = compact ? 'bold 66px monospace' : 'bold 45px monospace';
+        g.fillText(text.toUpperCase(), 36, compact ? 91 : 84, 695);
+        g.font = compact ? '28px monospace' : '22px monospace';
+        g.fillText(sub.toUpperCase(), 36, compact ? 143 : 125, 690);
         if (diagram) {
             g.strokeStyle = '#4d6965';
             g.lineWidth = 5;
@@ -117,7 +125,7 @@ export function buildFacility(scene: T.Scene, cutaway = false) {
             g.font = '18px monospace';
             g.fillText('01 CHECK IN   02 CALIBRATE   03 ASSIST   04 EXTRACT', 35, 345);
         }
-        else {
+        else if(!compact) {
             g.fillStyle = color;
             g.fillRect(36, 290, 130, 10);
             g.font = '19px monospace';
@@ -144,7 +152,7 @@ export function buildFacility(scene: T.Scene, cutaway = false) {
         const b = (u: number, h: number, v: number, width: number, height: number, d: number, m: T.Material) => { const p = pos(u, v); box(p.x, h, p.y, tangent.x ? width : d, height, tangent.x ? d : width, m); };
         const c = (u: number, h: number, v: number, radius: number, height: number, m: T.Material) => { const p = pos(u, v); cylinder(p.x, h, p.y, radius, height, m); };
         const accent = make(r.color, .75, .15);
-        const face = (u: number, h: number, v: number, width: number, height: number, text: string, sub: string) => planeAt(pos(u, v), h, normal, width, height, panel(text, sub, r.color));
+        const face = (u: number, h: number, v: number, width: number, height: number, text: string, sub: string) => planeAt(pos(u, v), h, normal, width, height, panel(text, sub, r.color,false,height<=20));
         // One high room identifier and one purposeful installation per room; the floor stays open.
         face(0, 84, 1.2, Math.min(length, 106), 20, r.name, r.sub);
         b(0, 23, .8, length, 1, 1.6, accent);
@@ -178,9 +186,9 @@ export function buildFacility(scene: T.Scene, cutaway = false) {
         else if (eq.kind === 'pods') {
             for (const u of [-30, 30]) {
                 c(u, 3, 12, 11, 6, trim);
-                c(u, 30, 12, 9.5, 48, steel);
+                if(u>0)c(u, 30, 12, 9.5, 48, podGlass);else {c(u,8,12,9.5,4,steel);b(u+8,31,12,2,44,2,steel);}
                 c(u, 56, 12, 11, 5, lightMetal);
-                face(u, 33, 22, 14, 24, 'FIELD', 'CONTAINMENT');
+                face(u, 11, 23.1, 18, 8, u<0?'ESCAPED':'SEALED', u<0?'094 / SEAL FAILURE':'RESEARCH / EMPTY');
                 c(u, 22, 12, 10, 1, accent);
             }
             b(0, 17, 4, length, 5, 8, steel);
@@ -240,13 +248,10 @@ export function buildFacility(scene: T.Scene, cutaway = false) {
             face(0, 69, 1.5, 62, 10, 'POWER GRID', 'CIRCUIT CONTROL');
         }
         else if (['relay', 'security', 'navigation', 'override', 'archive'].includes(eq.kind)) {
-            b(0, 37, depth / 2, length, 46, depth, steel);
+            if(eq.kind!=='archive')b(0, 37, depth / 2, length, 46, depth, steel);
             if (eq.kind === 'archive') {
-                for (const h of [23, 36, 49]) {
-                    b(0, h, depth + .2, length - 8, 10, .6, trim);
-                    for (const u of [-34, 0, 34])
-                        b(u, h, depth + .6, 12, 1.5, .6, screen);
-                }
+                b(0,25,depth/2,length,3,depth,steel);
+                for(const u of [-length/2+3,length/2-3])b(u,12,depth/2,4,24,depth,steel);
             }
             else {
                 for (const u of [-25, 25]) {
@@ -265,22 +270,8 @@ export function buildFacility(scene: T.Scene, cutaway = false) {
             }
         }
     }
-    // Entrances are intervals in the canonical floor union, not intersections of overlapping rectangles.
-    // Accent strips sit OUTSIDE the opening in the wall; no freestanding doorway pillars narrow it.
-    for (const portal of roomPortals) {
-        const r = rooms.find(r => r.id === portal.roomId)!, { normal: n, tangent: t, start, length } = portal, mid = { x: start.x + t.x * length / 2, y: start.y + t.y * length / 2 };
-        const accent = make(r.color, .8, .1);
-        for (const offset of [-2, length + 2]) {
-            const p = { x: start.x + t.x * offset, y: start.y + t.y * offset };
-            box(p.x, cutaway?12:50, p.y, t.x ? 3 : 2, cutaway?24:92, t.x ? 2 : 3, accent);
-        }
-        if(!cutaway) box(mid.x, 105, mid.y, t.x ? length : 3, 6, t.x ? 3 : length, trim);
-        const outside = { x: mid.x - n.x * 24, y: mid.y - n.y * 24 };
-        const destinations = rooms.filter(v => v.id !== r.id).map(v => { const direction = pathDirection(outside, center(v.id)); return { room: v, length: pathLength(outside, center(v.id)), outward: direction.x * n.x + direction.y * n.y <= 1 }; }).filter(v => v.outward && Number.isFinite(v.length)).sort((a, b) => a.length - b.length);
-        const destination = destinations[0]?.room;
-        planeAt({ x: mid.x - n.x * 1.2, y: mid.y - n.y * 1.2 }, 87, { x: -n.x, y: -n.y }, Math.min(100, length - 8), 13, panel(r.name, 'ENTER / ' + r.sub, r.color));
-        planeAt({ x: mid.x + n.x * 1.2, y: mid.y + n.y * 1.2 }, 87, n, Math.min(100, length - 8), 13, panel(destination ? 'TO ' + destination.name : 'SERVICE PASSAGE', 'FOLLOW THE CORRIDOR', r.color));
-    }
+    // Open connections are left completely open. Room names live on actual solid equipment walls.
+    // No per-room threshold shells, free-standing posts, crossbars or guessed destination signs.
     for (const [mat, list] of batches) {
         const merged = mergeGeometries(list);
         list.forEach(g => g.dispose());
@@ -292,5 +283,6 @@ export function buildFacility(scene: T.Scene, cutaway = false) {
         mesh.receiveShadow = true;
         scene.add(mesh);
     }
-    return { textures, materials, geometries, fixtures, dispose() { textures.forEach(t => t.dispose()); materials.forEach(m => m.dispose()); geometries.forEach(g => g.dispose()); } };
+    const damage=buildDamage(scene),identity=buildRoomIdentity(scene,cutaway);
+    return { identity, structure:{walls:wallSegments.map(w=>({...wallBounds(w),height:cutaway?24:108})),floorTiles,decorativeDoorFrames:0}, damage, textures, materials, geometries, fixtures, dispose() { identity.dispose();damage.dispose(); textures.forEach(t => t.dispose()); materials.forEach(m => m.dispose()); geometries.forEach(g => g.dispose()); } };
 }

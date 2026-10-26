@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-25",
+  "feature": "Live battle stage and stationary injected Pokemon animation",
+  "productionBuild": "passed",
+  "fullUnitIntegration": {
+    "passed": 107,
+    "failed": 0
+  },
+  "finalFocusedReactionAndEngineChecks": {
+    "passed": 18,
+    "failed": 0,
+    "reason": "Final containment reaction is a target hit/impact without HP damage or enemy damage turn."
+  },
+  "browserChecks": {
+    "initialRun": {
+      "battle": "Native idle and stage attack verified; exposed duplicate-engagement reconnect bug",
+      "models": "passed"
+    },
+    "correctedRun": {
+      "battle": "passed",
+      "chase": "passed"
+    },
+    "distinctRelevantScenariosPassed": 3
+  },
+  "nativeModelAvailability": {
+    "idle": 205,
+    "attack": 219,
+    "hit": 62,
+    "guard": 0
+  },
+  "gameplayChanged": false,
+  "optionalCosmeticThreatMotion": true,
+  "serviceWorker": "ghost-shift-battle-animation-12",
+  "limitations": [
+    "Native body animation requires a compatible source clip",
+    "Static 3D assets use labeled ambient effects, not fake body animation",
+    "Cosmetic threat challenge is non-damaging",
+    "No four-move turn/PP/player-HP mechanics redesign"
+  ],
+  "evidence": "reports/battle-animation-browser.json",
+  "screenshots": "docs/screenshots/battle-animation/"
+}

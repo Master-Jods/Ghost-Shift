@@ -1,4 +1,8 @@
+> Historical revision. Current first-person camera, real Showdown battles, fast live predictions and fatal emergency rules are documented in [v10](V10-CRITICAL-INCIDENTS.md). Asset provenance and earlier measurements below remain historical evidence.
+
 # Third-person horror revision
+
+Historical revision on base `67f4637`. Superseded by [the shoulder camera and damaged facility](SHOULDER-FACILITY-REVISION.md); the fixed north-up camera and trainer sprite descriptions below are retained as historical context.
 
 The player route now opens on an original full-screen haunted-facility scene. A dedicated distressed dimensional Pokémon: Ghost Shift title, restrained environmental movement, distinct menu, session input and operator access replace the old specimen-card hero. The operator uses the same steel/bone/crimson identity while preserving clear map, table, chart and input surfaces.
 

@@ -1,0 +1,282 @@
+{
+  "registryVersion": "authentic-catalog-sprites-1",
+  "catalogEntries": 1351,
+  "samples": [
+    {
+      "kind": "eevee-quadruped",
+      "first": {
+        "key": "companion-A",
+        "id": 133,
+        "representation": "directional-sprite",
+        "state": "run",
+        "clip": "Walk",
+        "frame": 6,
+        "frameKey": "Walk:5:6",
+        "direction": 5,
+        "actionFallback": false,
+        "clipTime": 0.42172923378717225,
+        "position": {
+          "x": 3303.1053474711275,
+          "y": 730.9999980946845
+        },
+        "pose": [
+          "Walk",
+          5,
+          6
+        ]
+      },
+      "second": {
+        "key": "companion-A",
+        "id": 133,
+        "representation": "directional-sprite",
+        "state": "run",
+        "clip": "Walk",
+        "frame": 4,
+        "frameKey": "Walk:5:4",
+        "direction": 5,
+        "actionFallback": false,
+        "clipTime": 0.7957602602214252,
+        "position": {
+          "x": 3373.4945173412493,
+          "y": 730.9999937235481
+        },
+        "pose": [
+          "Walk",
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "kind": "fletchling-flight",
+      "first": {
+        "key": "companion-A",
+        "id": 661,
+        "representation": "directional-sprite",
+        "state": "run",
+        "clip": "Walk",
+        "frame": 2,
+        "frameKey": "Walk:5:2",
+        "direction": 5,
+        "actionFallback": false,
+        "clipTime": 0.1756292346904503,
+        "position": {
+          "x": 3592.806048199494,
+          "y": 730.9999800941135
+        },
+        "pose": [
+          "Walk",
+          5,
+          2
+        ]
+      },
+      "second": {
+        "key": "companion-A",
+        "id": 661,
+        "representation": "directional-sprite",
+        "state": "run",
+        "clip": "Walk",
+        "frame": 3,
+        "frameKey": "Walk:5:3",
+        "direction": 5,
+        "actionFallback": false,
+        "clipTime": 0.6050224238916614,
+        "position": {
+          "x": 3669.365991495766,
+          "y": 730.9999753361838
+        },
+        "pose": [
+          "Walk",
+          5,
+          3
+        ]
+      }
+    },
+    {
+      "kind": "serperior-body",
+      "first": {
+        "key": "companion-A",
+        "id": 497,
+        "representation": "directional-sprite",
+        "state": "run",
+        "clip": "Walk",
+        "frame": 2,
+        "frameKey": "Walk:5:2",
+        "direction": 5,
+        "actionFallback": false,
+        "clipTime": 0.2361806388425487,
+        "position": {
+          "x": 3889.5725081684777,
+          "y": 730.9999616511287
+        },
+        "pose": [
+          "Walk",
+          5,
+          2
+        ]
+      },
+      "second": {
+        "key": "companion-A",
+        "id": 497,
+        "representation": "directional-sprite",
+        "state": "run",
+        "clip": "Walk",
+        "frame": 5,
+        "frameKey": "Walk:5:5",
+        "direction": 5,
+        "actionFallback": false,
+        "clipTime": 0.6078112875857643,
+        "position": {
+          "x": 3958.1087642031134,
+          "y": 730.9999573918428
+        },
+        "pose": [
+          "Walk",
+          5,
+          5
+        ]
+      }
+    },
+    {
+      "kind": "chandelure-hover",
+      "first": {
+        "key": "companion-B",
+        "id": 609,
+        "representation": "directional-sprite",
+        "state": "run",
+        "clip": "Walk",
+        "frame": 5,
+        "frameKey": "Walk:3:5",
+        "direction": 3,
+        "actionFallback": false,
+        "clipTime": 0.5278066196916776,
+        "position": {
+          "x": 3335.849668350843,
+          "y": 781.6178999260801
+        },
+        "pose": [
+          "Walk",
+          3,
+          5
+        ]
+      },
+      "second": {
+        "key": "companion-B",
+        "id": 609,
+        "representation": "directional-sprite",
+        "state": "run",
+        "clip": "Walk",
+        "frame": 3,
+        "frameKey": "Walk:5:3",
+        "direction": 5,
+        "actionFallback": false,
+        "clipTime": 0.9782759764315127,
+        "position": {
+          "x": 3255.408699021211,
+          "y": 798.9709032588402
+        },
+        "pose": [
+          "Walk",
+          5,
+          3
+        ]
+      }
+    },
+    {
+      "kind": "exact-female-form",
+      "value": {
+        "key": "companion-B",
+        "id": 10025,
+        "representation": "directional-sprite",
+        "state": "assist",
+        "clip": "Idle",
+        "frame": 0,
+        "frameKey": "Idle:5:0",
+        "direction": 5,
+        "actionFallback": true,
+        "clipTime": 0.0665,
+        "position": {
+          "x": 3175.206044221616,
+          "y": 799.0000011882086
+        },
+        "pose": [
+          "Idle",
+          5,
+          0
+        ]
+      }
+    },
+    {
+      "kind": "remote-guard",
+      "value": {
+        "key": "companion-A",
+        "id": 133,
+        "representation": "directional-sprite",
+        "state": "guard",
+        "clip": "Pose",
+        "frame": 0,
+        "frameKey": "Pose:1:0",
+        "direction": 1,
+        "actionFallback": false,
+        "clipTime": 0.01669999999999709,
+        "position": {
+          "x": 3410.490091762293,
+          "y": 730.9999945315222
+        },
+        "pose": [
+          "Pose",
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "kind": "confirmed-remote-attack",
+      "hp": 76,
+      "first": {
+        "key": "companion-A",
+        "id": 133,
+        "representation": "directional-sprite",
+        "state": "attack",
+        "clip": "Attack",
+        "frame": 0,
+        "frameKey": "Attack:1:0",
+        "direction": 1,
+        "actionFallback": false,
+        "clipTime": 0.03121805882352479,
+        "position": {
+          "x": 3410.490091762293,
+          "y": 730.9999945315222
+        },
+        "pose": [
+          "Attack",
+          1,
+          0
+        ]
+      },
+      "second": {
+        "key": "companion-A",
+        "id": 133,
+        "representation": "directional-sprite",
+        "state": "attack",
+        "clip": "Attack",
+        "frame": 7,
+        "frameKey": "Attack:1:7",
+        "direction": 1,
+        "actionFallback": false,
+        "clipTime": 0.2680254117647043,
+        "position": {
+          "x": 3410.490091762293,
+          "y": 730.9999945315222
+        },
+        "pose": [
+          "Attack",
+          1,
+          7
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "source": "Real browser/WebSocket movement and authoritative guard/attack; native frame changes, exact variants, injected HTTP failures and reconnect. Full catalog PNG/identity validation is separate."
+}

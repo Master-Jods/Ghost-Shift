@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-10-22T07:41:46.071Z",
+  "generatedAt": "2026-10-24T07:54:44.811Z",
   "scenario": "ghost-shift-wings-v6-third-person",
   "source": "Isolated reducer fixtures; not visitor sessions or browser traversal",
-  "passed": 45,
-  "total": 45,
+  "passed": 1,
+  "total": 41,
   "rows": [
     {
       "name": "normal / wiring / standard mechanism",
@@ -23,13 +23,13 @@
         "receipt",
         "extraction"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
-      "name": "normal / circuit / full",
+      "name": "normal / circuit / A",
       "category": "normal",
       "kind": "circuit",
-      "option": "full",
+      "option": "A",
       "room": "electrical",
       "checks": [
         "range",
@@ -43,13 +43,13 @@
         "receipt",
         "extraction"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
-      "name": "normal / circuit / essential",
+      "name": "normal / circuit / B",
       "category": "normal",
       "kind": "circuit",
-      "option": "essential",
+      "option": "B",
       "room": "electrical",
       "checks": [
         "range",
@@ -63,54 +63,14 @@
         "receipt",
         "extraction"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
-      "name": "normal / signal / boost",
+      "name": "normal / signal / standard mechanism",
       "category": "normal",
       "kind": "signal",
-      "option": "boost",
-      "room": "comms",
-      "checks": [
-        "range",
-        "role",
-        "invalid input",
-        "reachability",
-        "completion",
-        "duplicate",
-        "resources",
-        "companion",
-        "receipt",
-        "extraction"
-      ],
-      "status": "passed"
-    },
-    {
-      "name": "normal / signal / standard",
-      "category": "normal",
-      "kind": "signal",
-      "option": "standard",
-      "room": "comms",
-      "checks": [
-        "range",
-        "role",
-        "invalid input",
-        "reachability",
-        "completion",
-        "duplicate",
-        "resources",
-        "companion",
-        "receipt",
-        "extraction"
-      ],
-      "status": "passed"
-    },
-    {
-      "name": "normal / calibrate / standard mechanism",
-      "category": "normal",
-      "kind": "calibrate",
       "option": null,
-      "room": "containment",
+      "room": "comms",
       "checks": [
         "range",
         "role",
@@ -123,7 +83,7 @@
         "receipt",
         "extraction"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "normal / valves / standard mechanism",
@@ -143,7 +103,7 @@
         "receipt",
         "extraction"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "normal / upload / standard mechanism",
@@ -163,47 +123,7 @@
         "receipt",
         "extraction"
       ],
-      "status": "passed"
-    },
-    {
-      "name": "normal / access / standard mechanism",
-      "category": "normal",
-      "kind": "access",
-      "option": null,
-      "room": "security",
-      "checks": [
-        "range",
-        "role",
-        "invalid input",
-        "reachability",
-        "completion",
-        "duplicate",
-        "resources",
-        "companion",
-        "receipt",
-        "extraction"
-      ],
-      "status": "passed"
-    },
-    {
-      "name": "normal / fuse / standard mechanism",
-      "category": "normal",
-      "kind": "fuse",
-      "option": null,
-      "room": "workshop",
-      "checks": [
-        "range",
-        "role",
-        "invalid input",
-        "reachability",
-        "completion",
-        "duplicate",
-        "resources",
-        "companion",
-        "receipt",
-        "extraction"
-      ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "normal / containment / standard mechanism",
@@ -223,7 +143,7 @@
         "receipt",
         "extraction"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / blackout / A / none",
@@ -244,7 +164,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / blackout / B / none",
@@ -265,7 +185,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / blackout / either / none",
@@ -286,7 +206,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / blackout / both / none",
@@ -307,7 +227,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / comms / A / none",
@@ -328,7 +248,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / comms / B / none",
@@ -349,7 +269,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / comms / either / none",
@@ -370,7 +290,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / comms / both / none",
@@ -391,7 +311,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / reactor / both / none",
@@ -412,7 +332,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / coolant / A / none",
@@ -433,7 +353,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / coolant / B / none",
@@ -454,7 +374,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / coolant / either / none",
@@ -475,7 +395,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / coolant / both / none",
@@ -496,7 +416,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / leak / both / none",
@@ -517,7 +437,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / lockdown / A / none",
@@ -538,7 +458,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / lockdown / B / none",
@@ -559,7 +479,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / lockdown / either / none",
@@ -580,7 +500,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / lockdown / both / none",
@@ -601,7 +521,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / corruption / A / none",
@@ -622,7 +542,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / corruption / B / none",
@@ -643,7 +563,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / corruption / either / none",
@@ -664,7 +584,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / corruption / both / none",
@@ -685,7 +605,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / overload / A / balanced",
@@ -706,7 +626,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / overload / A / priority",
@@ -727,7 +647,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / overload / B / balanced",
@@ -748,7 +668,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / overload / B / priority",
@@ -769,7 +689,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / overload / either / balanced",
@@ -790,7 +710,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / overload / either / priority",
@@ -811,7 +731,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / overload / both / balanced",
@@ -832,7 +752,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "incident / overload / both / priority",
@@ -853,7 +773,7 @@
         "expiry",
         "cancellation"
       ],
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "briefing is authoritative, time-free, and retained across reconnect snapshots",
@@ -863,17 +783,17 @@
     {
       "name": "assistance cannot be repeated and assignment releases on completion or cancellation",
       "category": "assignment",
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "free choices remain feasible with zero energy and unavailable or fatigued companions",
       "category": "feasibility",
-      "status": "passed"
+      "status": "failed"
     },
     {
       "name": "analysis refresh keys ignore frame/look churn and player forecasts exclude unseen remote threats",
       "category": "analysis",
-      "status": "passed"
+      "status": "failed"
     }
   ]
 }

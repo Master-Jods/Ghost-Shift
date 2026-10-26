@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-26",
+  "build": "passed",
+  "unitServerTests": 128,
+  "browserUniqueScenarios": 5,
+  "pythonModelTests": 4,
+  "accepted3D": 1108,
+  "added3D": 13,
+  "nativeLocomotion": 221,
+  "nativeAttack": 249,
+  "runtimeLocomotionFallback": 887,
+  "remaining2DFallbacks": 243,
+  "bundledModels": [
+    1,
+    4,
+    6,
+    7,
+    25,
+    133,
+    197,
+    609,
+    10001,
+    10117
+  ],
+  "audio": {
+    "musicOnlyOutput": {
+      "ready": true,
+      "mode": "menu",
+      "notes": 6,
+      "clicks": 1,
+      "level": 0.08713721620851723,
+      "muted": false,
+      "musicVolume": 0.65
+    },
+    "buttonOnlyOutput": {
+      "ready": true,
+      "mode": "menu",
+      "notes": 8,
+      "clicks": 5,
+      "level": 0.0060882518260158,
+      "muted": false,
+      "musicVolume": 0
+    },
+    "errors": [],
+    "method": "Real WebAudio analyser RMS, with effects and ambience zero for the score test, then music/ambience zero for the button test. This verifies generated signal, not a human listening review."
+  },
+  "sourcesAudit": "reports/model-source-audit.json",
+  "screenshots": "docs/screenshots/models-music/",
+  "limitations": [
+    "Native clips are preferred; runtime authored motion is not represented as native game animation.",
+    "Unrigged models receive root motion, not invented skeletal clips.",
+    "243 exact variants still lack an accepted 3D source and remain explicitly labeled 2D fallbacks.",
+    "Metadata validation covers all accepted model records; representative browser visuals only.",
+    "Audio output was measured with a real WebAudio analyser; no human listening review is claimed."
+  ],
+  "scenarioChanged": false,
+  "databaseReset": false,
+  "serviceWorker": "ghost-shift-models-music-16"
+}

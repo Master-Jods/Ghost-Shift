@@ -1,3 +1,5 @@
+> Historical pre-v8 report. Current gameplay, map measurements, resource-free rules and validation are documented in [Route Trials revision](ROUTE-TRIALS-REVISION.md). Earlier timing/accuracy claims are not current.
+
 # Ghost Shift analytics
 
 Current version: `ghost-shift-wings-v5-decisions-mc1`, method `monte-carlo-actual-rules`. [Fresh 16-scenario evaluation](../reports/industrial-v5-evaluation.json): 13 successful time pairs, MAE 5.31 seconds, Brier 0.14844, matched policy difference 1.08 seconds with unchanged 81.25% success. These generated checks do not establish visitor accuracy or human improvement. Historical v4/v3 reports are incompatible as current-rule evidence. See [current implementation and limitations](INDUSTRIAL-REVISION.md).

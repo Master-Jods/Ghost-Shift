@@ -1,0 +1,114 @@
+{
+  "generatedAt": "2026-10-25T06:32:35.252699+00:00",
+  "scenario": "ghost-shift-v9-pokemon-rooms",
+  "mapSignature": "aster-wings-v9-pokemon-rooms:47aa0356",
+  "build": "passed",
+  "unit": {
+    "passed": 97,
+    "failed": 0
+  },
+  "browser": {
+    "initialFullSuite": {
+      "passed": 9,
+      "failed": 1,
+      "failure": "Fresh Vite lazily discovered GLTF/SkeletonUtils dependencies and reloaded during renderer initialization."
+    },
+    "afterFix": {
+      "passed": 3,
+      "failed": 0,
+      "scenarios": [
+        "characters",
+        "chase",
+        "journal with fresh dependency cache"
+      ]
+    },
+    "distinctScenariosValidated": 10,
+    "note": "All scenarios passed across full suite and affected rechecks; not a claim of one final fresh 10/10 run."
+  },
+  "fullRound": {
+    "scenario": "ghost-shift-v9-pokemon-rooms",
+    "mapSignature": "aster-wings-v9-pokemon-rooms:47aa0356",
+    "elapsed": 199,
+    "phase": "success",
+    "normalTasks": [
+      {
+        "name": "Electrical Wiring",
+        "complete": true
+      },
+      {
+        "name": "Door Power Routing",
+        "complete": true
+      },
+      {
+        "name": "Communications Calibration",
+        "complete": true
+      },
+      {
+        "name": "Coolant Control",
+        "complete": true
+      },
+      {
+        "name": "Research Data Transport",
+        "complete": true
+      },
+      {
+        "name": "Dual Stabilization",
+        "complete": true
+      }
+    ],
+    "bothExtracted": true,
+    "source": "Two real browser/WebSocket clients, keyboard travel, terminal interactions, carried-data reload; automated inputs, not visitor playtesting.",
+    "errors": []
+  },
+  "coverage": {
+    "catalogEntries": 1351,
+    "proceduralRigIds": [
+      1,
+      4,
+      6,
+      7,
+      25,
+      41,
+      92,
+      93,
+      94,
+      95,
+      129,
+      132,
+      133,
+      150
+    ],
+    "staticFallbackCount": 1337,
+    "importedGlbCount": 0
+  },
+  "screenshotsDirectory": "docs/screenshots/pokemon-characters",
+  "evidence": "reports/pokemon-character-browser.json contains real UI/authoritative action samples, joint poses and exact identities. Room approaches are controlled fixtures; full-round keyboard travel is separate.",
+  "productionEnvironmentEdited": false,
+  "productionDatabaseManuallyEdited": false,
+  "limitations": [
+    "Procedural stylized rigs, not imported production GLB assets.",
+    "Most catalog entries retain static exact-ID artwork fallback.",
+    "GLTF adapter has no enabled imported asset to visually validate.",
+    "Generated and headless-browser results do not establish visitor calibration or real-device performance."
+  ],
+  "evaluation": {
+    "version": "ghost-shift-v9-pokemon-rooms-mc1",
+    "generatedScenarios": 16,
+    "successfulTimePairs": 12,
+    "timeMAESeconds": 17,
+    "deadlineBrier": 0.00390625,
+    "matched": {
+      "n": 16,
+      "baselineSuccessRate": 0.75,
+      "bestPlanSuccessRate": 0.75,
+      "pairedBothSuccessfulN": 12,
+      "pairedTimeImprovement": -1.5
+    },
+    "calibrated": false
+  },
+  "balance": {
+    "legalObservedFastestSeconds": 108,
+    "generatedSuccesses": 12,
+    "generatedRuns": 12
+  }
+}

@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS gs_schema(version integer PRIMARY KEY,applied_at bigint NOT NULL);
+CREATE TABLE IF NOT EXISTS gs_operators(id text PRIMARY KEY,username text UNIQUE NOT NULL,password_hash text NOT NULL,created_at bigint NOT NULL);
+CREATE TABLE IF NOT EXISTS gs_operator_sessions(token_hash text PRIMARY KEY,operator_id text NOT NULL REFERENCES gs_operators(id),expires_at bigint NOT NULL);
+CREATE TABLE IF NOT EXISTS gs_rooms(id text PRIMARY KEY,code text UNIQUE NOT NULL,owner text REFERENCES gs_operators(id),state jsonb NOT NULL,version bigint NOT NULL DEFAULT 0,closed boolean NOT NULL DEFAULT false,expires_at bigint NOT NULL,created_at bigint NOT NULL,updated_at bigint NOT NULL,last_tick bigint NOT NULL,pause_reason text,proposal jsonb,rematch_code text,parent_id text,override_disconnect boolean NOT NULL DEFAULT false);
+CREATE TABLE IF NOT EXISTS gs_players(id text PRIMARY KEY,session_id text NOT NULL REFERENCES gs_rooms(id),role text NOT NULL CHECK(role IN('A','B')),token_hash text UNIQUE NOT NULL,profile jsonb NOT NULL,last_seq bigint NOT NULL DEFAULT 0,joined_at bigint NOT NULL,released boolean NOT NULL DEFAULT false,connection_id text,lease_until bigint NOT NULL DEFAULT 0,last_seen bigint NOT NULL DEFAULT 0);
+CREATE UNIQUE INDEX IF NOT EXISTS gs_player_slot ON gs_players(session_id,role) WHERE NOT released;
+CREATE TABLE IF NOT EXISTS gs_commands(session_id text NOT NULL REFERENCES gs_rooms(id),actor_id text NOT NULL,id text NOT NULL,seq bigint NOT NULL,kind text NOT NULL,result jsonb NOT NULL,created_at bigint NOT NULL,PRIMARY KEY(session_id,actor_id,id));
+CREATE TABLE IF NOT EXISTS gs_previews(id text PRIMARY KEY,session_id text NOT NULL REFERENCES gs_rooms(id),actor_id text NOT NULL,data jsonb NOT NULL,status text NOT NULL,created_at bigint NOT NULL);
+CREATE TABLE IF NOT EXISTS gs_jobs(id text PRIMARY KEY,session_id text REFERENCES gs_rooms(id),owner text NOT NULL,kind text NOT NULL,result jsonb,status text NOT NULL,context jsonb,created_at bigint NOT NULL);
+CREATE TABLE IF NOT EXISTS gs_forecasts(id text PRIMARY KEY,session_id text NOT NULL REFERENCES gs_rooms(id),role text NOT NULL,features jsonb NOT NULL,result jsonb NOT NULL,elapsed double precision NOT NULL,method_version text NOT NULL,created_at bigint NOT NULL);
+CREATE TABLE IF NOT EXISTS gs_records(id integer PRIMARY KEY,data jsonb NOT NULL,cached_at bigint NOT NULL);
+CREATE TABLE IF NOT EXISTS gs_activity(id bigserial PRIMARY KEY,session_id text NOT NULL REFERENCES gs_rooms(id),entry_key text NOT NULL,elapsed double precision NOT NULL,category text NOT NULL,action text NOT NULL,actor_id text,actor_role text NOT NULL,full_name text,block text,group_number text,status text NOT NULL,summary text NOT NULL,details jsonb NOT NULL DEFAULT '{}'::jsonb,created_at bigint NOT NULL,UNIQUE(session_id,entry_key));
+CREATE TABLE IF NOT EXISTS gs_limits(key text NOT NULL,bucket bigint NOT NULL,n integer NOT NULL,PRIMARY KEY(key,bucket));
+CREATE INDEX IF NOT EXISTS gs_rooms_owner ON gs_rooms(owner,created_at DESC);
+CREATE INDEX IF NOT EXISTS gs_activity_session ON gs_activity(session_id,id DESC);
+CREATE INDEX IF NOT EXISTS gs_forecasts_session ON gs_forecasts(session_id,created_at DESC);
+CREATE INDEX IF NOT EXISTS gs_jobs_owner ON gs_jobs(owner,created_at DESC);
+INSERT INTO gs_schema VALUES(1,(extract(epoch from clock_timestamp())*1000)::bigint) ON CONFLICT DO NOTHING;
+CREATE TABLE IF NOT EXISTS gs_legacy_rows(table_name text NOT NULL,row_key text NOT NULL,session_id text,data jsonb NOT NULL,imported_at bigint NOT NULL,PRIMARY KEY(table_name,row_key));
+CREATE INDEX IF NOT EXISTS gs_legacy_session ON gs_legacy_rows(session_id);
+
+ALTER TABLE gs_limits ADD COLUMN IF NOT EXISTS expires_at bigint NOT NULL DEFAULT 0;
+CREATE INDEX IF NOT EXISTS gs_limits_expiry ON gs_limits(expires_at);

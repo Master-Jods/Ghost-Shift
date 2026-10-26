@@ -1,0 +1,105 @@
+{
+  "author": "Kenney",
+  "license": "CC0-1.0",
+  "entries": [
+    {
+      "name": "knifeSlice",
+      "path": "/audio/battle/knifeSlice.ogg",
+      "sourceFile": "Audio/knifeSlice.ogg",
+      "pack": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "bytes": 15532,
+      "sha256": "4cd96dc630bed9840c15f1dd2306da2cc56a4da26a5d3f1a03c5a7265ac5e54f"
+    },
+    {
+      "name": "knifeSlice2",
+      "path": "/audio/battle/knifeSlice2.ogg",
+      "sourceFile": "Audio/knifeSlice2.ogg",
+      "pack": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "bytes": 15099,
+      "sha256": "6c2064d0ef988d1ec3d56868e823ea8823a5cac00f2742560052633529407def"
+    },
+    {
+      "name": "cloth1",
+      "path": "/audio/battle/cloth1.ogg",
+      "sourceFile": "Audio/cloth1.ogg",
+      "pack": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "bytes": 16508,
+      "sha256": "ddb93a3671233f95da0e0b10367f082f7eb42fa6caaddcf776410aa8833c747d"
+    },
+    {
+      "name": "cloth2",
+      "path": "/audio/battle/cloth2.ogg",
+      "sourceFile": "Audio/cloth2.ogg",
+      "pack": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "bytes": 11787,
+      "sha256": "8a7451193c38bc05483aec25dd193e163a15d44cf7fff04ac7912573231b0201"
+    },
+    {
+      "name": "drawKnife1",
+      "path": "/audio/battle/drawKnife1.ogg",
+      "sourceFile": "Audio/drawKnife1.ogg",
+      "pack": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "bytes": 11134,
+      "sha256": "276403e72c3b71c47bc24db3083970c23f8e5551ffa78f436f83483c56f3f0bb"
+    },
+    {
+      "name": "impactPunch_medium_000",
+      "path": "/audio/battle/impactPunch_medium_000.ogg",
+      "sourceFile": "Audio/impactPunch_medium_000.ogg",
+      "pack": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "bytes": 8800,
+      "sha256": "486988aa2d6440ffc4c62a0e8ccf3c23673ba84424bd4723378d451b7255eb5c"
+    },
+    {
+      "name": "impactPunch_medium_001",
+      "path": "/audio/battle/impactPunch_medium_001.ogg",
+      "sourceFile": "Audio/impactPunch_medium_001.ogg",
+      "pack": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "bytes": 8701,
+      "sha256": "e71d23abcc3f10d9d6bc9615b2a431fff70b12333a5fcdd9964457564ace4349"
+    },
+    {
+      "name": "impactSoft_medium_000",
+      "path": "/audio/battle/impactSoft_medium_000.ogg",
+      "sourceFile": "Audio/impactSoft_medium_000.ogg",
+      "pack": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "bytes": 5351,
+      "sha256": "7d3ba0bb5e60a11b5d3e558c141303dcf494256675fbf753c0d252d2cf0481e3"
+    },
+    {
+      "name": "impactGlass_light_000",
+      "path": "/audio/battle/impactGlass_light_000.ogg",
+      "sourceFile": "Audio/impactGlass_light_000.ogg",
+      "pack": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "bytes": 6526,
+      "sha256": "d750cf88097d0c3e69920e6e14496e1444e1a9da01aa4cca8f5ec8cb44c57b4f"
+    },
+    {
+      "name": "impactMetal_light_000",
+      "path": "/audio/battle/impactMetal_light_000.ogg",
+      "sourceFile": "Audio/impactMetal_light_000.ogg",
+      "pack": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "bytes": 7651,
+      "sha256": "33b5e6e37c6e9d54e07bf5a89b12c76e879f40c1ea83cdd82714df1d6f9fec6d"
+    },
+    {
+      "name": "impactBell_heavy_000",
+      "path": "/audio/battle/impactBell_heavy_000.ogg",
+      "sourceFile": "Audio/impactBell_heavy_000.ogg",
+      "pack": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "bytes": 13915,
+      "sha256": "94b8bb5f2d43ab65e4bcc32b28562416e9bc2c51d9fd4be1e333660ee52f977f"
+    }
+  ]
+}

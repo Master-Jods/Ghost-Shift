@@ -1,0 +1,24 @@
+{
+  "audio": {
+    "ready": true,
+    "mode": "menu",
+    "notes": 6,
+    "clicks": 0,
+    "typing": 0,
+    "battleEffects": 0,
+    "cries": 0,
+    "decodedCries": 0,
+    "musicGain": 1.4465599060058594,
+    "level": 0.023330255117358305,
+    "muted": false,
+    "musicVolume": 0.85
+  },
+  "selectionCount": 1108,
+  "checks": [
+    "Legacy mute/zero levels upgraded once",
+    "Pointer gesture on non-button unlocks audio",
+    "Actual analyser output",
+    "API excludes non-3D entries",
+    "Separate hands/key9 scenario passed"
+  ]
+}

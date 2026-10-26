@@ -1,3 +1,5 @@
+> Historical pre-v8 report. Current gameplay, map measurements, resource-free rules and validation are documented in [Route Trials revision](ROUTE-TRIALS-REVISION.md). Earlier timing/accuracy claims are not current.
+
 # Industrial revision / task QA matrix
 
 Current scenario: `ghost-shift-wings-v5-decisions`; protocol **6**; analytics model `ghost-shift-wings-v5-decisions-mc1`. Canonical collision map remains `aster-wings-v4-collision`.

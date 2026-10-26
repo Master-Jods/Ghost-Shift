@@ -1,0 +1,74 @@
+{
+  "before": {
+    "ready": true,
+    "mode": "battle",
+    "notes": 28,
+    "clicks": 10,
+    "typing": 3,
+    "battleEffects": 0,
+    "battleSamplesPlayed": 0,
+    "decodedBattleSamples": 11,
+    "battleVolume": 0.7,
+    "cries": 2,
+    "decodedCries": 2,
+    "musicGain": 0,
+    "level": 0.0008250749170240324,
+    "muted": false,
+    "musicVolume": 0
+  },
+  "after": {
+    "ready": true,
+    "mode": "battle",
+    "notes": 41,
+    "clicks": 11,
+    "typing": 3,
+    "battleEffects": 4,
+    "battleSamplesPlayed": 4,
+    "decodedBattleSamples": 11,
+    "battleVolume": 0.7,
+    "cries": 2,
+    "decodedCries": 2,
+    "musicGain": 0,
+    "level": 0,
+    "muted": false,
+    "musicVolume": 0
+  },
+  "cues": [
+    {
+      "side": "player",
+      "kind": "attack",
+      "move": "Heat Wave",
+      "type": "fire",
+      "at": 9.539220000000006,
+      "until": 10.439220000000006
+    },
+    {
+      "side": "opponent",
+      "kind": "hit",
+      "at": 9.889220000000005,
+      "until": 10.439220000000006
+    },
+    {
+      "side": "opponent",
+      "kind": "attack",
+      "move": "Hyper Voice",
+      "type": "normal",
+      "at": 10.489220000000005,
+      "until": 11.389220000000005
+    },
+    {
+      "side": "player",
+      "kind": "hit",
+      "at": 10.839220000000005,
+      "until": 11.389220000000005
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "One visible right arm; zero in third person",
+    "Actual server turn plays recorded CC0 battle samples",
+    "Quieter real cries on encounter entry, not every attack",
+    "Snapshot refresh does not replay effects",
+    "Measured actual output, not human listening review"
+  ]
+}

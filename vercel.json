@@ -1,0 +1,44 @@
+﻿{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/cloud.ts": {
+      "maxDuration": 300,
+      "includeFiles": [
+        "server/cloud/schema.sql",
+        "public/catalog/index.json",
+        "public/catalog/records.json",
+        "public/catalog/identities.json",
+        "public/catalog/pokemon-models.json"
+      ],
+      "excludeFiles": [
+        "data/**",
+        "reports/**",
+        "test-results/**",
+        "playwright-report/**",
+        ".env",
+        ".env.*",
+        "public/pokemon-models/**",
+        "public/pokemon-sprites/**"
+      ]
+    }
+  },
+  "rewrites": [
+    { "source": "/ws", "destination": "/api/cloud?__route=/ws" },
+    {
+      "source": "/api/:path((?!cloud$).*)",
+      "destination": "/api/cloud?__route=/api/:path"
+    },
+    { "source": "/operator/:path*", "destination": "/index.html" },
+    { "source": "/play/:path*", "destination": "/index.html" },
+    { "source": "/join", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    }
+  ]
+}

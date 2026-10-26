@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-25",
+  "catalogEntries": 1351,
+  "animatedSprites": 675,
+  "nativeSpriteAttacks": 668,
+  "staticFallback": 676,
+  "importedAnimatedGLB": 0,
+  "catalogValidation": {
+    "entries": 1351,
+    "clipReferences": 3150,
+    "errors": 0
+  },
+  "pythonTests": {
+    "passed": 5
+  },
+  "unitIntegrationTests": {
+    "passed": 102,
+    "failed": 0
+  },
+  "productionBuild": "passed",
+  "fullBrowserSuite": {
+    "passed": 9,
+    "failed": 1,
+    "failure": "Native character scenario hit analytical helper wait at 30s before server response. No animation failure at that assertion."
+  },
+  "correctiveTestChange": "Helper waits 60s, allowing server 45s computation plus scheduling/network. No gameplay timing change.",
+  "affectedBrowserRecheck": {
+    "passed": 1,
+    "failed": 0,
+    "duration": "1.6m"
+  },
+  "distinctBrowserScenariosPassedAcrossSuiteAndRecheck": 10,
+  "fullRound": {
+    "elapsedActiveSeconds": 194,
+    "phase": "success",
+    "normalTasksComplete": 6,
+    "jointPhysicalExtraction": true
+  },
+  "limits": [
+    "0 approved imported GLB models",
+    "676 entries lack approved native locomotion",
+    "4 special forms lack reference artwork; exact-ID placeholders used",
+    "Browser movement categories sampled; not every species visually walked"
+  ]
+}

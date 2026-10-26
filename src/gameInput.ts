@@ -5,5 +5,5 @@ export function journalTabIntent({playing,typing,modified,overlay,gameSurface,jo
  return overlay===null&&gameSurface?'open':null;
 }
 
-/** Fixed north-up camera movement shared by keyboard and touch. */
-export function cameraInput(forward:number,strafe:number){const length=Math.max(1,Math.hypot(forward,strafe));return {x:strafe/length,y:-forward/length};}
+/** Shared camera-relative keyboard/touch input; yaw is independent of trainer facing. */
+export function cameraInput(forward:number,strafe:number,yaw=-Math.PI/2){const length=Math.max(1,Math.hypot(forward,strafe));return {x:(Math.cos(yaw)*forward-Math.sin(yaw)*strafe)/length,y:(Math.sin(yaw)*forward+Math.cos(yaw)*strafe)/length};}

@@ -1,0 +1,35 @@
+{
+  "scenario": "ghost-shift-v8-six-route-trials",
+  "mapSignature": "aster-wings-v8-route-trials:926ab262",
+  "elapsed": 186,
+  "phase": "success",
+  "normalTasks": [
+    {
+      "name": "Electrical Wiring",
+      "complete": true
+    },
+    {
+      "name": "Door Power Routing",
+      "complete": true
+    },
+    {
+      "name": "Communications Calibration",
+      "complete": true
+    },
+    {
+      "name": "Coolant Control",
+      "complete": true
+    },
+    {
+      "name": "Research Data Transport",
+      "complete": true
+    },
+    {
+      "name": "Dual Stabilization",
+      "complete": true
+    }
+  ],
+  "bothExtracted": true,
+  "source": "Two real browser/WebSocket clients, keyboard travel, terminal interactions, carried-data reload; automated inputs, not visitor playtesting.",
+  "errors": []
+}

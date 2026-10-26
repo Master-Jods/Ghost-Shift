@@ -1,0 +1,13 @@
+# Verified 3D selection, hands, camera toggle and audible settings
+
+Updated 2026-10-26. Only the 1,108 entries in the accepted textured-model registry appear in `/api/catalog`. Player teams and operator injections validate against the same server-side set. The previous optional picker filter is now mandatory; excluding IDs in the UI alone cannot bypass the server. Native source clips are preferred, with existing runtime skeletal/root motion for missing clips. A verified model source can still fail to download on a particular device; existing identity-preserving fallback remains for network failure. This update does not claim all 1,108 have native skeletal game clips.
+
+First-person view now has camera-attached hands and sleeves, with small motion reduced by the existing accessibility setting. They do not add colliders or affect interaction. Press **9** during gameplay to toggle the prior collision-aware behind-the-character chase camera. Hands disappear and the player's trainer body appears in third person. Press 9 again to return. Typing, key repeats and overlays cannot trigger a camera change. Canonical player movement, collision, tasks and mission time remain unchanged.
+
+Audio fixes address old saved muted/zero sliders, gesture unlock and visible-but-unfocused browser windows. The first upgraded load sets an explicit `audioVersion:2` with audible master/music/effects levels; future user mute choices remain saved. Pointer and keyboard gestures now unlock audio even on a form field rather than only clicking a button. Visible pages no longer depend on `document.hasFocus()` to produce sound; hidden pages remain silent. The enable-sound button also repairs zero-volume master/music/effects values. The existing original horror score and UI/gameplay sounds remain.
+
+Production build passed. New browser scenarios passed for visible hands, third-person toggle/return, overlay input safety and genuine analyser output after starting from old muted/zero-volume settings. The 3D-only HTTP catalog was checked at 1,108 entries and exclusion of a non-3D form. Server checks verify excluded teams and injections are rejected. First- and third-person screenshots were visually inspected. Full regression results are recorded in the accompanying QA report.
+
+Evidence: [browser measurements](../reports/camera-audio-fix-browser.json), [hands](screenshots/camera-audio-fix/hands.png), [third person](screenshots/camera-audio-fix/third-person.png).
+
+Restart the host and refresh all tabs to activate cache `ghost-shift-3d-camera-audio-17`. No database reset is needed. Existing teams containing excluded older selections should be replaced in a new shift; old session history is preserved.

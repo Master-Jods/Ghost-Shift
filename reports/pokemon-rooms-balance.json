@@ -1,0 +1,204 @@
+{
+  "generatedAt": "2026-10-25T06:29:20.218Z",
+  "scenario": "ghost-shift-v9-pokemon-rooms",
+  "model": "ghost-shift-v9-pokemon-rooms-mc1",
+  "mapSignature": "aster-wings-v9-pokemon-rooms:47aa0356",
+  "movementUnitsPerSecond": 185,
+  "routeMeasurement": "Routes traced with actual canonical move() steps at full input; navigation-grid estimates are not reported as physical traversal times.",
+  "routeExamples": [
+    {
+      "from": {
+        "x": 2584,
+        "y": 2771
+      },
+      "to": {
+        "x": 1878.5,
+        "y": 1368.5
+      },
+      "shortcutSeconds": 9.239999999999986,
+      "detourSeconds": 26.266666398049107,
+      "shortcutRooms": [
+        "Power Plant Control",
+        "Nurse Joy's Pokemon Clinic"
+      ],
+      "detourRooms": [
+        "Power Plant Control",
+        "Poke Ball Workshop",
+        "Silph Security Office",
+        "Trainer Reception",
+        "Nurse Joy's Pokemon Clinic"
+      ],
+      "meetsTarget": true
+    },
+    {
+      "from": {
+        "x": 2584,
+        "y": 3519
+      },
+      "to": {
+        "x": 1878.5,
+        "y": 2116.5
+      },
+      "shortcutSeconds": 9.322757588998721,
+      "detourSeconds": 25.60970890168936,
+      "shortcutRooms": [
+        "Power Plant Control",
+        "Nurse Joy's Pokemon Clinic"
+      ],
+      "detourRooms": [
+        "Power Plant Control",
+        "Poke Mart Supply Depot",
+        "Professor Oak's Research Lab",
+        "Nurse Joy's Pokemon Clinic"
+      ],
+      "meetsTarget": true
+    },
+    {
+      "from": {
+        "x": 1836,
+        "y": 3519
+      },
+      "to": {
+        "x": 2626.5,
+        "y": 2116.5
+      },
+      "shortcutSeconds": 9.480000000000032,
+      "detourSeconds": 25.24782624573533,
+      "shortcutRooms": [
+        "Power Plant Control",
+        "Nurse Joy's Pokemon Clinic"
+      ],
+      "detourRooms": [
+        "Power Plant Control",
+        "Poke Ball Workshop",
+        "Silph Security Office",
+        "Trainer Reception",
+        "Nurse Joy's Pokemon Clinic"
+      ],
+      "meetsTarget": true
+    }
+  ],
+  "fastestObservedLegal": {
+    "success": true,
+    "seconds": 108,
+    "normalTasks": 6,
+    "travelTrainerSeconds": 200.5,
+    "coordinationUnionSeconds": 13
+  },
+  "runs": [
+    {
+      "seed": 482,
+      "standardizedInjection": false,
+      "success": true,
+      "completionTime": 235,
+      "travelTrainerSeconds": 355.5,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    },
+    {
+      "seed": 482,
+      "standardizedInjection": true,
+      "success": true,
+      "completionTime": 256,
+      "travelTrainerSeconds": 389.5,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    },
+    {
+      "seed": 1001,
+      "standardizedInjection": false,
+      "success": true,
+      "completionTime": 194,
+      "travelTrainerSeconds": 295.5,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    },
+    {
+      "seed": 1001,
+      "standardizedInjection": true,
+      "success": true,
+      "completionTime": 203,
+      "travelTrainerSeconds": 295.5,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    },
+    {
+      "seed": 1002,
+      "standardizedInjection": false,
+      "success": true,
+      "completionTime": 176,
+      "travelTrainerSeconds": 251.5,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    },
+    {
+      "seed": 1002,
+      "standardizedInjection": true,
+      "success": true,
+      "completionTime": 198,
+      "travelTrainerSeconds": 301.25,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    },
+    {
+      "seed": 1003,
+      "standardizedInjection": false,
+      "success": true,
+      "completionTime": 216,
+      "travelTrainerSeconds": 304.5,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    },
+    {
+      "seed": 1003,
+      "standardizedInjection": true,
+      "success": true,
+      "completionTime": 214,
+      "travelTrainerSeconds": 304.5,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    },
+    {
+      "seed": 1004,
+      "standardizedInjection": false,
+      "success": true,
+      "completionTime": 202,
+      "travelTrainerSeconds": 294,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    },
+    {
+      "seed": 1004,
+      "standardizedInjection": true,
+      "success": true,
+      "completionTime": 224,
+      "travelTrainerSeconds": 322,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    },
+    {
+      "seed": 1005,
+      "standardizedInjection": false,
+      "success": true,
+      "completionTime": 164,
+      "travelTrainerSeconds": 231,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    },
+    {
+      "seed": 1005,
+      "standardizedInjection": true,
+      "success": true,
+      "completionTime": 172,
+      "travelTrainerSeconds": 231,
+      "remainingTasks": 0,
+      "emergencyMiss": false
+    }
+  ],
+  "limitations": [
+    "Fastest observed legal continuation is not a mathematical lower bound.",
+    "Generated cooperative puzzle/reaction assumptions are explicit in forecasts; no real visitor solving-time measurements exist.",
+    "Parallel trainer travel seconds overlap and must not be added to round elapsed time.",
+    "Standardized incidents are bounded fixtures, not predictions of arbitrary operator behavior."
+  ]
+}

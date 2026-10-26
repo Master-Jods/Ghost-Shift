@@ -5,25 +5,25 @@ import { defaultPresentation, sanitizePresentation } from './presentation';
 import { rooms, center, doors, pathDirection, pathLength, move, distance, walkable, spawn, roomEquipment, roomPortals, controlPoint, obstacles } from './world';
 import { initial, defaultConfig, injectionCheck, reduce } from './engine';
 import { prepared, rollout } from '../server/analytics';
-test('fixed-camera keyboard and touch vectors are normalized and settings remain bounded',()=>{
- assert.deepEqual(cameraInput(1,0),{x:0,y:-1});assert.equal(cameraInput(0,1).x,1);assert.ok(Math.abs(cameraInput(0,1).y)===0);assert.ok(Math.abs(Math.hypot(...Object.values(cameraInput(1,1)))-1)<1e-10);
+test('camera-relative keyboard and touch vectors are normalized and settings remain bounded',()=>{
+ assert.ok(Math.abs(cameraInput(1,0).x)<1e-9);assert.equal(cameraInput(1,0).y,-1);assert.equal(cameraInput(0,1).x,1);assert.ok(Math.abs(cameraInput(0,1).y)<1e-9);assert.ok(Math.abs(Math.hypot(...Object.values(cameraInput(1,1)))-1)<1e-10);
     const safe = sanitizePresentation({ sensitivity: NaN, fov: 900, brightness: -1, minimapSize: 999 });
     assert.equal(safe.fov, 100);
     assert.equal(safe.brightness, .6);
     assert.equal(safe.minimapSize, 600);
     assert.equal(safe.sensitivity, .003);
 });
-test('every room pair is physically traversable with both optional gates locked; controls and spawn remain clear', () => {
+test('every nonfinal room pair is traversable with optional routes closed; final extraction is gated', () => {
     const state = initial();
-    state.tasks = [...state.tasks, ...['access', 'containment'].map((unlock, i) => ({ ...state.tasks[0], id: 'gate-' + i, unlock, complete: false }))];
+
     assert.ok(doors(state).every(d => d.locked));
     for (const p of Object.values(spawn))
         assert.ok(walkable(p, state));
-    for (const from of rooms)
-        for (const to of rooms) {
+    for (const from of rooms.filter(r=>r.id!=='exit'))
+        for (const to of rooms.filter(r=>r.id!=='exit')) {
             let p = center(from.id), target = center(to.id);
             assert.ok(Number.isFinite(pathLength(p, target, state)), from.id + ' to ' + to.id);
-            for (let step = 0; step < 700 && distance(p, target) > 35; step++) {
+            for (let step = 0; step < 1800 && distance(p, target) > 35; step++) {
                 const v = pathDirection(p, target, state), n = Math.hypot(v.x, v.y);
                 assert.ok(n > 0, from.id + ' to ' + to.id);
                 p = move(p, { x: v.x / n, y: v.y / n }, .07, state);
@@ -36,8 +36,8 @@ test('every room pair is physically traversable with both optional gates locked;
             assert.ok(walkable(t.secondPosition, state));
     }
 });
-test('rebuilt map remains feasible under seeded actual-rule continuations with 3-6 objectives and 300-second maximum', () => {
-    for (const taskCount of [3, 4, 5, 6])
+test('rebuilt map remains feasible under seeded actual-rule continuations with exactly six objectives and 300-second maximum', () => {
+    for (const taskCount of [6])
         for (const seed of [1, 2, 3]) {
             const result = rollout(prepared({ ...defaultConfig, seed, taskCount }), seed);
             assert.ok(result.success, JSON.stringify({ taskCount, seed, result }));

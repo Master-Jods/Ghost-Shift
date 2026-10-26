@@ -1,13 +1,8 @@
-export type Vec = {
-    x: number;
-    y: number;
-};
-export type Rect = Vec & {
-    w: number;
-    h: number;
-};
+import {ROOM_IDENTITIES} from './roomIdentity';
+import {deriveLayout,wallBounds,type Vec,type Rect,type RoomEdge,type WallSegment} from './layoutGeometry';
+export {wallBounds};export type {Vec,Rect,RoomEdge,WallSegment};
 export type MapState = {
-    worldTime?: number;
+    worldTime?: number;revision?:number;extractionBlocked?:boolean;unknownBlocking?:boolean;route?:{finalReleased?:boolean;configuration:'A'|'B';sealed?:string[];overridden:string[];repaired:string[];guardianClear:string[];holds:Record<string,{role:'A'|'B';pokemon:number}>};
     threats?: {
         activeAt: number;
         status: string;
@@ -25,10 +20,10 @@ export type MapState = {
         doorId?: string;
     }[];
 };
-const names = [['arrival', 'Arrival', 'CREW CHECK-IN', '#83c9bb'], ['hub', 'Central Hub', 'ASTER RESEARCH', '#5db5da'], ['electrical', 'Electrical', 'POWER GRID', '#e6c75e'], ['comms', 'Communications', 'RELAY ARRAY', '#80c6e5'], ['medical', 'Medical Bay', 'COMPANION CARE', '#69ceb0'], ['reactor', 'Reactor', 'DUAL STABILIZERS', '#ef9768'], ['cooling', 'Cooling Station', 'COOLANT MANIFOLD', '#75c7ef'], ['containment', 'Containment Lab', 'FIELD RESEARCH', '#b19ae8'], ['archive', 'Research Archive', 'DATA VAULT', '#baa272'], ['security', 'Security', 'ACCESS CONTROL', '#748dd5'], ['storage', 'Storage', 'SUPPLY LOCKERS', '#c9a078'], ['workshop', 'Maintenance Workshop', 'SERVICE BENCH', '#d1b552'], ['west', 'West Service Corridor', 'WEST CONNECTOR', '#82a5b1'], ['emergency', 'Emergency Control', 'MANUAL OVERRIDE', '#d57878'], ['east', 'East Service Corridor', 'EAST CONNECTOR', '#82a5b1'], ['exit', 'Extraction Airlock', 'BOTH TRAINERS REQUIRED', '#7fe5bb']];
+const roomColors:Record<string,string>={arrival:'#83c9bb',hub:'#5db5da',electrical:'#e6c75e',comms:'#80c6e5',medical:'#69ceb0',reactor:'#ef9768',cooling:'#75c7ef',containment:'#b19ae8',archive:'#baa272',security:'#748dd5',storage:'#c9a078',workshop:'#d1b552',west:'#82a5b1',emergency:'#d57878',east:'#82a5b1',exit:'#7fe5bb'};
 /** Original Aster wing layout, inspired by the supplied schematic's adjacency. */
-export const MAP_VERSION = 'aster-wings-v5-spacious';
-export const WORLD = { w: 1480, h: 1160 };
+export const MAP_VERSION = 'aster-wings-v9-pokemon-rooms';
+export const WORLD = { w: 6290, h: 4930 };
 const layout: Record<string, [
     number,
     number,
@@ -36,7 +31,7 @@ const layout: Record<string, [
     number
 ]> = {
     arrival: [200, 100, 200, 180], hub: [620, 60, 300, 240], containment: [1080, 120, 200, 180],
-    medical: [440, 320, 180, 180], reactor: [40, 420, 180, 220], security: [280, 420, 140, 180],
+    medical: [440, 320, 180, 180], reactor: [40, 420, 180, 220], security: [250, 420, 140, 180],
     cooling: [1030, 390, 180, 170], east: [1280, 400, 160, 200], archive: [790, 400, 180, 180],
     electrical: [430, 650, 180, 180], storage: [680, 730, 260, 230], workshop: [220, 800, 180, 180],
     west: [80, 720, 120, 160], emergency: [1110, 710, 200, 180], comms: [970, 970, 200, 150], exit: [450, 950, 180, 160]
@@ -46,58 +41,33 @@ for (const id of Object.keys(layout)) {
  const r=layout[id], pad=['hub','storage'].includes(id)?15:['west','east'].includes(id)?10:20;
  layout[id]=[r[0]-pad,r[1]-pad,r[2]+pad*2,r[3]+pad*2];
 }
-export const rooms = names.map(([id, name, sub, color]) => { const [x, y, w, h] = layout[id]; return { x, y, w, h, id, name, sub, color }; });
+export const MAP_SCALE=4.25;
+for(const r of Object.values(layout))for(let i=0;i<4;i++)r[i]*=MAP_SCALE;
+export const rooms = Object.entries(roomColors).map(([id,color]) => { const [x, y, w, h] = layout[id]; return { x, y, w, h, id, name:ROOM_IDENTITIES[id].name, sub:ROOM_IDENTITIES[id].sub, color }; });
 export const center = (id: string): Vec => { const r = rooms.find(r => r.id === id)!; return { x: r.x + r.w / 2, y: r.y + r.h / 2 }; };
 // Explicit corridors share the exact same rectangles in every consumer. Width 70-80, player radius 11.
 export const corridors: Rect[] = [
     { x: 400, y: 170, w: 220, h: 70 }, { x: 490, y: 205, w: 70, h: 115 },
     { x: 920, y: 180, w: 160, h: 70 }, { x: 750, y: 300, w: 70, h: 100 }, { x: 780, y: 365, w: 150, h: 70 },
-    { x: 620, y: 365, w: 130, h: 70 }, { x: 350, y: 280, w: 70, h: 140 }, { x: 130, y: 310, w: 220, h: 70 },
+    { x: 620, y: 365, w: 130, h: 70 }, { x: 300, y: 280, w: 70, h: 140 }, { x: 130, y: 310, w: 220, h: 70 },
     { x: 130, y: 310, w: 70, h: 110 }, { x: 220, y: 490, w: 60, h: 70 },
-    { x: 140, y: 640, w: 70, h: 80 }, { x: 165, y: 830, w: 55, h: 70 }, { x: 315, y: 600, w: 70, h: 200 },
+    { x: 140, y: 640, w: 70, h: 80 }, { x: 165, y: 830, w: 55, h: 70 }, {x:245,y:600,w:160,h:90}, {x:245,y:645,w:90,h:155},
     { x: 400, y: 850, w: 100, h: 70 }, { x: 465, y: 830, w: 70, h: 120 }, { x: 610, y: 760, w: 70, h: 70 },
     { x: 610, y: 940, w: 70, h: 90 }, { x: 880, y: 580, w: 70, h: 150 },
     { x: 1170, y: 300, w: 70, h: 90 }, { x: 1210, y: 460, w: 70, h: 70 },
     { x: 1320, y: 600, w: 70, h: 180 }, { x: 1310, y: 745, w: 80, h: 70 },
     { x: 940, y: 795, w: 170, h: 70 }, { x: 1000, y: 865, w: 70, h: 105 }, { x: 940, y: 995, w: 30, h: 70 },
-    { x: 930, y: 525, w: 100, h: 70 }, { x: 995, y: 560, w: 70, h: 235 }
+    { x: 930, y: 525, w: 100, h: 70 }, { x: 995, y: 560, w: 70, h: 235 }, {x:490,y:500,w:90,h:160}
 ];
 // Widen narrow service passages without extending travel.
 for(const c of corridors){if(c.w<c.h&&c.w<90){c.x-=(90-c.w)/2;c.w=90;}else if(c.h<=c.w&&c.h<90){c.y-=(90-c.h)/2;c.h=90;}}
-export const floors: Rect[] = [...rooms, ...corridors];
-/** Room-edge intervals, cut by the actual floor union. Used for equipment and flush entrances. */
-export type RoomEdge = {
-    roomId: string;
-    side: 'north' | 'south' | 'east' | 'west';
-    start: Vec;
-    normal: Vec;
-    tangent: Vec;
-    length: number;
-};
-const floorHit = (p: Vec) => floors.some(r => p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h);
-function boundaryIntervals(open: boolean): RoomEdge[] {
-    const result: RoomEdge[] = [];
-    for (const r of rooms)
-        for (const side of ['north', 'south', 'west', 'east'] as const) {
-            const horizontal = side === 'north' || side === 'south', length = horizontal ? r.w : r.h;
-            const origin = { x: side === 'east' ? r.x + r.w : r.x, y: side === 'south' ? r.y + r.h : r.y };
-            const tangent = horizontal ? { x: 1, y: 0 } : { x: 0, y: 1 }, normal = { x: side === 'west' ? 1 : side === 'east' ? -1 : 0, y: side === 'north' ? 1 : side === 'south' ? -1 : 0 };
-            let start = -1;
-            for (let step = 0; step <= length; step += 10) {
-                const outside = { x: origin.x + tangent.x * (step + 5) - normal.x * 5, y: origin.y + tangent.y * (step + 5) - normal.y * 5 }, match = step < length && floorHit(outside) === open;
-                if (match && start < 0)
-                    start = step;
-                if (!match && start >= 0) {
-                    result.push({ roomId: r.id, side, start: { x: origin.x + tangent.x * start, y: origin.y + tangent.y * start }, normal, tangent, length: step - start });
-                    start = -1;
-                }
-            }
-        }
-    return result;
-}
-export const roomWalls = boundaryIntervals(false);
-const floorClear = (p: Vec) => [p, { x: p.x - 12, y: p.y }, { x: p.x + 12, y: p.y }, { x: p.x, y: p.y - 12 }, { x: p.x, y: p.y + 12 }].every(floorHit);
-export const roomPortals = boundaryIntervals(true).filter(p => p.length >= 44 && [-20, 0, 20].every(offset => floorClear({ x: p.start.x + p.tangent.x * p.length / 2 + p.normal.x * offset, y: p.start.y + p.tangent.y * p.length / 2 + p.normal.y * offset })));
+for(const c of corridors){c.x*=MAP_SCALE;c.y*=MAP_SCALE;c.w*=MAP_SCALE;c.h*=MAP_SCALE;}
+export const layoutGeometry=deriveLayout(rooms,corridors);
+export const floors=layoutGeometry.floors, floorTiles=layoutGeometry.tiles, wallSegments=layoutGeometry.walls, roomWalls=layoutGeometry.roomWalls;
+const floorHit=layoutGeometry.floorHit;
+const floorClear=(p:Vec)=>[p,{x:p.x-12,y:p.y},{x:p.x+12,y:p.y},{x:p.x,y:p.y-12},{x:p.x,y:p.y+12}].every(floorHit);
+/** Logical room connections only. They never generate posts, lintels or room shells. */
+export const roomPortals=layoutGeometry.connections.filter(p=>p.length>=44&&[-20,0,20].every(offset=>floorClear({x:p.start.x+p.tangent.x*p.length/2+p.normal.x*offset,y:p.start.y+p.tangent.y*p.length/2+p.normal.y*offset})));
 export type RoomEquipment = {
     roomId: string;
     kind: string;
@@ -131,7 +101,7 @@ const equipmentPlan: Record<string, {
 export const roomEquipment: RoomEquipment[] = rooms.map(r => {
     const plan = equipmentPlan[r.id], edges = roomWalls.filter(e => e.roomId === r.id).sort((a, b) => Number(b.side === plan.side) - Number(a.side === plan.side) || b.length - a.length);
     const edge = edges.find(e => e.length >= plan.length + 16) || [...edges].sort((a, b) => b.length - a.length)[0];
-    const length = Math.min(plan.length, edge.length - 16), anchor = { x: edge.start.x + edge.tangent.x * edge.length / 2, y: edge.start.y + edge.tangent.y * edge.length / 2 }, normal = edge.normal, tangent = edge.tangent, depth = plan.depth;
+    const length = Math.min(plan.length, edge.length - 16), anchor = { x: edge.start.x + edge.tangent.x * (Math.floor(edge.length/10)*5), y: edge.start.y + edge.tangent.y * (Math.floor(edge.length/10)*5) }, normal = edge.normal, tangent = edge.tangent, depth = plan.depth;
     const corner = { x: anchor.x - tangent.x * length / 2, y: anchor.y - tangent.y * length / 2 }, other = { x: anchor.x + tangent.x * length / 2 + normal.x * depth, y: anchor.y + tangent.y * length / 2 + normal.y * depth };
     const bounds = { x: Math.min(corner.x, other.x), y: Math.min(corner.y, other.y), w: Math.abs(corner.x - other.x), h: Math.abs(corner.y - other.y) };
     const controls = [-30, 30].map(offset => ({ x: anchor.x + tangent.x * offset + normal.x * (depth + 32), y: anchor.y + tangent.y * offset + normal.y * (depth + 32) })) as [
@@ -140,7 +110,13 @@ export const roomEquipment: RoomEquipment[] = rooms.map(r => {
     ];
     return { roomId: r.id, kind: plan.kind, edge, anchor, normal, tangent, length, depth, bounds, controls };
 });
-export type Collider = {id:string;roomId:string} & ({shape:'box';x:number;y:number;w:number;h:number}|{shape:'circle';x:number;y:number;r:number});
+/** Wall-side themed furniture with explicit physical footprints; never free-standing partitions. */
+export const themedStations=roomEquipment.filter(e=>['archive','medical'].includes(e.roomId)).flatMap(eq=>{
+ const kinds=eq.roomId==='archive'?['research-bench','library-cabinet']:['recovery-beds','reception-counter'];
+ const edges=roomWalls.filter(e=>e.roomId===eq.roomId&&e!==eq.edge&&e.length>=260).sort((a,b)=>b.length-a.length).slice(0,2);
+ return edges.map((edge,i)=>{const width=156,depth=i===1?24:32,height=eq.roomId==='archive'?55:i===1?54:27,anchor={x:edge.start.x+edge.tangent.x*edge.length/2,y:edge.start.y+edge.tangent.y*edge.length/2},n=edge.normal,t=edge.tangent,center={x:anchor.x+n.x*(depth/2+1),y:anchor.y+n.y*(depth/2+1)},w=t.x?width:depth,h=t.x?depth:width;return {id:eq.roomId+'-themed-'+i,roomId:eq.roomId,kind:kinds[i],anchor,normal:n,tangent:t,width,depth,height,bounds:{x:center.x-w/2,y:center.y-h/2,w,h}};});
+});
+export type Collider = {id:string;roomId:string;height?:number} & ({shape:'box';x:number;y:number;w:number;h:number}|{shape:'circle';x:number;y:number;r:number});
 /** Solid visible equipment pieces, not the empty rectangular service bay around them. */
 export const colliders:Collider[]=roomEquipment.flatMap(eq=>{
  const result:Collider[]=[],pos=(u:number,v:number)=>({x:eq.anchor.x+eq.tangent.x*u+eq.normal.x*v,y:eq.anchor.y+eq.tangent.y*u+eq.normal.y*v});
@@ -153,6 +129,7 @@ export const colliders:Collider[]=roomEquipment.flatMap(eq=>{
  else box(0,eq.depth/2,eq.length,eq.depth);
  return result;
 });
+for(const station of themedStations)colliders.push({id:station.id,roomId:station.roomId,height:station.height,shape:'box',...station.bounds});
 export const obstacles:Rect[]=colliders.map(c=>c.shape==='box'?{x:c.x,y:c.y,w:c.w,h:c.h}:{x:c.x-c.r,y:c.y-c.r,w:c.r*2,h:c.r*2});
 export const PLAYER_RADIUS=11;
 export function colliderIntersects(c:Collider,p:Vec,radius=PLAYER_RADIUS){
@@ -160,26 +137,28 @@ export function colliderIntersects(c:Collider,p:Vec,radius=PLAYER_RADIUS){
  const dx=p.x-Math.max(c.x,Math.min(p.x,c.x+c.w)),dy=p.y-Math.max(c.y,Math.min(p.y,c.y+c.h));
  return radius===0?p.x>=c.x&&p.x<=c.x+c.w&&p.y>=c.y&&p.y<=c.y+c.h:dx*dx+dy*dy<radius*radius-1e-8;
 }
-/** Exact boundary of the rectangle union, including 5-unit offsets; no renderer-only voxel rounding. */
-export type WallSegment={x:number;z:number;length:number;axis:'x'|'z';normal:number};
-const boundaryX=[...new Set(floors.flatMap(r=>[r.x,r.x+r.w]))].sort((a,b)=>a-b),boundaryY=[...new Set(floors.flatMap(r=>[r.y,r.y+r.h]))].sort((a,b)=>a-b);
-export const wallSegments:WallSegment[]=[];
-for(const [axis,lines,spans] of [['x',boundaryY,boundaryX],['z',boundaryX,boundaryY]] as const)for(const line of lines)for(const normal of [-1,1]){
- let begin:number|undefined;
- for(let i=0;i<spans.length;i++){const start=spans[i],end=spans[i+1],mid=(start+end)/2;
-  const negative=axis==='x'?{x:mid,y:line-.1}:{x:line-.1,y:mid},positive=axis==='x'?{x:mid,y:line+.1}:{x:line+.1,y:mid};
-  const edge=end!==undefined&&(normal<0?floorHit(positive)&&!floorHit(negative):floorHit(negative)&&!floorHit(positive));
-  if(edge&&begin===undefined)begin=start;if(!edge&&begin!==undefined){wallSegments.push({x:axis==='x'?begin:line,z:axis==='x'?line:begin,length:start-begin,axis,normal});begin=undefined;}
- }
-}
 export function wallDistanceSquared(p:Vec,e:WallSegment){const x=e.axis==='x'?Math.max(e.x,Math.min(p.x,e.x+e.length)):e.x,y=e.axis==='z'?Math.max(e.z,Math.min(p.y,e.z+e.length)):e.z;return (p.x-x)**2+(p.y-y)**2;}
 export const controlPoint = (roomId: string, role: 'A' | 'B' = 'A'): Vec => ({ ...roomEquipment.find(e => e.roomId === roomId)!.controls[role === 'A' ? 0 : 1] });
 export const gateDefinitions = [
-    { id: 'hub-shortcut', x: 650, y: 365, w: 14, h: 70, unlock: 'access', name: 'Medical / central research shortcut' },
-    { id: 'east-shortcut', x: 995, y: 630, w: 70, h: 14, unlock: 'containment', name: 'Eastern service bypass' }
-];
-export function doors(state?: MapState | number, _allocation?: string | null, _ready?: boolean) { const s = typeof state === 'object' ? state : {}; return gateDefinitions.map(d => ({ ...d, locked: !!s.threats?.some(t => t.status === 'active' && (s.worldTime ?? 0) >= t.activeAt && t.behavior === 'seal' && !t.disabledEffect && t.doorId === d.id) || !!s.emergencies?.some(e => e.status === 'active' && e.kind === 'lockdown' && e.doorId === d.id) || !!s.tasks?.some(t => t.unlock === d.unlock && !t.complete)&&!(d.id==='hub-shortcut'&&s.systems?.wingPower==='full') })); }
-export const spawn = { A: { x: 265, y: 195 }, B: { x: 335, y: 195 } };
+ {id:'hub-shortcut',x:490,y:570,w:90,h:14,unlock:'power',name:'Shortcut A / Joy Clinic - Power Wing',kind:'switch',controlRoom:'electrical'},
+ {id:'east-shortcut',x:985,y:630,w:90,h:14,unlock:'power',name:'Shortcut B / Eastern bypass',kind:'switch',controlRoom:'electrical'},
+ {id:'research-access',x:740,y:335,w:90,h:14,unlock:'wiring',name:'Research access',kind:'task',controlRoom:'security'},
+ {id:'held-passage',x:130,y:675,w:90,h:14,unlock:'latch',name:'West maintenance passage',kind:'held',controlRoom:'west'},
+ {id:'extraction-north',x:455,y:915,w:90,h:14,unlock:'final',name:'Final extraction / north',kind:'final',controlRoom:'exit'},
+ {id:'extraction-east',x:645,y:930,w:14,h:110,unlock:'final',name:'Final extraction / east',kind:'final',controlRoom:'exit'}
+].map(d=>{if(d.kind==='final'){const edge=roomPortals.find(p=>p.roomId==='exit'&&p.side===(d.id==='extraction-north'?'north':'east'))!;return {...d,x:edge.start.x-(edge.side==='east'?7:0),y:edge.start.y-(edge.side==='north'?7:0),w:edge.side==='north'?edge.length:14,h:edge.side==='east'?edge.length:14};}return {...d,x:d.x*MAP_SCALE,y:d.y*MAP_SCALE,w:d.w*MAP_SCALE,h:d.h*MAP_SCALE};});
+export const gateControl=(id:string)=>controlPoint(gateDefinitions.find(d=>d.id===id)?.controlRoom||'electrical');
+const doorCache=new WeakMap<object,{revision:number;value:any[]}>();
+export const invalidateDoorCache=(s:object)=>doorCache.delete(s);
+export function doors(state?:MapState|number,_allocation?:string|null,_ready?:boolean){const s=typeof state==='object'?state:{},route=s.route;
+ const cached=typeof state==='object'&&s.revision!==undefined?doorCache.get(s):undefined;if(cached&&cached.revision===s.revision)return cached.value;
+ const value=gateDefinitions.map(d=>{const guardian=s.threats?.find(t=>t.status==='active'&&t.doorId===d.id),incident=s.emergencies?.some(e=>e.status==='active'&&e.kind==='lockdown'&&e.doorId===d.id),allDone=!!s.tasks?.length&&s.tasks.every(t=>t.complete),task=s.tasks?.find(t=>t.unlock===d.unlock),override=route?.overridden.includes(d.id),repaired=route?.repaired.includes(d.id);
+ const base=d.kind==='switch'?!task?.complete||(route?.configuration||'A')!==(d.id==='hub-shortcut'?'A':'B'):d.kind==='held'?!repaired&&!route?.holds[d.id]:d.kind==='final'?!route?.finalReleased&&(!allDone||!!s.extractionBlocked||!!s.unknownBlocking||!!s.threats?.some(t=>t.status==='active'&&(t as any).blocking)||!!s.emergencies?.some(e=>e.status==='active'&&(e as any).blocking)):!!task&&!task.complete;
+ const locked=typeof state==='object'&&!!(guardian||route?.sealed?.includes(d.id)||incident||(!override&&base));
+ const reason=guardian||route?.sealed?.includes(d.id)?'Defeat or contain the linked guardian':incident?'Resolve the active lockdown':d.kind==='final'?'Complete all six normal tasks and clear extraction-blocking incidents':d.kind==='switch'?`Complete Door Power Routing; return to Power Plant Control to select ${d.id==='hub-shortcut'?'A':'B'}`:d.kind==='held'?'Assign a companion here or repair the latch permanently':'Complete Electrical Wiring or use the shared override key';
+ return {...d,locked,reason:locked?reason:'Open',alternative:d.kind==='final'?'Final access has no prerequisite bypass':'Longer connected service corridors remain available',guardianId:guardian?(guardian as any).instanceId:undefined};});if(typeof state==='object'&&s.revision!==undefined)doorCache.set(s,{revision:s.revision,value});return value;
+}
+export const spawn={A:{x:265*MAP_SCALE,y:195*MAP_SCALE},B:{x:335*MAP_SCALE,y:195*MAP_SCALE}};
 export const contains = (r: Rect, p: Vec, pad = 0) => p.x >= r.x - pad && p.x <= r.x + r.w + pad && p.y >= r.y - pad && p.y <= r.y + r.h + pad;
 export const distance = (a: Vec, b: Vec) => Math.hypot(a.x - b.x, a.y - b.y);
 export const roomAt = (p: Vec) => rooms.find(r => contains(r, p))?.id || 'corridor';
@@ -220,33 +199,33 @@ export type Interactable = Vec & {
 export const points: Interactable[] = rooms.map(r => ({ ...center(r.id), id: r.id, name: r.name, kind: r.id === 'exit' ? 'exit' : 'terminal' }));
 export const point = (id: string) => points.find(p => p.id === id)!;
 export const nearby = (p: Vec, _r?: string, range = 85) => points.filter(t => distance(t, p) < range).sort((a, b) => distance(a, p) - distance(b, p))[0];
-const navSize = 10, navCols = Math.ceil(WORLD.w / navSize), navRows = Math.ceil(WORLD.h / navSize);
+const navSize = 20, navCols = Math.ceil(WORLD.w / navSize), navRows = Math.ceil(WORLD.h / navSize);
 const navBase = new Uint8Array(navCols * navRows);
 for (let y = 0; y < navRows; y++)
     for (let x = 0; x < navCols; x++)
-        navBase[y * navCols + x] = Number(walkable({ x: x * navSize + 5, y: y * navSize + 5 }, undefined, null, false, 12));
+        navBase[y * navCols + x] = Number(walkable({ x: x * navSize + navSize/2, y: y * navSize + navSize/2 }, undefined, null, false, 12));
 const flowCache = new Map<string, {
     cost: Int32Array;
     open: Uint8Array;
 }>();
 function flow(target: Vec, state?: MapState | number) {
-    const locked = doors(state).filter(d => d.locked), key = Math.round(target.x / 10) + ',' + Math.round(target.y / 10) + '|' + locked.map(d => d.id).join();
+    const locked = doors(state).filter(d => d.locked), key = Math.round(target.x / navSize) + ',' + Math.round(target.y / navSize) + '|' + locked.map(d => d.id).join();
     const cached = flowCache.get(key);
     if (cached)
         return cached;
     const open = navBase.slice();
     for (const d of locked)
-        for (let y = Math.max(0, Math.floor((d.y - 13) / 10)); y < Math.min(navRows, Math.ceil((d.y + d.h + 13) / 10)); y++)
-            for (let x = Math.max(0, Math.floor((d.x - 13) / 10)); x < Math.min(navCols, Math.ceil((d.x + d.w + 13) / 10)); x++)
-                if (contains(d, { x: x * 10 + 5, y: y * 10 + 5 }, 12))
+        for (let y = Math.max(0, Math.floor((d.y - 13) / navSize)); y < Math.min(navRows, Math.ceil((d.y + d.h + 13) / navSize)); y++)
+            for (let x = Math.max(0, Math.floor((d.x - 13) / navSize)); x < Math.min(navCols, Math.ceil((d.x + d.w + 13) / navSize)); x++)
+                if (contains(d, { x: x * navSize + navSize/2, y: y * navSize + navSize/2 }, 12))
                     open[y * navCols + x] = 0;
     const cost = new Int32Array(open.length);
     cost.fill(-1);
     const queue = new Int32Array(open.length);
     let tail = 0, nearest = -1, best = Infinity;
-    for (let y = Math.max(0, Math.floor(target.y / 10) - 5); y < Math.min(navRows, Math.floor(target.y / 10) + 6); y++)
-        for (let x = Math.max(0, Math.floor(target.x / 10) - 5); x < Math.min(navCols, Math.floor(target.x / 10) + 6); x++) {
-            const i = y * navCols + x, d = distance({ x: x * 10 + 5, y: y * 10 + 5 }, target);
+    for (let y = Math.max(0, Math.floor(target.y / navSize) - 5); y < Math.min(navRows, Math.floor(target.y / navSize) + 6); y++)
+        for (let x = Math.max(0, Math.floor(target.x / navSize) - 5); x < Math.min(navCols, Math.floor(target.x / navSize) + 6); x++) {
+            const i = y * navCols + x, d = distance({ x: x * navSize + navSize/2, y: y * navSize + navSize/2 }, target);
             if (open[i] && d < best) {
                 best = d;
                 nearest = i;
@@ -258,14 +237,10 @@ function flow(target: Vec, state?: MapState | number) {
     }
     for (let head = 0; head < tail; head++) {
         const i = queue[head], x = i % navCols, y = Math.floor(i / navCols);
-        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-            const nx = x + dx, ny = y + dy, j = ny * navCols + nx;
-            if (nx < 0 || ny < 0 || nx >= navCols || ny >= navRows || !open[j] || cost[j] >= 0)
-                continue;
-            cost[j] = cost[i] + 1;
-            queue[tail++] = j;
-        }
+        const visit=(j:number)=>{if(open[j]&&cost[j]<0){cost[j]=cost[i]+1;queue[tail++]=j;}};
+        if(x>0)visit(i-1);if(x+1<navCols)visit(i+1);if(y>0)visit(i-navCols);if(y+1<navRows)visit(i+navCols);
     }
+
     const result = { cost, open };
     if (flowCache.size > 96)
         flowCache.delete(flowCache.keys().next().value!);
@@ -280,15 +255,17 @@ function swept(a: Vec, b: Vec, state?: MapState | number) {
     return true;
 }
 function navStart(start: Vec, cost: Int32Array, state?: MapState | number) {
+    const ownX=Math.floor(start.x/navSize),ownY=Math.floor(start.y/navSize),own=ownY*navCols+ownX;
+    if(ownX>=0&&ownX<navCols&&ownY>=0&&ownY<navRows&&cost[own]>=0&&swept(start,{x:ownX*navSize+navSize/2,y:ownY*navSize+navSize/2},state))return own;
     let result = -1, best = Infinity;
-    const sx = Math.floor(start.x / 10), sy = Math.floor(start.y / 10);
+    const sx = Math.floor(start.x / navSize), sy = Math.floor(start.y / navSize);
     for (let y = sy - 2; y <= sy + 2; y++)
         for (let x = sx - 2; x <= sx + 2; x++) {
             const i = y * navCols + x;
             if (x < 0 || y < 0 || x >= navCols || y >= navRows || cost[i] < 0)
                 continue;
-            const p = { x: x * 10 + 5, y: y * 10 + 5 }, d = distance(start, p);
-            const score = cost[i] * 10 + d;
+            const p = { x: x * navSize + navSize/2, y: y * navSize + navSize/2 }, d = distance(start, p);
+            const score = cost[i] * navSize + d;
             if (score < best && swept(start, p, state)) {
                 best = score;
                 result = i;
@@ -303,12 +280,12 @@ export function pathDirection(start: Vec, target: Vec, state?: MapState | number
     let i = navStart(start, cost, state);
     if (i < 0)
         return { x: 0, y: 0 };
-    let to = { x: i % navCols * 10 + 5, y: Math.floor(i / navCols) * 10 + 5 };
+    let to = { x: i % navCols * navSize + navSize/2, y: Math.floor(i / navCols) * navSize + navSize/2 };
     for (let step = 0; step < 4; step++) {
         const x = i % navCols, y = Math.floor(i / navCols), neighbors = [i - 1, i + 1, i - navCols, i + navCols].filter(j => j >= 0 && j < cost.length && cost[j] >= 0 && cost[j] < cost[i] && Math.abs(j % navCols - x) + Math.abs(Math.floor(j / navCols) - y) === 1);
         if (!neighbors.length)
             break;
-        const next = neighbors.sort((a, b) => cost[a] - cost[b] || distance({ x: a % navCols * 10 + 5, y: Math.floor(a / navCols) * 10 + 5 }, target) - distance({ x: b % navCols * 10 + 5, y: Math.floor(b / navCols) * 10 + 5 }, target))[0], candidate = { x: next % navCols * 10 + 5, y: Math.floor(next / navCols) * 10 + 5 };
+        const next = neighbors.sort((a, b) => cost[a] - cost[b] || distance({ x: a % navCols * navSize + navSize/2, y: Math.floor(a / navCols) * navSize + navSize/2 }, target) - distance({ x: b % navCols * navSize + navSize/2, y: Math.floor(b / navCols) * navSize + navSize/2 }, target))[0], candidate = { x: next % navCols * navSize + navSize/2, y: Math.floor(next / navCols) * navSize + navSize/2 };
         if (!swept(start, candidate, state))
             break;
         i = next;
@@ -320,7 +297,7 @@ export function pathLength(start: Vec, target: Vec, state?: MapState) {
     if (distance(start, target) < 45 && swept(start, target, state))
         return distance(start, target);
     const { cost } = flow(target, state), i = navStart(start, cost, state);
-    return i < 0 ? Infinity : cost[i] * 10 + distance(start, { x: i % navCols * 10 + 5, y: Math.floor(i / navCols) * 10 + 5 });
+    return i < 0 ? Infinity : cost[i] * navSize + distance(start, { x: i % navCols * navSize + navSize/2, y: Math.floor(i / navCols) * navSize + navSize/2 });
 }
 export function lineOfSight(a: Vec, b: Vec, state?: MapState) {
     const d = distance(a, b), n = Math.ceil(d / 8);
@@ -330,6 +307,6 @@ export function lineOfSight(a: Vec, b: Vec, state?: MapState) {
     return true;
 }
 
-const geometryData=JSON.stringify({version:MAP_VERSION,floors,colliders,gates:gateDefinitions,radius:PLAYER_RADIUS});
+const geometryData=JSON.stringify({version:MAP_VERSION,floors,walls:wallSegments,connections:layoutGeometry.connections,colliders,gates:gateDefinitions,radius:PLAYER_RADIUS});
 let geometryHash=2166136261;for(let i=0;i<geometryData.length;i++)geometryHash=Math.imul(geometryHash^geometryData.charCodeAt(i),16777619);
 export const MAP_SIGNATURE=MAP_VERSION+':'+(geometryHash>>>0).toString(16);

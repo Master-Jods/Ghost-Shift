@@ -1,3 +1,4 @@
+import type {PlayerProfile}from './playerProfile';
 import {MAP_SIGNATURE} from './world';
 import {RULES} from './rules';
 import {commandId} from './ids';
@@ -25,7 +26,7 @@ export class NetworkTransport{
   location.reload();
  }
  private async accept(value:Credential){this.previewTicket++;this.pending.clear();this.decision=null;this.credential=value;this.seq=Math.max(value.nextSeq,Number(sessionStorage.getItem('jt-seq-'+value.participantId)||1));sessionStorage.setItem('jt-player-'+value.code+'-'+value.role,JSON.stringify(value));sessionStorage.setItem('jt-active-player',JSON.stringify(value));this.state={...initial(),id:value.sessionId,code:value.code,connection:'Connecting',threats:[]};return new Promise<void>((resolve,reject)=>{this.firstResolve=resolve;this.connect(value.sessionId,value.role);setTimeout(()=>{if(!this.net.connected)reject(Error('Could not open the player socket. Use reconnect after checking the server.'));},7000);});}
- async join(role:'A'|'B',code:string){const saved=sessionStorage.getItem('jt-player-'+code.toUpperCase()+'-'+role);const old=saved?JSON.parse(saved):null;const data=await this.api('/api/join',{method:'POST',body:JSON.stringify({code:code.toUpperCase(),role,alias:'Trainer '+role,resumeToken:old?.credential})});await this.accept(data);}
+ async join(role:'A'|'B',code:string,profile:PlayerProfile){const saved=sessionStorage.getItem('jt-player-'+code.toUpperCase()+'-'+role);const old=saved?JSON.parse(saved):null;const data=await this.api('/api/join',{method:'POST',body:JSON.stringify({code:code.toUpperCase(),role,profile,resumeToken:old?.credential})});await this.accept(data);}
  async operatorConnect(id:string){this.previewTicket++;this.pending.clear();this.decision=null;this.credential=null;this.socketRole='control';sessionStorage.setItem('jt-operator-session',id);return new Promise<void>((resolve,reject)=>{this.firstResolve=resolve;this.connect(id,'control');setTimeout(()=>{if(!this.net.connected)reject(Error('Operator socket did not connect.'));},7000);});}
  private connect(id:string,role:'control'|'A'|'B'){
   this.stop=false;clearTimeout(this.timeout);if(this.socket){this.socket.onclose=null;this.socket.close();}this.socketRole=role;const previous=this.net.connected;this.net={...this.net,sessionId:id,role,connected:false};this.state={...this.state,connection:this.reconnects?'Reconnecting':'Connecting'};this.emit();const socket=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws`);this.socket=socket;

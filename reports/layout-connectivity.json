@@ -1,0 +1,1832 @@
+{
+  "mapSignature": "aster-wings-v9-pokemon-rooms:47aa0356",
+  "rooms": [
+    {
+      "id": "arrival",
+      "bounds": {
+        "x": 765,
+        "y": 340,
+        "w": 1020,
+        "h": 935
+      },
+      "controls": [
+        {
+          "x": 1245,
+          "y": 376
+        },
+        {
+          "x": 1305,
+          "y": 376
+        }
+      ]
+    },
+    {
+      "id": "hub",
+      "bounds": {
+        "x": 2571.25,
+        "y": 191.25,
+        "w": 1402.5,
+        "h": 1147.5
+      },
+      "controls": [
+        {
+          "x": 3241.25,
+          "y": 227.25
+        },
+        {
+          "x": 3301.25,
+          "y": 227.25
+        }
+      ]
+    },
+    {
+      "id": "electrical",
+      "bounds": {
+        "x": 1742.5,
+        "y": 2677.5,
+        "w": 935,
+        "h": 935
+      },
+      "controls": [
+        {
+          "x": 1882.5,
+          "y": 2715.5
+        },
+        {
+          "x": 1942.5,
+          "y": 2715.5
+        }
+      ]
+    },
+    {
+      "id": "comms",
+      "bounds": {
+        "x": 4037.5,
+        "y": 4037.5,
+        "w": 1020,
+        "h": 807.5
+      },
+      "controls": [
+        {
+          "x": 4517.5,
+          "y": 4805
+        },
+        {
+          "x": 4577.5,
+          "y": 4805
+        }
+      ]
+    },
+    {
+      "id": "medical",
+      "bounds": {
+        "x": 1785,
+        "y": 1275,
+        "w": 935,
+        "h": 935
+      },
+      "controls": [
+        {
+          "x": 1900,
+          "y": 2150
+        },
+        {
+          "x": 1960,
+          "y": 2150
+        }
+      ]
+    },
+    {
+      "id": "reactor",
+      "bounds": {
+        "x": 85,
+        "y": 1700,
+        "w": 935,
+        "h": 1105
+      },
+      "controls": [
+        {
+          "x": 145,
+          "y": 2220
+        },
+        {
+          "x": 145,
+          "y": 2280
+        }
+      ]
+    },
+    {
+      "id": "cooling",
+      "bounds": {
+        "x": 4292.5,
+        "y": 1572.5,
+        "w": 935,
+        "h": 892.5
+      },
+      "controls": [
+        {
+          "x": 4577.5,
+          "y": 1618.5
+        },
+        {
+          "x": 4637.5,
+          "y": 1618.5
+        }
+      ]
+    },
+    {
+      "id": "containment",
+      "bounds": {
+        "x": 4505,
+        "y": 425,
+        "w": 1020,
+        "h": 935
+      },
+      "controls": [
+        {
+          "x": 5469,
+          "y": 860
+        },
+        {
+          "x": 5469,
+          "y": 920
+        }
+      ]
+    },
+    {
+      "id": "archive",
+      "bounds": {
+        "x": 3272.5,
+        "y": 1615,
+        "w": 935,
+        "h": 935
+      },
+      "controls": [
+        {
+          "x": 4163.5,
+          "y": 1870
+        },
+        {
+          "x": 4163.5,
+          "y": 1930
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "bounds": {
+        "x": 977.5,
+        "y": 1700,
+        "w": 765,
+        "h": 935
+      },
+      "controls": [
+        {
+          "x": 1072.5,
+          "y": 1740
+        },
+        {
+          "x": 1132.5,
+          "y": 1740
+        }
+      ]
+    },
+    {
+      "id": "storage",
+      "bounds": {
+        "x": 2826.25,
+        "y": 3038.75,
+        "w": 1232.5,
+        "h": 1105
+      },
+      "controls": [
+        {
+          "x": 3452.5,
+          "y": 4089.75
+        },
+        {
+          "x": 3512.5,
+          "y": 4089.75
+        }
+      ]
+    },
+    {
+      "id": "workshop",
+      "bounds": {
+        "x": 850,
+        "y": 3315,
+        "w": 935,
+        "h": 935
+      },
+      "controls": [
+        {
+          "x": 1285,
+          "y": 4198
+        },
+        {
+          "x": 1345,
+          "y": 4198
+        }
+      ]
+    },
+    {
+      "id": "west",
+      "bounds": {
+        "x": 297.5,
+        "y": 3017.5,
+        "w": 595,
+        "h": 765
+      },
+      "controls": [
+        {
+          "x": 331.5,
+          "y": 3367.5
+        },
+        {
+          "x": 331.5,
+          "y": 3427.5
+        }
+      ]
+    },
+    {
+      "id": "emergency",
+      "bounds": {
+        "x": 4632.5,
+        "y": 2932.5,
+        "w": 1020,
+        "h": 935
+      },
+      "controls": [
+        {
+          "x": 5112.5,
+          "y": 3827.5
+        },
+        {
+          "x": 5172.5,
+          "y": 3827.5
+        }
+      ]
+    },
+    {
+      "id": "east",
+      "bounds": {
+        "x": 5397.5,
+        "y": 1657.5,
+        "w": 765,
+        "h": 935
+      },
+      "controls": [
+        {
+          "x": 6122.5,
+          "y": 2092.5
+        },
+        {
+          "x": 6122.5,
+          "y": 2152.5
+        }
+      ]
+    },
+    {
+      "id": "exit",
+      "bounds": {
+        "x": 1827.5,
+        "y": 3952.5,
+        "w": 935,
+        "h": 850
+      },
+      "controls": [
+        {
+          "x": 2262.5,
+          "y": 4766.5
+        },
+        {
+          "x": 2322.5,
+          "y": 4766.5
+        }
+      ]
+    }
+  ],
+  "floorInventorySHA256": "2c4c87541e49119ad37e5841668863bc00706fc40cdb3b7871bf96287f7dc139",
+  "walls": 154,
+  "floorTiles": 69,
+  "connections": [
+    {
+      "index": 0,
+      "room": "arrival",
+      "side": "south",
+      "start": {
+        "x": 765,
+        "y": 1275
+      },
+      "width": 850,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 1,
+      "room": "arrival",
+      "side": "east",
+      "start": {
+        "x": 1785,
+        "y": 680
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 2,
+      "room": "hub",
+      "side": "south",
+      "start": {
+        "x": 2571.25,
+        "y": 1338.75
+      },
+      "width": 148.75,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 3,
+      "room": "hub",
+      "side": "south",
+      "start": {
+        "x": 3145,
+        "y": 1338.75
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 4,
+      "room": "hub",
+      "side": "west",
+      "start": {
+        "x": 2571.25,
+        "y": 680
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 5,
+      "room": "hub",
+      "side": "west",
+      "start": {
+        "x": 2571.25,
+        "y": 1275
+      },
+      "width": 63.75,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 6,
+      "room": "hub",
+      "side": "east",
+      "start": {
+        "x": 3973.75,
+        "y": 722.5
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 7,
+      "room": "electrical",
+      "side": "north",
+      "start": {
+        "x": 2082.5,
+        "y": 2677.5
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 8,
+      "room": "electrical",
+      "side": "south",
+      "start": {
+        "x": 1742.5,
+        "y": 3612.5
+      },
+      "width": 573.75,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 9,
+      "room": "electrical",
+      "side": "west",
+      "start": {
+        "x": 1742.5,
+        "y": 3315
+      },
+      "width": 297.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 10,
+      "room": "electrical",
+      "side": "east",
+      "start": {
+        "x": 2677.5,
+        "y": 3187.5
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 11,
+      "room": "comms",
+      "side": "north",
+      "start": {
+        "x": 4207.5,
+        "y": 4037.5
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 12,
+      "room": "comms",
+      "side": "west",
+      "start": {
+        "x": 4037.5,
+        "y": 4037.5
+      },
+      "width": 106.25,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 13,
+      "room": "comms",
+      "side": "west",
+      "start": {
+        "x": 4037.5,
+        "y": 4228.75
+      },
+      "width": 297.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 14,
+      "room": "medical",
+      "side": "north",
+      "start": {
+        "x": 2040,
+        "y": 1275
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 15,
+      "room": "medical",
+      "side": "north",
+      "start": {
+        "x": 2571.25,
+        "y": 1275
+      },
+      "width": 148.75,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 16,
+      "room": "medical",
+      "side": "south",
+      "start": {
+        "x": 2082.5,
+        "y": 2210
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 17,
+      "room": "medical",
+      "side": "east",
+      "start": {
+        "x": 2720,
+        "y": 1275
+      },
+      "width": 63.75,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 18,
+      "room": "medical",
+      "side": "east",
+      "start": {
+        "x": 2720,
+        "y": 1508.75
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 19,
+      "room": "reactor",
+      "side": "north",
+      "start": {
+        "x": 510,
+        "y": 1700
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 20,
+      "room": "reactor",
+      "side": "south",
+      "start": {
+        "x": 552.5,
+        "y": 2805
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 21,
+      "room": "reactor",
+      "side": "east",
+      "start": {
+        "x": 1020,
+        "y": 1700
+      },
+      "width": 935,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 22,
+      "room": "cooling",
+      "side": "north",
+      "start": {
+        "x": 4930,
+        "y": 1572.5
+      },
+      "width": 297.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 23,
+      "room": "cooling",
+      "side": "south",
+      "start": {
+        "x": 4292.5,
+        "y": 2465
+      },
+      "width": 276.25,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 24,
+      "room": "cooling",
+      "side": "west",
+      "start": {
+        "x": 4292.5,
+        "y": 2188.75
+      },
+      "width": 276.25,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 25,
+      "room": "cooling",
+      "side": "east",
+      "start": {
+        "x": 5227.5,
+        "y": 1572.5
+      },
+      "width": 85,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 26,
+      "room": "cooling",
+      "side": "east",
+      "start": {
+        "x": 5227.5,
+        "y": 1912.5
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 27,
+      "room": "containment",
+      "side": "south",
+      "start": {
+        "x": 4930,
+        "y": 1360
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 28,
+      "room": "containment",
+      "side": "west",
+      "start": {
+        "x": 4505,
+        "y": 722.5
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 29,
+      "room": "archive",
+      "side": "north",
+      "start": {
+        "x": 3272.5,
+        "y": 1615
+      },
+      "width": 680,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 30,
+      "room": "archive",
+      "side": "south",
+      "start": {
+        "x": 3697.5,
+        "y": 2550
+      },
+      "width": 510,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 31,
+      "room": "archive",
+      "side": "west",
+      "start": {
+        "x": 3272.5,
+        "y": 1615
+      },
+      "width": 85,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 32,
+      "room": "archive",
+      "side": "east",
+      "start": {
+        "x": 4207.5,
+        "y": 2188.75
+      },
+      "width": 361.25,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 33,
+      "room": "security",
+      "side": "north",
+      "start": {
+        "x": 1232.5,
+        "y": 1700
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 34,
+      "room": "security",
+      "side": "south",
+      "start": {
+        "x": 1041.25,
+        "y": 2635
+      },
+      "width": 680,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 35,
+      "room": "security",
+      "side": "west",
+      "start": {
+        "x": 977.5,
+        "y": 1700
+      },
+      "width": 935,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 36,
+      "room": "storage",
+      "side": "north",
+      "start": {
+        "x": 3697.5,
+        "y": 3038.75
+      },
+      "width": 361.25,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 37,
+      "room": "storage",
+      "side": "south",
+      "start": {
+        "x": 2826.25,
+        "y": 4143.75
+      },
+      "width": 106.25,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 38,
+      "room": "storage",
+      "side": "west",
+      "start": {
+        "x": 2826.25,
+        "y": 3187.5
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 39,
+      "room": "storage",
+      "side": "west",
+      "start": {
+        "x": 2826.25,
+        "y": 3995
+      },
+      "width": 148.75,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 40,
+      "room": "storage",
+      "side": "east",
+      "start": {
+        "x": 4058.75,
+        "y": 3336.25
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 41,
+      "room": "storage",
+      "side": "east",
+      "start": {
+        "x": 4058.75,
+        "y": 4037.5
+      },
+      "width": 106.25,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 42,
+      "room": "workshop",
+      "side": "north",
+      "start": {
+        "x": 1041.25,
+        "y": 3315
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 43,
+      "room": "workshop",
+      "side": "west",
+      "start": {
+        "x": 850,
+        "y": 3315
+      },
+      "width": 510,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 44,
+      "room": "workshop",
+      "side": "east",
+      "start": {
+        "x": 1785,
+        "y": 3315
+      },
+      "width": 637.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 45,
+      "room": "west",
+      "side": "north",
+      "start": {
+        "x": 552.5,
+        "y": 3017.5
+      },
+      "width": 340,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 46,
+      "room": "west",
+      "side": "south",
+      "start": {
+        "x": 626.875,
+        "y": 3782.5
+      },
+      "width": 265.625,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 47,
+      "room": "west",
+      "side": "east",
+      "start": {
+        "x": 892.5,
+        "y": 3315
+      },
+      "width": 467.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 48,
+      "room": "emergency",
+      "side": "north",
+      "start": {
+        "x": 5567.5,
+        "y": 2932.5
+      },
+      "width": 85,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 49,
+      "room": "emergency",
+      "side": "west",
+      "start": {
+        "x": 4632.5,
+        "y": 3336.25
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 50,
+      "room": "emergency",
+      "side": "east",
+      "start": {
+        "x": 5652.5,
+        "y": 2932.5
+      },
+      "width": 573.75,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 51,
+      "room": "east",
+      "side": "south",
+      "start": {
+        "x": 5567.5,
+        "y": 2592.5
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 52,
+      "room": "east",
+      "side": "west",
+      "start": {
+        "x": 5397.5,
+        "y": 1912.5
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 53,
+      "room": "exit",
+      "side": "north",
+      "start": {
+        "x": 1827.5,
+        "y": 3952.5
+      },
+      "width": 488.75,
+      "crossing": "passed",
+      "camera": "passed"
+    },
+    {
+      "index": 54,
+      "room": "exit",
+      "side": "east",
+      "start": {
+        "x": 2762.5,
+        "y": 3995
+      },
+      "width": 382.5,
+      "crossing": "passed",
+      "camera": "passed"
+    }
+  ],
+  "decorativeDoorFrames": 0,
+  "rawRegionContacts": 62,
+  "crossableRegionContacts": [
+    {
+      "index": 0,
+      "room": "arrival",
+      "side": "south",
+      "width": 850,
+      "from": {
+        "x": 1190,
+        "y": 1261
+      },
+      "to": {
+        "x": 1190,
+        "y": 1289
+      }
+    },
+    {
+      "index": 1,
+      "room": "arrival",
+      "side": "east",
+      "width": 382.5,
+      "from": {
+        "x": 1771,
+        "y": 871
+      },
+      "to": {
+        "x": 1799,
+        "y": 871
+      }
+    },
+    {
+      "index": 2,
+      "room": "hub",
+      "side": "south",
+      "width": 148.75,
+      "from": {
+        "x": 2645.25,
+        "y": 1324.75
+      },
+      "to": {
+        "x": 2645.25,
+        "y": 1352.75
+      }
+    },
+    {
+      "index": 3,
+      "room": "hub",
+      "side": "south",
+      "width": 382.5,
+      "from": {
+        "x": 3336,
+        "y": 1324.75
+      },
+      "to": {
+        "x": 3336,
+        "y": 1352.75
+      }
+    },
+    {
+      "index": 4,
+      "room": "hub",
+      "side": "west",
+      "width": 382.5,
+      "from": {
+        "x": 2585.25,
+        "y": 871
+      },
+      "to": {
+        "x": 2557.25,
+        "y": 871
+      }
+    },
+    {
+      "index": 5,
+      "room": "hub",
+      "side": "west",
+      "width": 63.75,
+      "from": {
+        "x": 2585.25,
+        "y": 1307
+      },
+      "to": {
+        "x": 2557.25,
+        "y": 1307
+      }
+    },
+    {
+      "index": 6,
+      "room": "hub",
+      "side": "east",
+      "width": 382.5,
+      "from": {
+        "x": 3959.75,
+        "y": 913.5
+      },
+      "to": {
+        "x": 3987.75,
+        "y": 913.5
+      }
+    },
+    {
+      "index": 7,
+      "room": "electrical",
+      "side": "north",
+      "width": 382.5,
+      "from": {
+        "x": 2273.5,
+        "y": 2691.5
+      },
+      "to": {
+        "x": 2273.5,
+        "y": 2663.5
+      }
+    },
+    {
+      "index": 8,
+      "room": "electrical",
+      "side": "south",
+      "width": 573.75,
+      "from": {
+        "x": 2029.5,
+        "y": 3598.5
+      },
+      "to": {
+        "x": 2029.5,
+        "y": 3626.5
+      }
+    },
+    {
+      "index": 9,
+      "room": "electrical",
+      "side": "west",
+      "width": 297.5,
+      "from": {
+        "x": 1756.5,
+        "y": 3464
+      },
+      "to": {
+        "x": 1728.5,
+        "y": 3464
+      }
+    },
+    {
+      "index": 10,
+      "room": "electrical",
+      "side": "east",
+      "width": 382.5,
+      "from": {
+        "x": 2663.5,
+        "y": 3378.5
+      },
+      "to": {
+        "x": 2691.5,
+        "y": 3378.5
+      }
+    },
+    {
+      "index": 11,
+      "room": "comms",
+      "side": "north",
+      "width": 21.25,
+      "from": {
+        "x": 4046.5,
+        "y": 4051.5
+      },
+      "to": {
+        "x": 4046.5,
+        "y": 4023.5
+      }
+    },
+    {
+      "index": 12,
+      "room": "comms",
+      "side": "north",
+      "width": 382.5,
+      "from": {
+        "x": 4398.5,
+        "y": 4051.5
+      },
+      "to": {
+        "x": 4398.5,
+        "y": 4023.5
+      }
+    },
+    {
+      "index": 13,
+      "room": "comms",
+      "side": "west",
+      "width": 106.25,
+      "from": {
+        "x": 4051.5,
+        "y": 4090.5
+      },
+      "to": {
+        "x": 4023.5,
+        "y": 4090.5
+      }
+    },
+    {
+      "index": 14,
+      "room": "comms",
+      "side": "west",
+      "width": 297.5,
+      "from": {
+        "x": 4051.5,
+        "y": 4377.75
+      },
+      "to": {
+        "x": 4023.5,
+        "y": 4377.75
+      }
+    },
+    {
+      "index": 15,
+      "room": "medical",
+      "side": "north",
+      "width": 382.5,
+      "from": {
+        "x": 2231,
+        "y": 1289
+      },
+      "to": {
+        "x": 2231,
+        "y": 1261
+      }
+    },
+    {
+      "index": 16,
+      "room": "medical",
+      "side": "north",
+      "width": 148.75,
+      "from": {
+        "x": 2645.25,
+        "y": 1289
+      },
+      "to": {
+        "x": 2645.25,
+        "y": 1261
+      }
+    },
+    {
+      "index": 17,
+      "room": "medical",
+      "side": "south",
+      "width": 382.5,
+      "from": {
+        "x": 2273.5,
+        "y": 2196
+      },
+      "to": {
+        "x": 2273.5,
+        "y": 2224
+      }
+    },
+    {
+      "index": 18,
+      "room": "medical",
+      "side": "east",
+      "width": 63.75,
+      "from": {
+        "x": 2706,
+        "y": 1307
+      },
+      "to": {
+        "x": 2734,
+        "y": 1307
+      }
+    },
+    {
+      "index": 19,
+      "room": "medical",
+      "side": "east",
+      "width": 382.5,
+      "from": {
+        "x": 2706,
+        "y": 1699.75
+      },
+      "to": {
+        "x": 2734,
+        "y": 1699.75
+      }
+    },
+    {
+      "index": 20,
+      "room": "reactor",
+      "side": "north",
+      "width": 382.5,
+      "from": {
+        "x": 701,
+        "y": 1714
+      },
+      "to": {
+        "x": 701,
+        "y": 1686
+      }
+    },
+    {
+      "index": 21,
+      "room": "reactor",
+      "side": "south",
+      "width": 382.5,
+      "from": {
+        "x": 743.5,
+        "y": 2791
+      },
+      "to": {
+        "x": 743.5,
+        "y": 2819
+      }
+    },
+    {
+      "index": 22,
+      "room": "reactor",
+      "side": "east",
+      "width": 935,
+      "from": {
+        "x": 1006,
+        "y": 2167
+      },
+      "to": {
+        "x": 1034,
+        "y": 2167
+      }
+    },
+    {
+      "index": 23,
+      "room": "cooling",
+      "side": "north",
+      "width": 297.5,
+      "from": {
+        "x": 5079,
+        "y": 1586.5
+      },
+      "to": {
+        "x": 5079,
+        "y": 1558.5
+      }
+    },
+    {
+      "index": 24,
+      "room": "cooling",
+      "side": "south",
+      "width": 276.25,
+      "from": {
+        "x": 4430.5,
+        "y": 2451
+      },
+      "to": {
+        "x": 4430.5,
+        "y": 2479
+      }
+    },
+    {
+      "index": 25,
+      "room": "cooling",
+      "side": "west",
+      "width": 276.25,
+      "from": {
+        "x": 4306.5,
+        "y": 2326.75
+      },
+      "to": {
+        "x": 4278.5,
+        "y": 2326.75
+      }
+    },
+    {
+      "index": 26,
+      "room": "cooling",
+      "side": "east",
+      "width": 85,
+      "from": {
+        "x": 5213.5,
+        "y": 1614.5
+      },
+      "to": {
+        "x": 5241.5,
+        "y": 1614.5
+      }
+    },
+    {
+      "index": 27,
+      "room": "cooling",
+      "side": "east",
+      "width": 382.5,
+      "from": {
+        "x": 5213.5,
+        "y": 2103.5
+      },
+      "to": {
+        "x": 5241.5,
+        "y": 2103.5
+      }
+    },
+    {
+      "index": 28,
+      "room": "containment",
+      "side": "south",
+      "width": 382.5,
+      "from": {
+        "x": 5121,
+        "y": 1346
+      },
+      "to": {
+        "x": 5121,
+        "y": 1374
+      }
+    },
+    {
+      "index": 29,
+      "room": "containment",
+      "side": "west",
+      "width": 382.5,
+      "from": {
+        "x": 4519,
+        "y": 913.5
+      },
+      "to": {
+        "x": 4491,
+        "y": 913.5
+      }
+    },
+    {
+      "index": 30,
+      "room": "archive",
+      "side": "north",
+      "width": 680,
+      "from": {
+        "x": 3612.5,
+        "y": 1629
+      },
+      "to": {
+        "x": 3612.5,
+        "y": 1601
+      }
+    },
+    {
+      "index": 31,
+      "room": "archive",
+      "side": "south",
+      "width": 510,
+      "from": {
+        "x": 3952.5,
+        "y": 2536
+      },
+      "to": {
+        "x": 3952.5,
+        "y": 2564
+      }
+    },
+    {
+      "index": 32,
+      "room": "archive",
+      "side": "west",
+      "width": 85,
+      "from": {
+        "x": 3286.5,
+        "y": 1657
+      },
+      "to": {
+        "x": 3258.5,
+        "y": 1657
+      }
+    },
+    {
+      "index": 33,
+      "room": "archive",
+      "side": "east",
+      "width": 361.25,
+      "from": {
+        "x": 4193.5,
+        "y": 2369.75
+      },
+      "to": {
+        "x": 4221.5,
+        "y": 2369.75
+      }
+    },
+    {
+      "index": 34,
+      "room": "security",
+      "side": "north",
+      "width": 382.5,
+      "from": {
+        "x": 1423.5,
+        "y": 1714
+      },
+      "to": {
+        "x": 1423.5,
+        "y": 1686
+      }
+    },
+    {
+      "index": 35,
+      "room": "security",
+      "side": "south",
+      "width": 42.5,
+      "from": {
+        "x": 998.5,
+        "y": 2621
+      },
+      "to": {
+        "x": 998.5,
+        "y": 2649
+      }
+    },
+    {
+      "index": 36,
+      "room": "security",
+      "side": "south",
+      "width": 680,
+      "from": {
+        "x": 1381.25,
+        "y": 2621
+      },
+      "to": {
+        "x": 1381.25,
+        "y": 2649
+      }
+    },
+    {
+      "index": 37,
+      "room": "security",
+      "side": "west",
+      "width": 935,
+      "from": {
+        "x": 991.5,
+        "y": 2167
+      },
+      "to": {
+        "x": 963.5,
+        "y": 2167
+      }
+    },
+    {
+      "index": 38,
+      "room": "storage",
+      "side": "north",
+      "width": 361.25,
+      "from": {
+        "x": 3878.5,
+        "y": 3052.75
+      },
+      "to": {
+        "x": 3878.5,
+        "y": 3024.75
+      }
+    },
+    {
+      "index": 39,
+      "room": "storage",
+      "side": "south",
+      "width": 106.25,
+      "from": {
+        "x": 2879.25,
+        "y": 4129.75
+      },
+      "to": {
+        "x": 2879.25,
+        "y": 4157.75
+      }
+    },
+    {
+      "index": 40,
+      "room": "storage",
+      "side": "south",
+      "width": 21.25,
+      "from": {
+        "x": 4049.5,
+        "y": 4129.75
+      },
+      "to": {
+        "x": 4049.5,
+        "y": 4157.75
+      }
+    },
+    {
+      "index": 41,
+      "room": "storage",
+      "side": "west",
+      "width": 382.5,
+      "from": {
+        "x": 2840.25,
+        "y": 3378.5
+      },
+      "to": {
+        "x": 2812.25,
+        "y": 3378.5
+      }
+    },
+    {
+      "index": 42,
+      "room": "storage",
+      "side": "west",
+      "width": 148.75,
+      "from": {
+        "x": 2840.25,
+        "y": 4069
+      },
+      "to": {
+        "x": 2812.25,
+        "y": 4069
+      }
+    },
+    {
+      "index": 44,
+      "room": "storage",
+      "side": "east",
+      "width": 382.5,
+      "from": {
+        "x": 4044.75,
+        "y": 3527.25
+      },
+      "to": {
+        "x": 4072.75,
+        "y": 3527.25
+      }
+    },
+    {
+      "index": 45,
+      "room": "storage",
+      "side": "east",
+      "width": 106.25,
+      "from": {
+        "x": 4044.75,
+        "y": 4090.5
+      },
+      "to": {
+        "x": 4072.75,
+        "y": 4090.5
+      }
+    },
+    {
+      "index": 46,
+      "room": "workshop",
+      "side": "north",
+      "width": 42.5,
+      "from": {
+        "x": 871,
+        "y": 3329
+      },
+      "to": {
+        "x": 871,
+        "y": 3301
+      }
+    },
+    {
+      "index": 47,
+      "room": "workshop",
+      "side": "north",
+      "width": 382.5,
+      "from": {
+        "x": 1232.25,
+        "y": 3329
+      },
+      "to": {
+        "x": 1232.25,
+        "y": 3301
+      }
+    },
+    {
+      "index": 48,
+      "room": "workshop",
+      "side": "north",
+      "width": 42.5,
+      "from": {
+        "x": 1763.5,
+        "y": 3329
+      },
+      "to": {
+        "x": 1763.5,
+        "y": 3301
+      }
+    },
+    {
+      "index": 49,
+      "room": "workshop",
+      "side": "west",
+      "width": 510,
+      "from": {
+        "x": 864,
+        "y": 3570
+      },
+      "to": {
+        "x": 836,
+        "y": 3570
+      }
+    },
+    {
+      "index": 50,
+      "room": "workshop",
+      "side": "east",
+      "width": 637.5,
+      "from": {
+        "x": 1771,
+        "y": 3634
+      },
+      "to": {
+        "x": 1799,
+        "y": 3634
+      }
+    },
+    {
+      "index": 51,
+      "room": "west",
+      "side": "north",
+      "width": 340,
+      "from": {
+        "x": 722.5,
+        "y": 3031.5
+      },
+      "to": {
+        "x": 722.5,
+        "y": 3003.5
+      }
+    },
+    {
+      "index": 52,
+      "room": "west",
+      "side": "south",
+      "width": 265.625,
+      "from": {
+        "x": 759.875,
+        "y": 3768.5
+      },
+      "to": {
+        "x": 759.875,
+        "y": 3796.5
+      }
+    },
+    {
+      "index": 53,
+      "room": "west",
+      "side": "east",
+      "width": 42.5,
+      "from": {
+        "x": 878.5,
+        "y": 3038.5
+      },
+      "to": {
+        "x": 906.5,
+        "y": 3038.5
+      }
+    },
+    {
+      "index": 54,
+      "room": "west",
+      "side": "east",
+      "width": 467.5,
+      "from": {
+        "x": 878.5,
+        "y": 3549
+      },
+      "to": {
+        "x": 906.5,
+        "y": 3549
+      }
+    },
+    {
+      "index": 55,
+      "room": "emergency",
+      "side": "north",
+      "width": 85,
+      "from": {
+        "x": 5609.5,
+        "y": 2946.5
+      },
+      "to": {
+        "x": 5609.5,
+        "y": 2918.5
+      }
+    },
+    {
+      "index": 56,
+      "room": "emergency",
+      "side": "west",
+      "width": 382.5,
+      "from": {
+        "x": 4646.5,
+        "y": 3527.25
+      },
+      "to": {
+        "x": 4618.5,
+        "y": 3527.25
+      }
+    },
+    {
+      "index": 57,
+      "room": "emergency",
+      "side": "east",
+      "width": 573.75,
+      "from": {
+        "x": 5638.5,
+        "y": 3219.5
+      },
+      "to": {
+        "x": 5666.5,
+        "y": 3219.5
+      }
+    },
+    {
+      "index": 58,
+      "room": "east",
+      "side": "south",
+      "width": 382.5,
+      "from": {
+        "x": 5758.5,
+        "y": 2578.5
+      },
+      "to": {
+        "x": 5758.5,
+        "y": 2606.5
+      }
+    },
+    {
+      "index": 59,
+      "room": "east",
+      "side": "west",
+      "width": 382.5,
+      "from": {
+        "x": 5411.5,
+        "y": 2103.5
+      },
+      "to": {
+        "x": 5383.5,
+        "y": 2103.5
+      }
+    },
+    {
+      "index": 60,
+      "room": "exit",
+      "side": "north",
+      "width": 488.75,
+      "from": {
+        "x": 2071.5,
+        "y": 3966.5
+      },
+      "to": {
+        "x": 2071.5,
+        "y": 3938.5
+      }
+    },
+    {
+      "index": 61,
+      "room": "exit",
+      "side": "east",
+      "width": 382.5,
+      "from": {
+        "x": 2748.5,
+        "y": 4186
+      },
+      "to": {
+        "x": 2776.5,
+        "y": 4186
+      }
+    }
+  ]
+}

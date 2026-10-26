@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node --env-file-if-exists=.env scripts/dev.mjs",
     "build": "tsc -b && tsc -p tsconfig.server.json && vite build",
-    "test": "tsx --test src/engine.test.ts src/animation.test.ts src/presentation.test.ts src/navigation.test.ts src/collision-journal.test.ts src/task-matrix.test.ts server/*.test.ts",
+    "test": "tsx --test --test-concurrency=1 src/engine.test.ts src/animation.test.ts src/battlePresentation.test.ts src/battleAudio.test.ts src/pokemonCharacter.test.ts src/pokemonModels.test.ts src/runtimePokemonRig.test.ts src/firstPersonHands.test.ts src/chaseCamera.test.ts src/layoutGeometry.test.ts src/render-layout.test.ts src/presentation.test.ts src/navigation.test.ts src/collision-journal.test.ts src/task-matrix.test.ts server/*.test.ts",
     "preview": "vite preview --host 127.0.0.1",
     "test:e2e": "playwright test",
     "dev:client": "vite --host 0.0.0.0",
@@ -17,25 +17,47 @@
     "operator:create": "node --env-file-if-exists=.env --import tsx server/cli.ts operator",
     "operator:reset-password": "node --env-file-if-exists=.env --import tsx server/cli.ts operator-reset",
     "analytics:evaluate": "node --env-file-if-exists=.env --import tsx server/cli.ts evaluate",
-    "catalog:refresh": "node scripts/catalog.mjs"
+    "catalog:refresh": "node scripts/catalog.mjs",
+    "assets:sync": "python scripts/sync-pokemon-assets.py && python scripts/audit-reference-assets.py",
+    "assets:validate": "python scripts/sync-pokemon-assets.py --offline && python scripts/audit-reference-assets.py --offline",
+    "assets:references": "python scripts/audit-reference-assets.py",
+    "assets:test": "python -m unittest discover -s scripts/tests -p test_asset_pipeline.py",
+    "models:sync": "python scripts/sync-public-models.py",
+    "models:validate": "python scripts/sync-public-models.py --offline",
+    "models:test": "python -m unittest discover -s scripts/tests -p test_public_models.py",
+    "catalog:identities": "python scripts/sync-catalog-identities.py",
+    "cloud:start": "node --env-file-if-exists=.env --import tsx server/cloud/index.ts",
+    "cloud:migrate": "node --env-file-if-exists=.env --import tsx server/cloud/cli.ts migrate",
+    "cloud:operator": "node --env-file-if-exists=.env --import tsx server/cloud/cli.ts operator",
+    "cloud:import": "node --env-file-if-exists=.env --import tsx server/cloud/cli.ts import",
+    "test:cloud": "tsx --test --test-concurrency=1 server/cloud.test.ts",
+    "test:cloud:postgres": "tsx server/cloud/runPostgresTest.ts"
   },
   "dependencies": {
+    "@pkmn/sim": "0.10.11",
     "@types/three": "^0.186.0",
     "lucide-react": "^0.468.0",
+    "pg": "^8.23.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "three": "^0.186.1",
     "ws": "^8.22.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11",
     "@playwright/test": "^1.64.1",
     "@types/node": "^22.15.0",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@types/ws": "^8.18.2",
     "@vitejs/plugin-react": "^4.4.1",
+    "embedded-postgres": "^18.4.0-beta.17",
     "tsx": "^4.20.0",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }

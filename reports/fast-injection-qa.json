@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-25",
+  "rootCause": [
+    "INJECT previews awaited Monte Carlo policy comparisons/shared workers",
+    "Pokemon metadata could block on remote/stale PokeAPI fetch"
+  ],
+  "correction": [
+    "Rules-only local injection/rejection review",
+    "All 1351 exact species/form identities/types bundled",
+    "Existing atomic confirm checks preserved",
+    "Actual analytics remain separate on updated state",
+    "Not-computed review is not a numerical forecast/history sample"
+  ],
+  "tests": {
+    "unitIntegrationPassed": 111,
+    "unitIntegrationFailed": 0,
+    "targetedOfflineBusyWorkerTestsPassed": 4,
+    "realBrowserInjectionScenarioPassed": 1,
+    "productionBuild": "passed",
+    "diffCheck": "passed"
+  },
+  "localBrowserMeasurements": [
+    {
+      "kind": "pokemon",
+      "reviewMs": 263,
+      "confirmToStateMs": 118
+    },
+    {
+      "kind": "event",
+      "reviewMs": 144,
+      "confirmToStateMs": 112
+    }
+  ],
+  "limitations": [
+    "Local measurements are not a deployment performance guarantee",
+    "Three-second Pokemon telegraph remains intentional",
+    "First-use model download may take longer without delaying server injection"
+  ],
+  "serviceWorker": "ghost-shift-fast-injection-13"
+}

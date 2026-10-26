@@ -1,0 +1,372 @@
+{
+  "samples": [
+    {
+      "kind": "terrestrial",
+      "first": {
+        "key": "companion-A",
+        "id": 25,
+        "representation": "procedural-rig",
+        "state": "run",
+        "clipTime": 0.08261081714620827,
+        "position": {
+          "x": 3269.16172491139,
+          "y": 736.9517088171165
+        },
+        "pose": [
+          [
+            "leg-1",
+            0,
+            0,
+            0.128
+          ],
+          [
+            "arm-1",
+            0,
+            0,
+            -0.088
+          ],
+          [
+            "head",
+            -0.003,
+            -0.003,
+            -0.003
+          ],
+          [
+            "body",
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "second": {
+        "key": "companion-A",
+        "id": 25,
+        "representation": "procedural-rig",
+        "state": "run",
+        "clipTime": 0.9724085459988874,
+        "position": {
+          "x": 3305.7240611332786,
+          "y": 840.0171717626245
+        },
+        "pose": [
+          [
+            "leg-1",
+            0,
+            0,
+            -0.072
+          ],
+          [
+            "arm-1",
+            0,
+            0,
+            0.05
+          ],
+          [
+            "head",
+            0,
+            0,
+            0
+          ],
+          [
+            "body",
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "kind": "flight",
+      "first": {
+        "key": "companion-A",
+        "id": 6,
+        "representation": "procedural-rig",
+        "state": "run",
+        "clipTime": 0.6783740366737466,
+        "position": {
+          "x": 3404.7732118377353,
+          "y": 903.2498293851075
+        },
+        "pose": [
+          [
+            "leg-1",
+            0,
+            0,
+            -0.464
+          ],
+          [
+            "wing-1",
+            0.392,
+            0,
+            0
+          ],
+          [
+            "arm-1",
+            0,
+            0,
+            0.321
+          ],
+          [
+            "head",
+            0,
+            0,
+            0
+          ],
+          [
+            "body",
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "second": {
+        "key": "companion-A",
+        "id": 6,
+        "representation": "procedural-rig",
+        "state": "run",
+        "clipTime": 0.36600092871116974,
+        "position": {
+          "x": 3476.9516690724404,
+          "y": 903.2498242940711
+        },
+        "pose": [
+          [
+            "leg-1",
+            0,
+            0,
+            0.348
+          ],
+          [
+            "wing-1",
+            -0.429,
+            0,
+            0
+          ],
+          [
+            "arm-1",
+            0,
+            0,
+            -0.241
+          ],
+          [
+            "head",
+            0,
+            0,
+            0
+          ],
+          [
+            "body",
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "kind": "confirmedAttack",
+      "hp": 76,
+      "local": {
+        "key": "companion-A",
+        "id": 25,
+        "representation": "procedural-rig",
+        "state": "attack",
+        "clipTime": 0.65,
+        "position": {
+          "x": 3313.0029674069997,
+          "y": 843.038009061879
+        },
+        "pose": [
+          [
+            "leg-1",
+            0,
+            0,
+            0
+          ],
+          [
+            "arm-1",
+            0,
+            0,
+            -0.471
+          ],
+          [
+            "head",
+            0,
+            0,
+            -0.047
+          ],
+          [
+            "body",
+            0,
+            0,
+            -0.075
+          ]
+        ]
+      },
+      "remote": {
+        "key": "companion-A",
+        "id": 25,
+        "representation": "procedural-rig",
+        "state": "attack",
+        "clipTime": 0.6667000000000044,
+        "position": {
+          "x": 3313.0029657596615,
+          "y": 843.0379862569689
+        },
+        "pose": [
+          [
+            "leg-1",
+            0,
+            0,
+            0
+          ],
+          [
+            "arm-1",
+            0,
+            0,
+            -0.431
+          ],
+          [
+            "head",
+            0,
+            0,
+            -0.043
+          ],
+          [
+            "body",
+            0,
+            0,
+            -0.069
+          ]
+        ]
+      }
+    }
+  ],
+  "rooms": {
+    "arrival": {
+      "name": "Trainer Reception",
+      "short": [
+        "Reception"
+      ],
+      "sub": "TRAINER CHECK-IN"
+    },
+    "hub": {
+      "name": "Trainer Assembly Hall",
+      "short": [
+        "Trainer",
+        "Hall"
+      ],
+      "sub": "ASSEMBLY / FIELD TEAMS"
+    },
+    "electrical": {
+      "name": "Power Plant Control",
+      "short": [
+        "Power",
+        "Plant"
+      ],
+      "sub": "POKEMON POWER RESEARCH"
+    },
+    "comms": {
+      "name": "Rotom Relay Station",
+      "short": [
+        "Rotom",
+        "Relay"
+      ],
+      "sub": "ROTOM SIGNAL ARRAY"
+    },
+    "medical": {
+      "name": "Nurse Joy's Pokemon Clinic",
+      "short": [
+        "Joy Clinic"
+      ],
+      "sub": "POKEMON HEALING / RECOVERY"
+    },
+    "reactor": {
+      "name": "Infinity Energy Core",
+      "short": [
+        "Infinity",
+        "Core"
+      ],
+      "sub": "DUAL STABILIZERS"
+    },
+    "cooling": {
+      "name": "Cerulean Pump Station",
+      "short": [
+        "Cerulean",
+        "Pumps"
+      ],
+      "sub": "WATER TREATMENT / VALVES"
+    },
+    "containment": {
+      "name": "Aether Containment Wing",
+      "short": [
+        "Aether",
+        "Wing"
+      ],
+      "sub": "SPECIMEN RESEARCH"
+    },
+    "archive": {
+      "name": "Professor Oak's Research Lab",
+      "short": [
+        "Oak Lab"
+      ],
+      "sub": "POKEDEX / DATA ARCHIVE"
+    },
+    "security": {
+      "name": "Silph Security Office",
+      "short": [
+        "Silph",
+        "Office"
+      ],
+      "sub": "CCTV / ACCESS CONTROL"
+    },
+    "storage": {
+      "name": "Poke Mart Supply Depot",
+      "short": [
+        "Poke Mart"
+      ],
+      "sub": "TRAINER SUPPLIES"
+    },
+    "workshop": {
+      "name": "Poke Ball Workshop",
+      "short": [
+        "Ball Shop"
+      ],
+      "sub": "ASSEMBLY / REPAIR"
+    },
+    "west": {
+      "name": "West Service Corridor",
+      "short": [
+        "West svc"
+      ],
+      "sub": "WEST CONNECTOR"
+    },
+    "emergency": {
+      "name": "Indigo Emergency Command",
+      "short": [
+        "Indigo",
+        "Command"
+      ],
+      "sub": "INCIDENT RESPONSE"
+    },
+    "east": {
+      "name": "East Service Corridor",
+      "short": [
+        "East svc"
+      ],
+      "sub": "EAST CONNECTOR"
+    },
+    "exit": {
+      "name": "Trainer Evacuation Gate",
+      "short": [
+        "Evac Gate"
+      ],
+      "sub": "BOTH TRAINERS REQUIRED"
+    }
+  },
+  "errors": [],
+  "source": "Real two-client/WebSocket UI inputs and authoritative attack; controlled room/model approach fixtures. No visitor animation/performance claims."
+}

@@ -1,0 +1,25 @@
+{
+  "acceptedSources": {
+    "animated": {
+      "repo": "06wj/pokemon",
+      "revision": "00d96f7f18894055e7f1db44fa0df6462e5e4c8a"
+    },
+    "broad": {
+      "repo": "Pokemon-3D-api/assets",
+      "revision": "429de1288cea0d43f5b4f56305d2276e94239d65"
+    }
+  },
+  "rejectedSource": {
+    "repo": "Lilothestitch16/Pokemon-HOME-GLB-Models",
+    "revision": "27703273836f38f0e185976d955b1fbfb15448af",
+    "shipped": false,
+    "reason": "Sample GLBs contain no images/textures and placeholder-only named materials; rendered examples showed untextured/distorted appearance. Repository tree contains only GLB/GLTF/BIN files, so no separate missing textures were available.",
+    "sampleIds": [
+      609,
+      850,
+      935,
+      10025
+    ]
+  },
+  "mappingAndValidation": "13 added explicit alternate-form mappings in the established textured source. All 1108 accepted GLB metadata records validated; sampled rendering does not establish that every upstream model has been visually verified."
+}

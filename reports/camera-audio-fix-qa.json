@@ -1,0 +1,15 @@
+{
+  "build": "passed",
+  "unitServer": 129,
+  "browserScenariosPassed": 5,
+  "selectionCount": 1108,
+  "checks": [
+    "server rejects excluded team and injection IDs",
+    "first-person hands visually inspected",
+    "key9 toggles collision-aware third-person and returns",
+    "overlays suppress toggle",
+    "legacy muted zero-volume settings produce real audio after pointer gesture",
+    "touch controls, Showdown battle, emergencies and dashboard regressions passed"
+  ],
+  "cache": "ghost-shift-3d-camera-audio-17"
+}

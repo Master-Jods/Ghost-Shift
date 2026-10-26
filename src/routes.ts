@@ -1,0 +1,4 @@
+import {pathDirection,move,distance,pathLength,roomAt,roomName,type Vec,type MapState} from './world';
+/** Trace actual legal movement; no straight segments are drawn through obstacles. */
+export function traceRoute(start:Vec,target:Vec,state:MapState){let p={...start};const points:Vec[]=[p];let length=0;for(let i=0;i<1800&&distance(p,target)>35;i++){const v=pathDirection(p,target,state),n=Math.hypot(v.x,v.y);if(n<.01)break;const next=move(p,{x:v.x/n,y:v.y/n},Math.min(.12,n/185),state),step=distance(next,p);if(step<.01)break;length+=step;p=next;points.push(p);}return {points,length,seconds:length/185,reachable:distance(p,target)<=45,rooms:[...new Set(points.map(roomAt).filter(r=>r!=='corridor'))].map(roomName)};}
+export const travelSeconds=(start:Vec,target:Vec,state:MapState)=>pathLength(start,target,state)/185;

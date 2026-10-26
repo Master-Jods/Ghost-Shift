@@ -1,11 +1,27 @@
+import {BATTLE_SAMPLES,battleSound,type BattleSample}from './battleAudio';
 import type { CueKind, PresentationSettings } from './presentation';
 import type { Vec } from './world';
-/** Original synthesized sounds. One context, bounded voices, no downloaded audio. */
+/** One bounded mixer: original music/UI, recorded CC0 battle foley and credited Pokemon cries. */
 export class FacilityAudio {
     private context: AudioContext | null = null;
     private master: GainNode | null = null;
     private effects: GainNode | null = null;
     private ambience: GainNode | null = null;
+    private music: GainNode | null = null;private analyser:AnalyserNode|null=null;private musicTimer:ReturnType<typeof setInterval>|null=null;private nextBeat=0;private beat=0;private active=true;private mode:'menu'|'explore'|'danger'|'battle'|'off'='menu';private notes=0;private clicks=0;private typingCount=0;private battleCount=0;private playedCries=0;private lastTyping=-Infinity;
+    setMusicMode(mode:typeof this.mode){this.mode=mode;}
+    get diagnostics(){let level=0;if(this.analyser){const a=new Float32Array(this.analyser.fftSize);this.analyser.getFloatTimeDomainData(a);level=Math.sqrt(a.reduce((n,v)=>n+v*v,0)/a.length);}return {ready:this.ready,mode:this.mode,notes:this.notes,clicks:this.clicks,typing:this.typingCount,battleEffects:this.battleCount,battleSamplesPlayed:this.battleSamplesPlayed,decodedBattleSamples:this.battleSamples.size,battleVolume:this.settings?.battleVolume??.7,cries:this.playedCries,decodedCries:this.cryBuffers.size,musicGain:this.music?.gain.value||0,level,muted:this.settings?.muted??true,musicVolume:this.settings?.music??0};}
+    async ui(kind:'click'|'change',settings:PresentationSettings){await this.unlock(settings);this.clicks++;this.play(kind==='click'?'selection':'switch',{x:0,y:0},{x:0,y:0},0);}
+    typing(){const c=this.context;if(!c||!this.ready||this.settings?.muted||!this.active||c.currentTime-this.lastTyping<.025)return;this.lastTyping=c.currentTime;this.typingCount++;this.play('submitted',{x:0,y:0},{x:0,y:0},0,'typing');}
+    private battleSamples=new Map<BattleSample,AudioBuffer>();private sampleLoading=false;private sampleReady:Promise<unknown>=Promise.resolve();private battleVoices=new Set<AudioBufferSourceNode>();private battleSamplesPlayed=0;
+    private preloadBattle(){const c=this.context;if(!c||this.sampleLoading)return;this.sampleLoading=true;this.sampleReady=Promise.allSettled(BATTLE_SAMPLES.map(name=>fetch('/audio/battle/'+name+'.ogg',{signal:AbortSignal.timeout(6000)}).then(r=>{if(!r.ok)throw Error('Battle sample unavailable');return r.arrayBuffer();}).then(b=>c.decodeAudioData(b)).then(buffer=>{if(this.context===c)this.battleSamples.set(name,buffer);}).catch(()=>{})));}
+    async previewBattle(kind:string){if(this.settings)await this.unlock(this.settings);await this.sampleReady;this.battle(kind,kind==='attack'?'fire':'normal','player');}
+    battle(kind:string,type:string,side:string){const c=this.context;if(!c||!this.ready||this.settings?.muted||(this.settings?.battleVolume??.7)<=0||!this.active||!this.effects||this.battleVoices.size>=4)return;const spec=battleSound(kind,type),buffer=this.battleSamples.get(spec.sample);if(!buffer)return;const source=c.createBufferSource(),filter=c.createBiquadFilter(),pan=c.createStereoPanner(),gain=c.createGain(),at=c.currentTime,duration=Math.min(spec.maxDuration,buffer.duration/spec.rate);source.buffer=buffer;source.playbackRate.value=spec.rate;filter.type='lowpass';filter.frequency.value=spec.cutoff;pan.pan.value=side==='player'?-.2:.2;gain.gain.setValueAtTime(0,at);gain.gain.linearRampToValueAtTime(spec.gain*(this.settings?.battleVolume??.7),at+.008);gain.gain.setValueAtTime(spec.gain*(this.settings?.battleVolume??.7),at+Math.max(.01,duration-.04));gain.gain.linearRampToValueAtTime(0,at+duration);source.connect(filter).connect(pan).connect(gain).connect(this.effects);this.battleVoices.add(source);source.onended=()=>{this.battleVoices.delete(source);source.disconnect();filter.disconnect();pan.disconnect();gain.disconnect();};source.start();source.stop(at+duration+.01);this.battleCount++;this.battleSamplesPlayed++;}
+    private cryBuffers=new Map<number,AudioBuffer>();private cryPending=new Set<number>();private cryFailed=new Set<number>();private cryActive=new Set<AudioBufferSourceNode>();
+    preloadCry(name:number){if(!Number.isInteger(name)||name<1||this.cryFailed.has(name)||this.cryBuffers.has(name)||this.cryPending.has(name)||!this.context)return;this.cryPending.add(name);const ctx=this.context;void fetch([1,4,6,7,25,133,197,609,10001,10117].includes(name)?'/audio/cries/'+name+'.ogg':'https://raw.githubusercontent.com/PokeAPI/cries/b3a9044bb839b5e3152aaa536c7b463a0fcf0140/cries/pokemon/latest/'+name+'.ogg',{signal:AbortSignal.timeout(6000)}).then(r=>{if(!r.ok)throw Error('Cry unavailable');return r.arrayBuffer();}).then(b=>ctx.decodeAudioData(b)).then(buffer=>{if(ctx!==this.context)return;if(this.cryBuffers.size>=16)this.cryBuffers.delete(this.cryBuffers.keys().next().value!);this.cryBuffers.set(name,buffer);}).catch(()=>{this.cryFailed.add(name);}).finally(()=>this.cryPending.delete(name));}
+    cry(name:number){const c=this.context,buffer=this.cryBuffers.get(name);if(!c||!buffer||!this.effects||!this.ready||this.settings?.muted||!this.active||(this.settings?.battleVolume??.7)<=0||this.cryActive.size>=1)return false;const source=c.createBufferSource(),gain=c.createGain();source.buffer=buffer;gain.gain.value=.2*(this.settings?.battleVolume??.7);source.connect(gain).connect(this.effects);this.cryActive.add(source);this.playedCries++;source.onended=()=>{this.cryActive.delete(source);source.disconnect();gain.disconnect();};source.start();return true;}
+    private score(){const c=this.context;if(!c||c.state!=='running')return;if(!this.active||this.settings?.muted||this.mode==='off'){this.nextBeat=c.currentTime+.06;return;}if(this.nextBeat<c.currentTime)this.nextBeat=c.currentTime+.03;const urgent=this.mode==='danger'||this.mode==='battle',step=urgent?.26:.42;while(this.nextBeat<c.currentTime+.12){const at=this.nextBeat,b=this.beat++%64,chord=[[38,45,50],[34,41,46],[36,43,48],[37,43,49]][Math.floor(b/16)];if(b%16===0){for(const note of chord)this.note(note,at,step*15,.065,'triangle');this.note(chord[0]-12,at,step*15,.09,'sine');}if(b%4===0)this.note(chord[0],at,.24,urgent?.14:.07,'sine');const melody=[74,null,77,null,73,null,69,null,74,null,70,null,73,null,65,null];if(b%2===0){const n=melody[(b/2)%16];if(n!==null)this.note(n,at,step*3,urgent?.085:.055,'sine');}if(urgent&&b%2===1)this.note(49,at,.12,.035,'triangle');this.nextBeat+=step;}}
+    private note(midi:number,at:number,length:number,volume:number,type:OscillatorType){const c=this.context;if(!c||!this.music)return;const oscillator=c.createOscillator(),gain=c.createGain(),filter=c.createBiquadFilter();oscillator.type=type;oscillator.frequency.value=440*Math.pow(2,(midi-69)/12);filter.type='lowpass';filter.frequency.value=type==='triangle'?520:2400;gain.gain.setValueAtTime(.0001,at);gain.gain.exponentialRampToValueAtTime(volume,at+.05);gain.gain.exponentialRampToValueAtTime(.0001,at+length);oscillator.connect(filter).connect(gain).connect(this.music);oscillator.start(at);oscillator.stop(at+length+.02);oscillator.onended=()=>{oscillator.disconnect();filter.disconnect();gain.disconnect();};this.notes++;}
+
     private sources: AudioScheduledSourceNode[] = [];
     private noise: AudioBuffer | null = null;
     private voices = 0;
@@ -19,8 +35,7 @@ export class FacilityAudio {
             const ctx = this.context = new AudioContext(), master = this.master = ctx.createGain(), effects = this.effects = ctx.createGain(), ambience = this.ambience = ctx.createGain(), limiter = ctx.createDynamicsCompressor();
             effects.connect(master);
             ambience.connect(master);
-            master.connect(limiter);
-            limiter.connect(ctx.destination);
+            master.connect(limiter);const analyser=this.analyser=ctx.createAnalyser();analyser.fftSize=256;limiter.connect(analyser).connect(ctx.destination);const music=this.music=ctx.createGain();music.connect(master);
             limiter.threshold.value = -16;
             limiter.ratio.value = 8;
             this.noise = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
@@ -45,15 +60,15 @@ export class FacilityAudio {
             motorGain.gain.value = .075;
             motor.connect(motorGain).connect(ambience);
             motor.start();
-            this.sources.push(air, motor);
+            this.sources.push(air, motor);this.nextBeat=ctx.currentTime+.04;this.musicTimer=setInterval(()=>this.score(),40);
         }
-        await this.context.resume();
+        this.preloadBattle();await this.context.resume();
         this.configure(settings);
     }
     catch { /* Browsers may deny audio until another explicit gesture. */ } }
-    configure(settings: PresentationSettings, active = true) { this.settings = settings; if (!this.context)
-        return; const key = JSON.stringify([settings.muted, settings.master, settings.effects, settings.ambience, active]); if (key === this.lastConfig)
-        return; this.lastConfig = key; const t = this.context.currentTime; this.master?.gain.setTargetAtTime(settings.muted || !active ? 0 : settings.master, t, .06); this.effects?.gain.setTargetAtTime(settings.effects, t, .04); this.ambience?.gain.setTargetAtTime(settings.ambience, t, .1); }
+    configure(settings: PresentationSettings, active = true) { this.settings = settings;this.active=active; if (!this.context)
+        return; const key = JSON.stringify([settings.muted, settings.master, settings.effects, settings.ambience, settings.music, active]); if (key === this.lastConfig)
+        return; this.lastConfig = key; const t = this.context.currentTime; this.master?.gain.setTargetAtTime(settings.muted || !active ? 0 : settings.master, t, .06); this.effects?.gain.setTargetAtTime(settings.effects, t, .04); this.ambience?.gain.setTargetAtTime(settings.ambience, t, .1);this.music?.gain.setTargetAtTime(settings.music*1.8, t, .15); }
     play(kind: CueKind, position: Vec, listener: Vec, yaw: number, surface = 'metal') {
         const ctx = this.context, s = this.settings;
         if (!ctx || ctx.state !== 'running' || !this.effects || s?.muted || this.voices > 12)
@@ -68,7 +83,7 @@ export class FacilityAudio {
             return;
         const pan = ctx.createStereoPanner(), gain = ctx.createGain();
         pan.pan.value = Math.max(-.85, Math.min(.85, Math.sin(Math.atan2(position.y - listener.y, position.x - listener.x) - yaw) * Math.min(1, d / 100)));
-        gain.gain.value = .22 / (1 + d / 160);
+        gain.gain.value = (surface==='typing'?.34:kind==='selection'?.65:.36) / (1 + d / 160);
         pan.connect(gain).connect(this.effects);
         this.voices++;
         const t = ctx.currentTime;
@@ -101,8 +116,12 @@ export class FacilityAudio {
                 tone(330, .3, 'sine', 0, 660);
                 break;
             case 'attack':
-                noise(.15, 1600);
-                tone(180, .16, 'triangle', 0, 55);
+                if(['fire','dragon'].includes(surface)){noise(.48,650,.8);tone(90,.36,'sawtooth',0,42,.35);}
+                else if(['electric','steel'].includes(surface)){tone(780,.12,'sawtooth',0,110,.45);tone(1200,.2,'square',.08,240,.2);noise(.24,2500,.5);}
+                else if(['water','ice'].includes(surface)){noise(.45,2100,.8);tone(480,.4,'sine',0,120,.35);}
+                else if(['psychic','ghost','fairy'].includes(surface)){tone(330,.4,'sine',0,990,.5);tone(440,.4,'triangle',.06,220,.25);}
+                else{noise(.2,1300,.7);tone(180,.2,'triangle',0,55,.6);}
+
                 break;
             case 'impact':
                 noise(.1, 600, .8);
@@ -129,15 +148,17 @@ export class FacilityAudio {
             case 'selection':
                 tone(480, .14, 'sine', 0, 720, .3);
                 break;
-            default: tone(650, .055, 'triangle', 0, 420, .18);
+            default: tone(surface==='typing'?1050:650, surface==='typing'?.035:.055, 'triangle', 0, surface==='typing'?560:420, surface==='typing'?.36:.3);
         }
         setTimeout(() => { pan.disconnect(); gain.disconnect(); this.voices = Math.max(0, this.voices - 1); }, Math.ceil(duration * 1000) + 80);
     }
-    dispose() { for (const source of this.sources) {
+    dispose() {if(this.musicTimer)clearInterval(this.musicTimer);this.musicTimer=null;this.lastConfig='';for(const source of this.battleVoices){try{source.stop();}catch{}}this.battleVoices.clear();this.battleSamples.clear();this.sampleLoading=false;for(const cry of this.cryActive){try{cry.stop();}catch{}}this.cryActive.clear();this.cryBuffers.clear();this.cryPending.clear();this.cryFailed.clear(); for (const source of this.sources) {
         try {
             source.stop();
             source.disconnect();
         }
         catch { }
-    } this.sources = []; void this.context?.close(); this.context = null; this.master = this.effects = this.ambience = null; }
+    } this.sources = []; void this.context?.close(); this.context = null; this.master = this.effects = this.ambience = this.music = null;this.analyser=null; }
 }
+
+export const facilityAudio=new FacilityAudio();

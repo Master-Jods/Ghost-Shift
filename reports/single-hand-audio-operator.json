@@ -1,0 +1,85 @@
+{
+  "musicOnly": {
+    "ready": true,
+    "mode": "menu",
+    "notes": 6,
+    "clicks": 0,
+    "typing": 0,
+    "battleEffects": 0,
+    "battleSamplesPlayed": 0,
+    "decodedBattleSamples": 11,
+    "battleVolume": 0.7,
+    "cries": 0,
+    "decodedCries": 0,
+    "musicGain": 1.3375790119171143,
+    "level": 0.10989117263534852,
+    "muted": false,
+    "musicVolume": 0.85
+  },
+  "typingOnly": {
+    "ready": true,
+    "mode": "menu",
+    "notes": 6,
+    "clicks": 0,
+    "typing": 9,
+    "battleEffects": 0,
+    "battleSamplesPlayed": 0,
+    "decodedBattleSamples": 11,
+    "battleVolume": 0.7,
+    "cries": 0,
+    "decodedCries": 0,
+    "musicGain": 0.00029772569541819394,
+    "level": 0.015755693566619416,
+    "muted": false,
+    "musicVolume": 0,
+    "measuredPeakDuringTyping": 0.021145900679638476
+  },
+  "decodedBundledCries": [
+    {
+      "id": 1,
+      "seconds": 0.9386394557823129
+    },
+    {
+      "id": 4,
+      "seconds": 0.7196145124716553
+    },
+    {
+      "id": 6,
+      "seconds": 1.001201814058957
+    },
+    {
+      "id": 7,
+      "seconds": 0.8760544217687075
+    },
+    {
+      "id": 133,
+      "seconds": 0.7821995464852608
+    },
+    {
+      "id": 197,
+      "seconds": 0.8447619047619047
+    },
+    {
+      "id": 609,
+      "seconds": 1.9711337868480725
+    },
+    {
+      "id": 10001,
+      "seconds": 1.1085714285714285
+    },
+    {
+      "id": 10117,
+      "seconds": 1.1640136054421768
+    },
+    {
+      "id": 25,
+      "seconds": 0.9260090702947846
+    }
+  ],
+  "checks": [
+    "Operator background music real waveform",
+    "Music gain boost",
+    "Typing effects without capturing typed text",
+    "Mute silences output and typing"
+  ]
+}

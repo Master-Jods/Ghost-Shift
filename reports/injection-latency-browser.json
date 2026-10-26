@@ -1,0 +1,16 @@
+{
+  "measurements": [
+    {
+      "kind": "pokemon",
+      "reviewMs": 96,
+      "confirmToStateMs": 70
+    },
+    {
+      "kind": "event",
+      "reviewMs": 46,
+      "confirmToStateMs": 61
+    }
+  ],
+  "errors": [],
+  "notes": "Local real-browser measurements, not a visitor/SLA benchmark. Includes actual operator UI, HTTP review, WebSocket confirmation and live client state. Model download/three-second warning are separate."
+}

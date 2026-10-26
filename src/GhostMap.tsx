@@ -1,5 +1,6 @@
+import {ROOM_IDENTITIES} from './roomIdentity';
 import { useRef, useEffect } from 'react';
-import { WORLD, rooms, corridors, colliders, doors, center, walkable, type Vec } from './world';
+import { WORLD, MAP_SIGNATURE,rooms, floorTiles, wallSegments,colliders, doors, center, walkable, roomName, roomAt, type Vec } from './world';
 import type { State } from './engine';
 export default function GhostMap({ state, onPlace, placement }: {
     state: State;
@@ -16,6 +17,7 @@ export default function GhostMap({ state, onPlace, placement }: {
             canvas.width = w * dpr;
             canvas.height = h * dpr;
             c.scale(dpr, dpr);
+            canvas.dataset.mapSignature=MAP_SIGNATURE;canvas.dataset.roomNames=JSON.stringify(rooms.map(r=>({id:r.id,name:r.name})));canvas.dataset.geometry=JSON.stringify({walls:wallSegments,floorTiles});
             const z = Math.min((w - 34) / WORLD.w, (h - 48) / WORLD.h), ox = (w - WORLD.w * z) / 2, oy = (h - WORLD.h * z) / 2 + 8;
             c.fillStyle = '#171218';
             c.fillRect(0, 0, w, h);
@@ -41,45 +43,36 @@ export default function GhostMap({ state, onPlace, placement }: {
             c.save();
             c.translate(ox, oy);
             c.scale(z, z);
-            for (const corridor of corridors) {
+            for (const corridor of floorTiles) {
                 c.fillStyle = '#41373d';
                 c.fillRect(corridor.x, corridor.y, corridor.w, corridor.h);
-                c.strokeStyle = '#7e8b6755';
-                c.lineWidth = 1 / z;
-                c.strokeRect(corridor.x, corridor.y, corridor.w, corridor.h);
+
             }
             for (const [index, room] of rooms.entries()) {
                 const occupied = Object.values(state.players).some(p => p.room === room.id);
                 c.fillStyle = occupied ? '#61404b' : '#302a31';
                 c.fillRect(room.x, room.y, room.w, room.h);
-                c.strokeStyle = occupied ? '#e6a3b5' : '#8b6b7c';
-                c.lineWidth = (occupied ? 1.5 : 1) / z;
-                c.strokeRect(room.x, room.y, room.w, room.h);
+
                 c.fillStyle = '#81906c';
                 c.font = `${7 / z}px monospace`;
                 c.textAlign = 'left';
                 c.fillText(String(index + 1).padStart(2, '0'), room.x + 10, room.y + 19);
-                const words = room.name.split(' '), lines: string[] = [];
-                for (const word of words) {
-                    if (lines.length && ((lines.at(-1)!.length + word.length) < Math.max(7,Math.floor((room.w*z-12)/6.6))))
-                        lines[lines.length - 1] += ' ' + word;
-                    else
-                        lines.push(word);
-                }
+                const lines=ROOM_IDENTITIES[room.id].short;
                 c.fillStyle = '#f4e5ec';
                 c.font = `${11 / z}px monospace`;
                 c.textAlign = 'center';
                 lines.forEach((line,i)=>{const text=line.toUpperCase(),width=c.measureText(text).width,y=room.y+(25+i*13)/z;c.fillStyle='#171017ee';c.fillRect(room.x+room.w/2-width/2-3/z,y-11/z,width+6/z,14/z);c.fillStyle='#f3e5ed';c.fillText(text,room.x+room.w/2,y,room.w-10);});
             }
+            c.strokeStyle='#d2dbce';c.lineWidth=1.2/z;c.beginPath();for(const wall of wallSegments){c.moveTo(wall.x,wall.z);c.lineTo(wall.x+(wall.axis==='x'?wall.length:0),wall.z+(wall.axis==='z'?wall.length:0));}c.stroke();
             for (const obstacle of colliders) {
                 c.fillStyle='#829174';if(obstacle.shape==='circle'){c.beginPath();c.arc(obstacle.x,obstacle.y,obstacle.r,0,Math.PI*2);c.fill();}else{c.fillRect(obstacle.x,obstacle.y,obstacle.w,obstacle.h);c.fillStyle='#b5bb9b';c.fillRect(obstacle.x,obstacle.y,obstacle.w,Math.min(3,obstacle.h));}
             }
             for (const door of doors(state)) {
                 c.fillStyle = door.locked ? '#d1a170' : '#a5bd86';
-                c.fillRect(door.x, door.y, door.w, door.h);
-                c.strokeStyle = '#19231c';
+                if(door.locked)c.fillRect(door.x, door.y, door.w, door.h);
+                c.strokeStyle = door.locked?'#19231c':'#a5bd86';c.setLineDash(door.locked?[]:[8,6]);
                 c.lineWidth = 2 / z;
-                c.strokeRect(door.x, door.y, door.w, door.h);
+                c.strokeRect(door.x, door.y, door.w, door.h);c.setLineDash([]);
             }
             for (const task of state.tasks) {
                 for (const point of [task.position, ...(task.secondPosition ? [task.secondPosition] : [])]) {
@@ -169,9 +162,9 @@ export default function GhostMap({ state, onPlace, placement }: {
         return () => observer.disconnect();
     }, [state, placement]);
     function position(e: React.MouseEvent<HTMLCanvasElement>) { const b = e.currentTarget.getBoundingClientRect(), z = Math.min((b.width - 34) / WORLD.w, (b.height - 48) / WORLD.h); return { x: (e.clientX - b.left - (b.width - WORLD.w * z) / 2) / z, y: (e.clientY - b.top - (b.height - WORLD.h * z) / 2 - 8) / z }; }
-    return <canvas ref={ref} className="ghost-map" aria-label="Authoritative overhead facility map" onMouseMove={e => { if (onPlace) {
+    return <canvas ref={ref} className="ghost-map" aria-label="Authoritative overhead facility map" onMouseMove={e => {const at=position(e);e.currentTarget.title=roomName(roomAt(at)); if (onPlace) {
         const p = position(e);
-        e.currentTarget.title = `${Math.round(p.x)}, ${Math.round(p.y)} / ${walkable(p, state) ? 'walkable placement' : 'blocked geometry'}`;
+        e.currentTarget.title = `${roomName(roomAt(p))} / ${Math.round(p.x)}, ${Math.round(p.y)} / ${walkable(p, state) ? 'walkable placement' : 'blocked geometry'}`;
         e.currentTarget.style.cursor = 'crosshair';
     } }} onClick={e => onPlace?.(position(e))}/>;
 }

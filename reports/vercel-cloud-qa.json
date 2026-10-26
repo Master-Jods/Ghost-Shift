@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-26",
+  "deployment": "Not deployed; external database and Vercel credentials were not supplied.",
+  "architecture": "Vercel Node HTTP/ws; external PostgreSQL room row locks, database clock, leases, durable receipts/logs/jobs; local SQLite mode retained.",
+  "checks": {
+    "fullRegression": {
+      "passed": 135,
+      "failed": 0,
+      "skipped": 1,
+      "note": "Optional native PostgreSQL test is skipped by default and was run separately."
+    },
+    "focusedCloud": {
+      "passed": 5,
+      "failed": 0,
+      "cases": [
+        "cross-service state/idempotent injections/persisted guidance",
+        "ownership/stale commands/revocation",
+        "fatal incident catchup/disconnect protection",
+        "read-only idempotent SQLite migration",
+        "HTTP and WebSocket Vercel rewrite authentication"
+      ]
+    },
+    "realPostgres": {
+      "passed": 1,
+      "failed": 0,
+      "pools": 3,
+      "checks": [
+        "actual row lock blocking across independent TCP connections",
+        "nine concurrent retries produce one injection/receipt",
+        "concurrent readers do not multiply world time",
+        "native Showdown battle survives JSONB persistence and move retry",
+        "private simulator is redacted from player snapshot"
+      ]
+    },
+    "chrome": {
+      "passed": 1,
+      "failed": 0,
+      "applicationInstances": 3,
+      "checks": [
+        "player registration/team selection/briefing",
+        "first-person canvas",
+        "keyboard movement",
+        "operator emergency injection",
+        "red emergency alerts",
+        "persisted predictive/prescriptive result",
+        "operator dashboard and identity logs",
+        "no page errors"
+      ]
+    },
+    "productionBuild": "passed; existing Vite large chunk advisory remains"
+  },
+  "screenshots": [
+    "docs/screenshots/vercel-cloud/player.png",
+    "docs/screenshots/vercel-cloud/operator.png"
+  ],
+  "limits": [
+    "No live Vercel deployment or managed PostgreSQL network latency/load test.",
+    "Cloud interactive forecasts use explicit fast route/workload Monte Carlo, not full native battle replay.",
+    "Offline historical reducer evaluation stays on the local CLI.",
+    "A pooled TLS DATABASE_URL and private OPERATOR_USER/OPERATOR_PASSWORD must be configured in Vercel."
+  ],
+  "privateData": "No private .env or production SQLite database was read or changed. No commit, push or live deployment."
+}

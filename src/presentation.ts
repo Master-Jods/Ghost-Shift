@@ -1,6 +1,7 @@
 import type { State } from './engine';
 import type { Vec } from './world';
 export type PresentationSettings = {
+    cameraDistance: number;
     quality: 'low' | 'standard' | 'high';
     sensitivity: number;
     touchSensitivity: number;
@@ -23,12 +24,15 @@ export type PresentationSettings = {
     master: number;
     effects: number;
     ambience: number;
+    music:number;
+    audioVersion:number;
+    battleVolume:number;
 };
 export const defaultPresentation: PresentationSettings = {
-    quality: 'standard', sensitivity: .003, touchSensitivity: .006, invertY: false, smoothing: false,
+    cameraDistance:94, quality: 'standard', sensitivity: .003, touchSensitivity: .006, invertY: false, smoothing: false,
     fov: 78, headBob: 0, cameraShake: 0, renderScale: 1, shadows: true, brightness: 1,
     showFps: false, minimapSize: 440, minimapOrientation: 'north', hudScale: 1,
-    reducedMotion: false, reducedFlashes: true, postProcessing: true, muted: true, master: .65, effects: .7, ambience: .22
+    reducedMotion: false, reducedFlashes: true, postProcessing: true, muted: false, audioVersion:3, battleVolume:.7, music:.85, master: .65, effects: .95, ambience: .22
 };
 export function sanitizePresentation(saved: Partial<PresentationSettings>): PresentationSettings {
     const value = { ...defaultPresentation };
@@ -40,8 +44,8 @@ export function sanitizePresentation(saved: Partial<PresentationSettings>): Pres
         number,
         number
     ]>> = {
-        sensitivity: [.0001, .008], touchSensitivity: [.001, .015], fov: [60, 100], headBob: [0, 1], cameraShake: [0, 1],
-        renderScale: [.5, 1.5], brightness: [.6, 1.6], minimapSize: [180, 600], hudScale: [.8, 1.3], master: [0, 1], effects: [0, 1], ambience: [0, 1]
+        cameraDistance:[56,140], sensitivity: [.0001, .008], touchSensitivity: [.001, .015], fov: [60, 100], headBob: [0, 1], cameraShake: [0, 1],
+        renderScale: [.5, 1.5], brightness: [.6, 1.6], minimapSize: [180, 600], hudScale: [.8, 1.3], master: [0, 1], effects: [0, 1], ambience: [0, 1], music:[0,1],battleVolume:[0,1]
     };
     for (const [key, bounds] of Object.entries(ranges)) {
         const k = key as keyof PresentationSettings, n = Number(value[k]);
@@ -56,7 +60,7 @@ export function sanitizePresentation(saved: Partial<PresentationSettings>): Pres
 export function loadPresentation(): PresentationSettings {
     try {
         const saved = JSON.parse(localStorage.getItem('gs-presentation') || '{}');if(saved._uiVersion!==2&&(!saved.minimapSize||saved.minimapSize===220))saved.minimapSize=440;
-        return sanitizePresentation({ reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches, ...saved });
+        if(saved.audioVersion!==3){const legacy=saved.audioVersion===undefined;if(legacy)saved.muted=false;saved.master=Math.max(saved.master||0,.85);saved.music=Math.max(saved.music||0,.85);saved.effects=Math.max(saved.effects||0,.95);saved.ambience=saved.ambience??.3;saved.audioVersion=3;}return sanitizePresentation({ reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches, ...saved });
     }
     catch {
         return { ...defaultPresentation };
@@ -147,7 +151,7 @@ export class PresentationTimeline {
                 add('attack', position, 'Attack confirmed');
             else if (event.kind === role && event.text.includes('scouted'))
                 add('switch', position, 'Signature identified');
-            else if (event.kind !== role && event.text.includes('Trainer ') && event.text.includes(': '))
+            else if (event.kind !== 'encounter' && event.kind !== role && event.text.includes('Trainer ') && event.text.includes(': '))
                 add('radio', s.players[role === 'A' ? 'B' : 'A'].position, 'Partner radio');
         }
         if (s.phase === 'success' && before.phase !== 'success')

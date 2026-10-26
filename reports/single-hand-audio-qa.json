@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-26",
+  "build": "passed",
+  "unitServerTests": 130,
+  "focusedBrowserScenarios": 4,
+  "finalAudioBrowserReruns": 2,
+  "bundledCriesDecoded": 10,
+  "handCount": 1,
+  "musicGainMultiplier": 1.8,
+  "buttonGainBefore": 0.22,
+  "buttonGainAfter": 0.65,
+  "operatorMusic": true,
+  "typingSounds": true,
+  "battleEffects": "Original type-based attack/impact effects driven by server cues",
+  "pokemonCries": "Pinned PokeAPI mirror, documented Showdown/Veekun/SoundsResource origin",
+  "showdownPrimaryResearch": "docs/SINGLE-HAND-AND-BATTLE-AUDIO.md",
+  "noSnapshotReplay": true,
+  "cache": "ghost-shift-single-hand-battle-audio-18",
+  "limitations": [
+    "No human listening review; actual RMS waveform measured.",
+    "Native Showdown client does not expose per-move recordings; synthesized attacks are explicitly original.",
+    "Unbundled cry availability depends on the pinned remote mirror; missing cries retain synthesized attack effect."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-26",
+  "build": "passed",
+  "fullUnitServerTests": 131,
+  "finalFocusedTests": 3,
+  "browserScenariosPassed": 2,
+  "sampleCount": 11,
+  "sampleBytes": 121004,
+  "license": "CC0-1.0 / Kenney",
+  "replacement": "Recorded foley instead of buzzy synthesized battle attacks",
+  "cryPolicy": "Quieter entry/new-active-species only, max one voice",
+  "battleVolumeControl": true,
+  "previewButtons": [
+    "Test battle attack",
+    "Test battle impact"
+  ],
+  "verified": [
+    "Actual server turn plays recorded samples",
+    "All11 samples decode",
+    "No per-attack cries",
+    "No snapshot replay",
+    "Preview button plays sample",
+    "Battle slider zero prevents samples",
+    "Operator music and typing still output real waveforms"
+  ],
+  "humanListeningReview": false,
+  "cache": "ghost-shift-recorded-battle-audio-19"
+}

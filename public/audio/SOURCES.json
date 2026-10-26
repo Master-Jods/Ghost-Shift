@@ -1,0 +1,80 @@
+{
+  "usage": "Explicitly requested Pokemon Showdown-style sound for the non-commercial fan prototype",
+  "source": "https://github.com/PokeAPI/cries",
+  "revision": "b3a9044bb839b5e3152aaa536c7b463a0fcf0140",
+  "upstreamNote": "PokeAPI documents Showdown, Veekun and The Sounds Resource as original cry sources. Direct Showdown downloads returned HTTP403; no access bypass was attempted.",
+  "rights": "Pokemon cries remain original owner property; public distribution is not a separate grant of owner redistribution rights. Music/UI/typing are original procedural compositions. Replacement battle effects are Kenney CC0 recorded samples; see battle/SOURCES.json and included licenses.",
+  "entries": [
+    {
+      "id": 1,
+      "path": "/audio/cries/1.ogg",
+      "source": "https://raw.githubusercontent.com/PokeAPI/cries/b3a9044bb839b5e3152aaa536c7b463a0fcf0140/cries/pokemon/latest/1.ogg",
+      "bytes": 13733,
+      "sha256": "6233bc22546f161d61240c7eef8494a61c42f8ba56833f96313045d1cbbec575"
+    },
+    {
+      "id": 4,
+      "path": "/audio/cries/4.ogg",
+      "source": "https://raw.githubusercontent.com/PokeAPI/cries/b3a9044bb839b5e3152aaa536c7b463a0fcf0140/cries/pokemon/latest/4.ogg",
+      "bytes": 11257,
+      "sha256": "bdb41cecd5a948ee4b19e4e13156abcbdb2bd3e9c9f458d65fe2c64a87fd852e"
+    },
+    {
+      "id": 6,
+      "path": "/audio/cries/6.ogg",
+      "source": "https://raw.githubusercontent.com/PokeAPI/cries/b3a9044bb839b5e3152aaa536c7b463a0fcf0140/cries/pokemon/latest/6.ogg",
+      "bytes": 13071,
+      "sha256": "110f91526342399a6a8d5e5c7d12b76ad85e925bce509d7fd4d2459930df09cf"
+    },
+    {
+      "id": 7,
+      "path": "/audio/cries/7.ogg",
+      "source": "https://raw.githubusercontent.com/PokeAPI/cries/b3a9044bb839b5e3152aaa536c7b463a0fcf0140/cries/pokemon/latest/7.ogg",
+      "bytes": 12204,
+      "sha256": "6c2603df20b277bf2e814a5a3b292bdb404d47ada67ab769ff9bee59d3f38631"
+    },
+    {
+      "id": 133,
+      "path": "/audio/cries/133.ogg",
+      "source": "https://raw.githubusercontent.com/PokeAPI/cries/b3a9044bb839b5e3152aaa536c7b463a0fcf0140/cries/pokemon/latest/133.ogg",
+      "bytes": 11659,
+      "sha256": "b9dd1a040ed6bd4e9025df476180c7cc82c3187ff21f235b26798ba84992489c"
+    },
+    {
+      "id": 197,
+      "path": "/audio/cries/197.ogg",
+      "source": "https://raw.githubusercontent.com/PokeAPI/cries/b3a9044bb839b5e3152aaa536c7b463a0fcf0140/cries/pokemon/latest/197.ogg",
+      "bytes": 11916,
+      "sha256": "27f1903b20a71d3a4b9e03c03dd9f35cee3547873e929f68ee124152925b1554"
+    },
+    {
+      "id": 609,
+      "path": "/audio/cries/609.ogg",
+      "source": "https://raw.githubusercontent.com/PokeAPI/cries/b3a9044bb839b5e3152aaa536c7b463a0fcf0140/cries/pokemon/latest/609.ogg",
+      "bytes": 22520,
+      "sha256": "d227bf4c6594d6877a06302ca60161fd6e508e26bda6c583d26332839b17e99e"
+    },
+    {
+      "id": 10001,
+      "path": "/audio/cries/10001.ogg",
+      "source": "https://raw.githubusercontent.com/PokeAPI/cries/b3a9044bb839b5e3152aaa536c7b463a0fcf0140/cries/pokemon/latest/10001.ogg",
+      "bytes": 12908,
+      "sha256": "7cc1078e56d4bc7cf6ff324d483639c5d4591bdf66bbeb118eed6ac8834c2280"
+    },
+    {
+      "id": 10117,
+      "path": "/audio/cries/10117.ogg",
+      "source": "https://raw.githubusercontent.com/PokeAPI/cries/b3a9044bb839b5e3152aaa536c7b463a0fcf0140/cries/pokemon/latest/10117.ogg",
+      "bytes": 14292,
+      "sha256": "7a35bd31a0f08c184b5bfb3abce7804d3c120da032064d10a7e35fa36ab7d351"
+    },
+    {
+      "id": 25,
+      "path": "/audio/cries/25.ogg",
+      "source": "https://raw.githubusercontent.com/PokeAPI/cries/b3a9044bb839b5e3152aaa536c7b463a0fcf0140/cries/pokemon/latest/25.ogg",
+      "bytes": 7080,
+      "sha256": "1ec10c893184b155a110d746ff0560f291978f32ce90c283b9871e61d6df12a1",
+      "note": "Upstream extension preserved; WebAudio detects actual codec."
+    }
+  ]
+}

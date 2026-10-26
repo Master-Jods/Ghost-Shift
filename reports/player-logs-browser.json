@@ -1,0 +1,32 @@
+{
+  "profiles": [
+    {
+      "participantId": "1883f84c-0bf0-4410-b363-3f4d156de3de",
+      "role": "A",
+      "fullName": "Maria Clara Santos",
+      "block": "BSIT 3-1",
+      "groupNumber": "7",
+      "registeredAt": 1792982011214
+    },
+    {
+      "participantId": "cf6a58f4-9ae6-45e2-9a42-94e5b7b6e4b3",
+      "role": "B",
+      "fullName": "Juan Dela Cruz",
+      "block": "BSIT 3-2",
+      "groupNumber": "8",
+      "registeredAt": 1792982013559
+    }
+  ],
+  "rows": 157,
+  "errors": [],
+  "checks": [
+    "Required form fields and numeric group validation",
+    "Real two-player names on operator overview",
+    "Actual task completion and Pokemon encounter attributed to participant",
+    "Reload retains profile",
+    "Operator search/category filters",
+    "Pagination beyond 100 rows",
+    "Full filtered CSV includes older task/encounter/start records"
+  ],
+  "fixture": "In-memory database. 125 explicitly labeled QA records exercise pagination only; gameplay records use actual HTTP/WebSocket actions."
+}

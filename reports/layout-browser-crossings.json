@@ -1,0 +1,536 @@
+{
+  "mapSignature": "aster-wings-v6-canonical:97682df7",
+  "crossings": [
+    {
+      "index": 0,
+      "room": "arrival",
+      "side": "south",
+      "position": {
+        "x": 300.00000437880897,
+        "y": 321.2297535
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 1,
+      "room": "arrival",
+      "side": "east",
+      "position": {
+        "x": 439.7680869999989,
+        "y": 205.00000022010352
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 3,
+      "room": "hub",
+      "side": "south",
+      "position": {
+        "x": 622.0000013035276,
+        "y": 324.4327845000008
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 4,
+      "room": "hub",
+      "side": "south",
+      "position": {
+        "x": 785.0000019092611,
+        "y": 335.32171800000106
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 5,
+      "room": "hub",
+      "side": "west",
+      "position": {
+        "x": 586.8971165000003,
+        "y": 205.00000378091153
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 6,
+      "room": "hub",
+      "side": "west",
+      "position": {
+        "x": 584.7999380000001,
+        "y": 311.999997765688
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 7,
+      "room": "hub",
+      "side": "east",
+      "position": {
+        "x": 944.0585665000024,
+        "y": 214.99999864041445
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 8,
+      "room": "electrical",
+      "side": "south",
+      "position": {
+        "x": 477.00000417845774,
+        "y": 870.5017044999997
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 9,
+      "room": "electrical",
+      "side": "west",
+      "position": {
+        "x": 400.7555639999998,
+        "y": 814.9999957472971
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 10,
+      "room": "electrical",
+      "side": "east",
+      "position": {
+        "x": 650.8709830000007,
+        "y": 795.0000020456303
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 12,
+      "room": "comms",
+      "side": "north",
+      "position": {
+        "x": 1035.000000219734,
+        "y": 929.4960570000017
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 13,
+      "room": "comms",
+      "side": "west",
+      "position": {
+        "x": 940.9358649999997,
+        "y": 962.0000000034531
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 14,
+      "room": "comms",
+      "side": "west",
+      "position": {
+        "x": 930.1071674999987,
+        "y": 1030.0000000050745
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 16,
+      "room": "medical",
+      "side": "north",
+      "position": {
+        "x": 524.9999978621393,
+        "y": 279.68231500000206
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 17,
+      "room": "medical",
+      "side": "north",
+      "position": {
+        "x": 621.9999988023792,
+        "y": 294.77537350000057
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 19,
+      "room": "medical",
+      "side": "west",
+      "position": {
+        "x": 413.8876509999999,
+        "y": 410.00000000301134
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 20,
+      "room": "medical",
+      "side": "east",
+      "position": {
+        "x": 660.1326479999991,
+        "y": 303.00000111239865
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 21,
+      "room": "medical",
+      "side": "east",
+      "position": {
+        "x": 647.733115499999,
+        "y": 400.0000007082923
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 22,
+      "room": "reactor",
+      "side": "north",
+      "position": {
+        "x": 165.00000010103878,
+        "y": 382.26854100000037
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 23,
+      "room": "reactor",
+      "side": "south",
+      "position": {
+        "x": 175.00000278026653,
+        "y": 668.9567795
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 24,
+      "room": "reactor",
+      "side": "east",
+      "position": {
+        "x": 257.37387250000234,
+        "y": 525.0000003043979
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 25,
+      "room": "cooling",
+      "side": "north",
+      "position": {
+        "x": 1195.0000000608306,
+        "y": 364.89603050000005
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 26,
+      "room": "cooling",
+      "side": "south",
+      "position": {
+        "x": 1042.0000028156242,
+        "y": 589.2487279999996
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 27,
+      "room": "cooling",
+      "side": "west",
+      "position": {
+        "x": 1000.5363020000011,
+        "y": 546.9999957071818
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 29,
+      "room": "cooling",
+      "side": "east",
+      "position": {
+        "x": 1250.6893129999999,
+        "y": 495.0000020349729
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 30,
+      "room": "containment",
+      "side": "south",
+      "position": {
+        "x": 1205.0000001075273,
+        "y": 336.86625099999935
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 31,
+      "room": "containment",
+      "side": "west",
+      "position": {
+        "x": 1050.8059210000006,
+        "y": 215.00000152222992
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 32,
+      "room": "archive",
+      "side": "north",
+      "position": {
+        "x": 824.9999971007226,
+        "y": 371.30978700000037
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 33,
+      "room": "archive",
+      "side": "south",
+      "position": {
+        "x": 930.0000000797211,
+        "y": 608.8844075000004
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 34,
+      "room": "archive",
+      "side": "west",
+      "position": {
+        "x": 761.1487814999984,
+        "y": 388.0000014997281
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 35,
+      "room": "archive",
+      "side": "east",
+      "position": {
+        "x": 999.6112540000004,
+        "y": 556.9999992234275
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 36,
+      "room": "security",
+      "side": "north",
+      "position": {
+        "x": 390.00000019018046,
+        "y": 384.13661550000006
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 37,
+      "room": "security",
+      "side": "south",
+      "position": {
+        "x": 350.00000267608254,
+        "y": 628.6931730000003
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 38,
+      "room": "security",
+      "side": "west",
+      "position": {
+        "x": 242.8024879999997,
+        "y": 525.000005617768
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 39,
+      "room": "security",
+      "side": "east",
+      "position": {
+        "x": 460.504349999999,
+        "y": 460.0000012343802
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 40,
+      "room": "storage",
+      "side": "north",
+      "position": {
+        "x": 912.0000001456999,
+        "y": 706.1212720000001
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 41,
+      "room": "storage",
+      "side": "south",
+      "position": {
+        "x": 677.0000023932287,
+        "y": 981.2945740000002
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 43,
+      "room": "storage",
+      "side": "west",
+      "position": {
+        "x": 655.7546760000007,
+        "y": 795.0000041858093
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 44,
+      "room": "storage",
+      "side": "west",
+      "position": {
+        "x": 656.3064754999989,
+        "y": 956.9999999311376
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 46,
+      "room": "storage",
+      "side": "east",
+      "position": {
+        "x": 972.5478834999994,
+        "y": 829.9999961745516
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 47,
+      "room": "storage",
+      "side": "east",
+      "position": {
+        "x": 963.7594029999991,
+        "y": 962.0000014076004
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 49,
+      "room": "workshop",
+      "side": "north",
+      "position": {
+        "x": 350.0000001922257,
+        "y": 773.8769949999996
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 51,
+      "room": "workshop",
+      "side": "west",
+      "position": {
+        "x": 193.69623150000183,
+        "y": 839.9999999383895
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 52,
+      "room": "workshop",
+      "side": "east",
+      "position": {
+        "x": 438.3556305000004,
+        "y": 854.9999960766052
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 53,
+      "room": "west",
+      "side": "north",
+      "position": {
+        "x": 170.00000030923104,
+        "y": 691.6283484999976
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 56,
+      "room": "west",
+      "side": "east",
+      "position": {
+        "x": 227.74636999999973,
+        "y": 834.9999983303335
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 57,
+      "room": "emergency",
+      "side": "north",
+      "position": {
+        "x": 1322.0000002221173,
+        "y": 680.7477754999984
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 58,
+      "room": "emergency",
+      "side": "west",
+      "position": {
+        "x": 1072.2680415000004,
+        "y": 829.9999999037113
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 59,
+      "room": "emergency",
+      "side": "east",
+      "position": {
+        "x": 1351.0737800000002,
+        "y": 756.9999957470063
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 60,
+      "room": "east",
+      "side": "south",
+      "position": {
+        "x": 1354.9999936233194,
+        "y": 630.8822309999985
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 61,
+      "room": "east",
+      "side": "west",
+      "position": {
+        "x": 1248.9498260000014,
+        "y": 494.9999957708626
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 62,
+      "room": "exit",
+      "side": "north",
+      "position": {
+        "x": 487.0000018568403,
+        "y": 912.2662284999983
+      },
+      "phase": "playing"
+    },
+    {
+      "index": 63,
+      "room": "exit",
+      "side": "east",
+      "position": {
+        "x": 670.3013310000019,
+        "y": 984.9999998753697
+      },
+      "phase": "playing"
+    }
+  ],
+  "errors": []
+}

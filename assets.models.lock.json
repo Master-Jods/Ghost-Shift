@@ -1,0 +1,26 @@
+{
+  "usage": "non-commercial-prototype-explicit-user-choice",
+  "rightsNotice": "Public game-derived Pokemon assets, enabled by explicit user choice for a non-commercial prototype. Pokemon/Nintendo/Creatures/Game Freak retain asset rights. Repository code licenses do not license these models; no owner redistribution permission is claimed.",
+  "sources": {
+    "animated": {
+      "repo": "06wj/pokemon",
+      "revision": "00d96f7f18894055e7f1db44fa0df6462e5e4c8a"
+    },
+    "broad": {
+      "repo": "Pokemon-3D-api/assets",
+      "revision": "429de1288cea0d43f5b4f56305d2276e94239d65"
+    }
+  },
+  "bundledIds": [
+    1,
+    4,
+    6,
+    7,
+    25,
+    133,
+    197,
+    609,
+    10001,
+    10117
+  ]
+}

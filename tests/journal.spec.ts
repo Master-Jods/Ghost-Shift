@@ -1,3 +1,5 @@
+import {fillRegistration}from './helpers';
+import {WEBGL_DEPENDENCIES} from '../scripts/webgl-dependencies';
 import {BRIEFING_VERSION} from '../src/engine';
 import {acknowledgeBriefing} from './helpers';
 import {test,expect} from '@playwright/test';
@@ -14,10 +16,10 @@ test('live journal, TAB ownership, tracked markers and development collision ins
  const app=createApp({dbPath:':memory:',staticDir:'dist'}),port=await app.listen(0,'127.0.0.1'),backend=`http://127.0.0.1:${port}`;
  let vite:ViteDevServer|undefined,partner:WebSocket|undefined;
  try{
-  vite=await createServer({configFile:false,plugins:[react()],server:{host:'127.0.0.1',port:0,proxy:{'/api':backend,'/ws':{target:backend,ws:true}}}});await vite.listen();const base=vite.resolvedUrls!.local[0];
+  vite=await createServer({configFile:false,cacheDir:'.qa/vite-journal-character-cold',optimizeDeps:{include:WEBGL_DEPENDENCIES},plugins:[react()],server:{host:'127.0.0.1',port:0,proxy:{'/api':backend,'/ws':{target:backend,ws:true}}}});await vite.listen();const base=vite.resolvedUrls!.local[0];
   const room=app.createRoom(null),joined=app.joinRoom(room,'B','Journal partner');partner=new WebSocket(backend.replace('http','ws')+'/ws');await new Promise<void>(resolve=>partner!.once('open',resolve));partner.send(JSON.stringify({type:'auth',mapSignature:MAP_SIGNATURE,protocol:PROTOCOL_VERSION,role:'B',sessionId:room.state.id,credential:joined.credential}));
   let seq=1;const command=(role:'B'|'control',type:string,value?:unknown)=>app.command(room,{id:role==='B'?joined.participantId:'journal-fixture',role,sessionId:room.state.id},{id:randomUUID(),seq:seq++,type,value});
-  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(base+`play?role=A&code=${room.state.code}`);await page.getByRole('button',{name:'JOIN SERVER SESSION',exact:true}).click();
+  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(base+`play?role=A&code=${room.state.code}`);await fillRegistration(page);await page.getByRole('button',{name:'JOIN SERVER SESSION',exact:true}).click();
   for(const id of [25,7,94]){await page.getByRole('textbox',{name:/Search Pok/}).fill(String(id));await page.locator('.catalog-grid').getByRole('button',{name:'Select',exact:true}).click();}
   await page.getByRole('button',{name:'Finalize three companions'}).click();await page.getByRole('button',{name:'Read field briefing',exact:true}).click();await acknowledgeBriefing(page);
   expect(command('B','TEAM',[1,4,7]).ok).toBe(true);expect(command('B','ACK_BRIEFING',BRIEFING_VERSION).ok).toBe(true);expect(command('control','START').ok).toBe(true);

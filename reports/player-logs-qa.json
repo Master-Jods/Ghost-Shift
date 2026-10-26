@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-26",
+  "build": "passed",
+  "unitServer": {
+    "passed": 125,
+    "failed": 0
+  },
+  "browser": {
+    "uniqueScenariosPassed": 6,
+    "scenarios": [
+      "entry UI",
+      "player registration and operator logs/filter/pagination/CSV",
+      "v10 first-person/forecasts/alerts/Showdown/dashboard/deadline",
+      "v10 emergency instructions and correct response",
+      "all six normal puzzles and reconnect",
+      "complete two-player keyboard round, six attributed completion logs and SESSION_SUCCESS"
+    ],
+    "fullRoundActiveSeconds": 142
+  },
+  "migration": 3,
+  "databaseReset": false,
+  "scenarioChanged": false,
+  "protocolChanged": false,
+  "serviceWorker": "ghost-shift-player-logs-15",
+  "profileFields": [
+    "Full Name",
+    "Block",
+    "Group #"
+  ],
+  "records": [
+    "registration/rejoin",
+    "connections",
+    "session transitions",
+    "tasks and errors",
+    "Pokemon encounters and battle actions",
+    "emergencies and operator injections",
+    "door/key/route decisions",
+    "movement summaries",
+    "gameplay command acceptance/rejection"
+  ],
+  "persistence": "SQLite with immutable participant identity snapshots; retained after slot release and host restart",
+  "screenshots": "docs/screenshots/player-logs/",
+  "browserEvidence": "reports/player-logs-browser.json",
+  "visualInspection": [
+    "registration.png",
+    "task-attribution.png"
+  ],
+  "historicalData": "Original event text imported once. Missing historical actor/block/group values are not fabricated."
+}

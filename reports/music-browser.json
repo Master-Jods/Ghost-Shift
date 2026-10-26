@@ -1,0 +1,22 @@
+{
+  "musicOnlyOutput": {
+    "ready": true,
+    "mode": "menu",
+    "notes": 6,
+    "clicks": 1,
+    "level": 0.08713721620851723,
+    "muted": false,
+    "musicVolume": 0.65
+  },
+  "buttonOnlyOutput": {
+    "ready": true,
+    "mode": "menu",
+    "notes": 8,
+    "clicks": 5,
+    "level": 0.0060882518260158,
+    "muted": false,
+    "musicVolume": 0
+  },
+  "errors": [],
+  "method": "Real WebAudio analyser RMS, with effects and ambience zero for the score test, then music/ambience zero for the button test. This verifies generated signal, not a human listening review."
+}

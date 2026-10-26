@@ -1,0 +1,39 @@
+{
+  "samples": {
+    "predictionRequestMs": [
+      24,
+      34,
+      43
+    ],
+    "battle": {
+      "before": {
+        "turn": 1,
+        "hp": 153,
+        "pp": 16
+      },
+      "after": {
+        "turn": 2,
+        "hp": 114,
+        "opponentHp": 100,
+        "pp": 15,
+        "log": [
+          "charizard entered the battle.",
+          "eevee entered the battle.",
+          "Turn 1",
+          "charizard used Heat Wave!",
+          "The attack missed!",
+          "eevee used Hyper Voice!",
+          "charizard: 114/153.",
+          "Turn 2"
+        ]
+      }
+    },
+    "ended": {
+      "phase": "failed",
+      "status": "missed",
+      "broadcast": "Blackout was not resolved within 60 active seconds. Emergency deadline failure."
+    }
+  },
+  "errors": [],
+  "notes": "Real Chrome/HTTP/WebSocket checks. Deadline fixture jumps to the final active second; authoritative tick applies the loss. No production data changed."
+}

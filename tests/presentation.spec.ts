@@ -1,3 +1,4 @@
+import {fillRegistration}from './helpers';
 import {BRIEFING_VERSION} from '../src/engine';
 import {acknowledgeBriefing} from './helpers';
 import {MAP_SIGNATURE} from '../src/world';
@@ -10,7 +11,7 @@ import { writeFileSync } from 'node:fs';
 let app: ReturnType<typeof createApp>, base: string;
 test.beforeAll(async () => { app = createApp({ dbPath: ':memory:', staticDir: 'dist' }); base = 'http://127.0.0.1:' + await app.listen(0, '127.0.0.1'); });
 test.afterAll(async () => app.close());
-test('landscape touch movement / fixed camera, mixer, accessibility, quality and overlay input safety', async ({ browser }) => { test.setTimeout(120000); const context = await browser.newContext({ viewport: { width: 1066, height: 600 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 }); const room = app.createRoom(null), code = room.state.code, joined = app.joinRoom(room, 'B', 'Touch test partner'), partner = new WebSocket(base.replace('http', 'ws') + '/ws'); await new Promise<void>(resolve => partner.once('open', resolve)); partner.send(JSON.stringify({ type: 'auth', mapSignature: MAP_SIGNATURE, protocol: PROTOCOL_VERSION, role: 'B', sessionId: room.state.id, credential: joined.credential })); let seq = 1; const command = (role: 'B' | 'control', type: string, value?: unknown) => app.command(room, { id: role === 'B' ? joined.participantId : 'fixture-director', role, sessionId: room.state.id }, { id: randomUUID(), seq: seq++, type, value }); const page = await context.newPage(), errors: string[] = []; page.on('pageerror', e => errors.push(e.message)); try {
+test('landscape touch movement / chase camera, mixer, accessibility, quality and overlay input safety', async ({ browser }) => { test.setTimeout(120000); const context = await browser.newContext({ viewport: { width: 1066, height: 600 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 }); const room = app.createRoom(null), code = room.state.code, joined = app.joinRoom(room, 'B', 'Touch test partner'), partner = new WebSocket(base.replace('http', 'ws') + '/ws'); await new Promise<void>(resolve => partner.once('open', resolve)); partner.send(JSON.stringify({ type: 'auth', mapSignature: MAP_SIGNATURE, protocol: PROTOCOL_VERSION, role: 'B', sessionId: room.state.id, credential: joined.credential })); let seq = 1; const command = (role: 'B' | 'control', type: string, value?: unknown) => app.command(room, { id: role === 'B' ? joined.participantId : 'fixture-director', role, sessionId: room.state.id }, { id: randomUUID(), seq: seq++, type, value }); const page = await context.newPage(), errors: string[] = []; page.on('pageerror', e => errors.push(e.message)); try {
     await page.goto(base + `/play?role=A&code=${code}`);
     await page.getByRole('button',{name:'Settings',exact:true}).click();
     await page.getByLabel('Brightness',{exact:true}).fill('1.2');
@@ -22,7 +23,7 @@ test('landscape touch movement / fixed camera, mixer, accessibility, quality and
     await expect(page.getByLabel('HUD scale',{exact:true})).toHaveValue('1.1');
     await page.getByRole('button',{name:'Reset to Defaults',exact:true}).click();
     await page.getByRole('button',{name:'Close overlay',exact:true}).click();
-    await page.getByRole('button', { name: 'JOIN SERVER SESSION', exact: true }).click();
+    await fillRegistration(page);await page.getByRole('button', { name: 'JOIN SERVER SESSION', exact: true }).click();
     for (const id of [25, 7, 94]) {
         await page.getByRole('textbox', { name: 'Search Pokémon by name or ID' }).fill(String(id));
         await page.locator('.catalog-grid').getByRole('button', { name: 'Select', exact: true }).click();
@@ -47,13 +48,13 @@ test('landscape touch movement / fixed camera, mixer, accessibility, quality and
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     await expect.poll(() => room.state.players.A.position.y).toBeLessThan(start - 20);
     await page.screenshot({ path: '.qa/atmosphere-touch-before.png' });
-    const lookX = 760, lookY = 330, yaw = room.state.players.A.yaw;
+    const lookX = 500, lookY = 330, yaw = room.state.players.A.yaw, orbitYaw=Number(await page.locator('.third-person').getAttribute('data-yaw'));
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: lookX, y: lookY }] });
     await page.waitForTimeout(80);
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: lookX + 70, y: lookY }] });
     await page.waitForTimeout(150);
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-    expect(room.state.players.A.yaw).toBe(yaw);await expect(page.locator('.third-person')).toHaveAttribute('data-camera','third-person');
+    expect(room.state.players.A.yaw).toBe(yaw);await expect.poll(async()=>Number(await page.locator('.third-person').getAttribute('data-yaw'))).toBeGreaterThan(orbitYaw+.2);await expect(page.locator('.third-person')).toHaveAttribute('data-camera-rig','eye-level');
     await page.screenshot({ path: '.qa/atmosphere-touch.png' });
     await page.keyboard.down('w');
     await page.getByRole('button', { name: 'Settings', exact: true }).click();
@@ -74,7 +75,7 @@ test('landscape touch movement / fixed camera, mixer, accessibility, quality and
     await page.getByLabel('Minimap orientation',{exact:true}).selectOption('heading');await page.getByLabel('Minimap size',{exact:true}).fill('280');await page.getByLabel('FPS display',{exact:true}).check();
     await page.getByLabel('master volume').focus();await page.keyboard.press('Escape');await expect(page.getByRole('dialog')).toBeHidden();
     await page.waitForTimeout(1000);
-    const measurement = await page.locator('.third-person').evaluate(el => ({ renderCpuMs: el.getAttribute('data-frame-ms'), resolution: el.getAttribute('data-render-resolution'), audio: el.getAttribute('data-audio'), environment: 'Headless Chrome on macOS; emulated 1066x600 touch viewport; not a physical phone benchmark' }));
+    const measurement = await page.locator('.third-person').evaluate(el => ({ renderCpuMs: el.getAttribute('data-frame-ms'), resolution: el.getAttribute('data-render-resolution'), audio: el.getAttribute('data-audio'), environment: 'Headless Chrome on Windows; emulated 1066x600 touch viewport; not a physical phone benchmark' }));
     writeFileSync('.qa/atmosphere-performance.json', JSON.stringify(measurement, null, 2));
     const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('gs-presentation') || '{}'));
     expect(saved.reducedMotion).toBe(true);

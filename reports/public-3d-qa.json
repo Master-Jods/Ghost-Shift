@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-25",
+  "sourceChoice": "Explicit user choice: public game-derived Pokemon models for non-commercial prototype with clear source/rights notice. Not a rights-holder license.",
+  "exact3DModels": 1095,
+  "nativeLocomotion": 218,
+  "nativeAttacks": 219,
+  "staticOrIdle3D": 877,
+  "primarySpriteFallback": 113,
+  "primaryReferenceFallback": 143,
+  "bundledIds": [
+    1,
+    4,
+    6,
+    7,
+    25,
+    133
+  ],
+  "catalogValidation": "All 1095 model JSON chunks and all 1351 exact identities checked; binary geometry decoded on demand.",
+  "unitIntegrationTests": {
+    "passed": 104,
+    "failed": 0
+  },
+  "pythonTests": {
+    "modelsPassed": 3,
+    "spritesPassed": 5
+  },
+  "browserTests": {
+    "passed": 3,
+    "failed": 0,
+    "scenarios": [
+      "Native sprite fallback, exact forms, network failures, remote encounters",
+      "Chase camera, walls and door navigation",
+      "Real GLBs, changing skeleton quaternions, switching/reconnect, HTTP failure fallback, remote Draco static model and authoritative remote attack"
+    ]
+  },
+  "build": "passed",
+  "gameplayChanged": false,
+  "serviceWorker": "ghost-shift-public-models-11",
+  "modelSources": {
+    "animated": {
+      "repo": "06wj/pokemon",
+      "revision": "00d96f7f18894055e7f1db44fa0df6462e5e4c8a"
+    },
+    "broad": {
+      "repo": "Pokemon-3D-api/assets",
+      "revision": "429de1288cea0d43f5b4f56305d2276e94239d65"
+    }
+  },
+  "remainingLimits": [
+    "877 3D entries lack verified native walk/run",
+    "256 exact forms retain sprite/reference",
+    "Remote first-use needs internet; failed files use fallback",
+    "Full JSON audit is not visual inspection of every binary model",
+    "Original Pokemon owners retain rights; no model redistribution license claimed"
+  ]
+}

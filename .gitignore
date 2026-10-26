@@ -14,3 +14,7 @@ backups/
 *.pem
 *.key
 *.pfx
+
+# Asset pipeline Python bytecode
+__pycache__/
+*.pyc
