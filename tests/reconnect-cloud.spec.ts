@@ -10,11 +10,18 @@ test('deployed-style connection rotations preserve player ownership and active g
  const authenticatePartner=()=>{partner!.send(JSON.stringify({type:'auth',protocol:PROTOCOL_VERSION,mapSignature:MAP_SIGNATURE,sessionId:room.sessionId,role:'B',credential:players[1].credential}));};
  // Partner reconnects explicitly in this fixture, independently of the browser transport.
  const partnerConnect=()=>{partner=new WebSocket(base.replace('http:','ws:')+'/ws');partner.on('open',authenticatePartner);partner.on('close',()=>{if(!finishing)partnerTimer=setTimeout(partnerConnect,100);});};partnerConnect();
- await ctx.addInitScript(p=>{sessionStorage.setItem('jt-active-player',JSON.stringify(p));localStorage.setItem('gs-presentation',JSON.stringify({_uiVersion:2,audioVersion:3,muted:true,quality:'low',shadows:false}));(window as any).__closes=[];window.addEventListener('ghost-connection-close',(e:any)=>(window as any).__closes.push(e.detail));},players[0]);
+ await ctx.addInitScript(p=>{sessionStorage.setItem('jt-active-player',JSON.stringify(p));localStorage.setItem('gs-presentation',JSON.stringify({_uiVersion:2,audioVersion:3,muted:true,quality:'low',shadows:false}));(window as any).__closes=[];const Native=window.WebSocket;(window as any).__sockets=[];class TestSocket extends Native{constructor(url:string,protocols?:string|string[]){super(url,protocols);(window as any).__sockets.push(this);}set onmessage(fn:any){super.onmessage=fn?e=>{if((window as any).__stuckSocket!==this)fn(e);}:null;}set onclose(fn:any){super.onclose=fn?e=>{if((window as any).__stuckSocket!==this)fn(e);}:null;}}window.WebSocket=TestSocket;window.addEventListener('ghost-connection-close',(e:any)=>(window as any).__closes.push(e.detail));},players[0]);
  const page=await ctx.newPage();await page.goto(base+'/play/lobby?role=A');await expect.poll(async()=>(await app.service.snapshot(room.sessionId,op)).net.presence.A.connected).toBe(true);
  await expect.poll(async()=>(await app.service.snapshot(room.sessionId,op)).net.presence.B.connected).toBe(true);expect((await app.service.command(room.sessionId,op,{id:randomUUID(),seq:seq++,type:'START'})).ok).toBe(true);
  await expect(page.locator('.third-person')).toBeVisible();await expect.poll(()=>page.evaluate(()=>(window as any).__closes.filter((c:any)=>c.code===1012).length),{timeout:15000}).toBeGreaterThanOrEqual(2);
  await expect(page.locator('.connection-banner')).toHaveCount(0);const snapshot=await app.service.snapshot(room.sessionId,op);expect(snapshot.state.phase).toBe('playing');expect(snapshot.state.paused).toBe(false);expect(snapshot.net.presence.A.connected).toBe(true);
+ // Simulate a half-open connection: no snapshots and no delivered close event.
+ const beforeSockets=await page.evaluate(()=>(window as any).__sockets.length);
+ await page.evaluate(()=>{(window as any).__stuckSocket=(window as any).__sockets.at(-1);const realNow=Date.now;Date.now=()=>realNow()+31000;});
+ await expect.poll(()=>page.evaluate(()=>(window as any).__sockets.length),{timeout:10000}).toBeGreaterThan(beforeSockets);
+ await expect.poll(()=>page.evaluate(()=>(window as any).__closes.some((c:any)=>c.code===4000))).toBe(true);
+ await expect(page.locator('.connection-banner')).toHaveCount(0);
+ expect((await app.service.snapshot(room.sessionId,op)).state.paused).toBe(false);
  await page.screenshot({path:'.qa/cloud-reconnect-recovered.png'});finishing=true;
  }finally{finishing=true;clearTimeout(partnerTimer);partner?.removeAllListeners('close');partner?.terminate();await ctx.close();await app.close();}
 });

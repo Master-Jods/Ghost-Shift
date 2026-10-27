@@ -254,7 +254,12 @@ export class NetworkTransport {
     let lastSnapshotAt=Date.now();
     this.connectionWatchdog=setInterval(()=>{
       if(this.socket!==socket||this.stop)return;
-      if(Date.now()-lastSnapshotAt>30000)socket.close(4000,'Authoritative snapshots stalled; reconnecting');
+      if(Date.now()-lastSnapshotAt>30000){
+        // A dead TCP connection may never finish its close handshake. Recover without waiting for onclose.
+        recover({code:4000,reason:'Authoritative snapshots stalled; reconnecting',wasClean:false});
+        socket.onclose=null;
+        socket.close(4000,'Authoritative snapshots stalled; reconnecting');
+      }
     },5000);
     socket.onopen = () =>
       socket.send(
@@ -395,6 +400,9 @@ export class NetworkTransport {
         }
       } else if (message.type === "ownership_lost") {
         this.stop = true;
+        clearInterval(this.connectionWatchdog);
+        this.net={...this.net,connected:false};
+        this.movementStatus={...this.movementStatus,connected:false,direction:{x:0,y:0}};
         this.state = { ...this.state, connection: "Connection failed" };
         this.error(message.message);
       } else if (message.type === "error") {
@@ -406,7 +414,10 @@ export class NetworkTransport {
         }
       }
     };
-    socket.onclose = (event) => {
+    let recovering=false;
+    const recover = (event:Pick<CloseEvent,'code'|'reason'|'wasClean'>) => {
+      if(recovering)return;
+      recovering=true;
       if(this.socket!==socket||this.stop)return;
       clearInterval(this.connectionWatchdog);
       const recovery=connectionRecovery(event.code,this.reconnects);
@@ -439,6 +450,7 @@ export class NetworkTransport {
           recovery.delay,
         );
     };
+    socket.onclose=recover;
     socket.onerror = () => {
       if(this.socket!==socket||this.stop)return;
       this.net = {
