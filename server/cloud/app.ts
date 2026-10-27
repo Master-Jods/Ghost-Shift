@@ -487,7 +487,9 @@ export function createCloudApp(options: CloudOptions = {}) {
       queue = Promise.resolve(),
       lastPong = Date.now(),
       frames = 0,
-      windowAt = Date.now();
+      windowAt = Date.now(),
+      queuedCommands = 0,
+      resyncQueued = false;
     const connectionId = randomUUID();
     const send = (v: unknown) => {
       if (
@@ -513,6 +515,7 @@ export function createCloudApp(options: CloudOptions = {}) {
         });
     };
     const motion = new Map<string, Command>();
+    const actionBarriers = new Set<number>();
     const takeMotion=(before=Infinity)=>{const batch=[...motion.values()].filter(c=>c.seq<before);for(const c of batch)if(motion.get(c.type)===c)motion.delete(c.type);return batch;};
     const flush=async(commands:Command[])=>{
       if(a.bearer){const frame=await service.motionFrame(session,a,commands);for(const ack of frame.acknowledgements)send(ack);send(frame.snapshot);}
@@ -566,6 +569,17 @@ export function createCloudApp(options: CloudOptions = {}) {
         motion.set(v.command.type, v.command);
         return;
       }
+      // Bound consequential work; movement stays latest-only outside this queue.
+      if(authenticated && message.type==='resync' && resyncQueued)return;
+      if(authenticated && queuedCommands>=24){
+        if(message.type==='command')send({type:'ack',id:message.command?.id,ok:false,message:'Server is busy; wait for the current action before retrying.'});
+        return;
+      }
+      const isResync=message.type==='resync';
+      if(isResync)resyncQueued=true;
+      queuedCommands++;
+      const barrier=authenticated&&message.type==='command'?message.command?.seq:undefined;
+      if(Number.isFinite(barrier))actionBarriers.add(barrier);
       const priorMotion=authenticated?takeMotion(message.type==='command'?message.command?.seq:Infinity):[];
       queue = queue
         .then(async () => {
@@ -606,7 +620,8 @@ export function createCloudApp(options: CloudOptions = {}) {
             send(await service.snapshot(session, a, true));
           else throw new CloudError(400, "Unknown socket message.");
         })
-        .catch(failure);
+        .catch(failure)
+        .finally(()=>{queuedCommands--;if(Number.isFinite(barrier))actionBarriers.delete(barrier);if(isResync)resyncQueued=false;});
     });
     ws.on("pong", () => {
       lastPong = Date.now();
@@ -618,10 +633,9 @@ export function createCloudApp(options: CloudOptions = {}) {
         return;
       }
       busy = true;
-      const batch=takeMotion();
       queue = queue
         .then(async () => {
-          if (!closed) await flush(batch);
+          if (!closed) await flush(takeMotion(Math.min(...actionBarriers)));
         })
         .catch(failure)
         .finally(() => {
@@ -633,7 +647,7 @@ export function createCloudApp(options: CloudOptions = {}) {
     }, 10000);
     const rotate = setTimeout(
       () => ws.close(1012, "Function connection rotation; reconnecting"),
-      options.rotationMs ?? 240000,
+      options.rotationMs ?? 285000,
     );
     ws.on("close", () => {
       closed = true;
@@ -641,9 +655,9 @@ export function createCloudApp(options: CloudOptions = {}) {
       clearInterval(poll);
       clearInterval(ping);
       clearTimeout(rotate);
-      void queue.finally(() => {
+      void queue.then(() => {
         if (authenticated) return service.detach(session, a);
-      });
+      }).catch(()=>{});
     });
   });
   return {

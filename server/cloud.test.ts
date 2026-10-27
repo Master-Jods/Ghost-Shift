@@ -380,3 +380,31 @@ test('movement frames combine heartbeat, orientation and input with five SQL cal
  await assert.rejects(()=>fast.motionFrame(id,f.op,[cmd('INPUT',{x:1,y:0})]),/player slot/);await assert.rejects(()=>fast.motionFrame(id,f.aa,[cmd('FAIL')]),/Only movement/);await f.b.attach(id,{bearer:f.pa.credential},'replacement');await assert.rejects(()=>fast.motionFrame(id,f.aa,[]),/another tab/);
  }finally{await f.db.close();}
 });
+test('a blocked cloud action does not replay stale movement ahead of a newer stop',async()=>{
+ const app=createCloudApp({db:memoryPostgres(),bootstrapPassword:'queue-test-password'});let socket:WebSocket|undefined,release!:()=>void;
+ try{
+  await app.service.ready;const login=await app.service.login('operator','queue-test-password'),room=await app.service.create(login.operator.id),player=await app.service.join(room.code,'A',profile('A'));
+  const base='http://127.0.0.1:'+await app.listen(0,'127.0.0.1');socket=new WebSocket(base.replace('http:','ws:')+'/ws');
+  await new Promise<void>((resolve,reject)=>{socket!.once('error',reject);socket!.on('message',data=>{if(JSON.parse(data.toString()).type==='snapshot')resolve();});socket!.once('open',()=>socket!.send(JSON.stringify({type:'auth',role:'A',credential:player.credential,sessionId:room.sessionId,protocol:PROTOCOL_VERSION,mapSignature:MAP_SIGNATURE})));});
+  const originalCommand=app.service.command.bind(app.service),originalMotion=app.service.motionFrame.bind(app.service),batches:any[][]=[];
+  let entered!:()=>void;const started=new Promise<void>(r=>entered=r),blocked=new Promise<void>(r=>release=r);
+  app.service.command=async(...args)=>{entered();await blocked;return originalCommand(...args);};
+  app.service.motionFrame=async(...args)=>{batches.push(args[2]);return originalMotion(...args);};
+  socket.send(JSON.stringify({type:'command',command:cmd('QUICK_SIGNAL','Acknowledged')}));await started;
+  socket.send(JSON.stringify({type:'command',command:cmd('INPUT',{x:1,y:0})}));await new Promise(r=>setTimeout(r,300));
+  socket.send(JSON.stringify({type:'command',command:cmd('INPUT',{x:0,y:0})}));await new Promise(r=>setTimeout(r,30));release();
+  const end=Date.now()+3000;while(!batches.some(b=>b.length)&&Date.now()<end)await new Promise(r=>setTimeout(r,20));
+  const first=batches.find(b=>b.length)!;assert.ok(first);assert.deepEqual(first.find(c=>c.type==='INPUT')?.value,{x:0,y:0});
+ }finally{release?.();socket?.terminate();await app.close();}
+});
+test('latest-only polling cannot overtake a queued consequential command',async()=>{
+ const app=createCloudApp({db:memoryPostgres(),bootstrapPassword:'order-test-password'});let socket:WebSocket|undefined,release!:()=>void;
+ try{await app.service.ready;const login=await app.service.login('operator','order-test-password'),room=await app.service.create(login.operator.id),p=await app.service.join(room.code,'A',profile('A')),base='http://127.0.0.1:'+await app.listen(0,'127.0.0.1');socket=new WebSocket(base.replace('http:','ws:')+'/ws');
+ await new Promise<void>((done,fail)=>{socket!.once('error',fail);socket!.on('message',d=>{if(JSON.parse(d.toString()).type==='snapshot')done();});socket!.once('open',()=>socket!.send(JSON.stringify({type:'auth',role:'A',credential:p.credential,sessionId:room.sessionId,protocol:PROTOCOL_VERSION,mapSignature:MAP_SIGNATURE})));});
+ const original=app.service.command.bind(app.service),motion=app.service.motionFrame.bind(app.service),trace:number[]=[];let entered!:()=>void;const started=new Promise<void>(r=>entered=r),gate=new Promise<void>(r=>release=r);let first=true;
+ app.service.command=async(...args)=>{if(first){first=false;entered();await gate;}trace.push(args[2].seq);return original(...args);};app.service.motionFrame=async(...args)=>{trace.push(...args[2].map(c=>c.seq));return motion(...args);};
+ const send=(c:ReturnType<typeof cmd>)=>socket!.send(JSON.stringify({type:'command',command:c}));send(cmd('QUICK_SIGNAL','Acknowledged'));await started;await new Promise(r=>setTimeout(r,250));
+ const move=cmd('INPUT',{x:1,y:0}),action=cmd('QUICK_SIGNAL','Need help'),stop=cmd('INPUT',{x:0,y:0});send(move);send(action);send(stop);await new Promise(r=>setTimeout(r,30));release();
+ const until=Date.now()+3000;while(!trace.includes(stop.seq)&&Date.now()<until)await new Promise(r=>setTimeout(r,20));assert.ok(trace.includes(stop.seq));assert.ok(trace.indexOf(move.seq)<trace.indexOf(action.seq));assert.ok(trace.indexOf(action.seq)<trace.indexOf(stop.seq),JSON.stringify(trace));
+ }finally{release?.();socket?.terminate();await app.close();}
+});

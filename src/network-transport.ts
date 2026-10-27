@@ -1,3 +1,4 @@
+import {connectionRecovery} from './connectionRecovery';
 import type { MovementStatus } from "./movementPrediction";
 import type { PlayerProfile } from "./playerProfile";
 import { MAP_SIGNATURE } from "./world";
@@ -68,8 +69,11 @@ export class NetworkTransport {
   getMovementStatus = () => this.movementStatus;
   private seq = 1;
   private reconnects = 0;
+  private connectionDiagnostics:{at:string;code:number;reason:string;wasClean:boolean}[]=[];
+  getConnectionDiagnostics=()=>this.connectionDiagnostics.map(v=>({...v}));
   private stop = false;
   private timeout?: ReturnType<typeof setTimeout>;
+  private connectionWatchdog?:ReturnType<typeof setInterval>;
   private decision: DecisionView = null;
   private previewTicket = 0;
   private firstResolve?: () => void;
@@ -227,8 +231,12 @@ export class NetworkTransport {
     };
     this.stop = false;
     clearTimeout(this.timeout);
+    clearInterval(this.connectionWatchdog);
     if (this.socket) {
       this.socket.onclose = null;
+      this.socket.onmessage = null;
+      this.socket.onerror = null;
+      this.socket.onopen = null;
       this.socket.close();
     }
     this.socketRole = role;
@@ -243,6 +251,11 @@ export class NetworkTransport {
       `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws`,
     );
     this.socket = socket;
+    let lastSnapshotAt=Date.now();
+    this.connectionWatchdog=setInterval(()=>{
+      if(this.socket!==socket||this.stop)return;
+      if(Date.now()-lastSnapshotAt>30000)socket.close(4000,'Authoritative snapshots stalled; reconnecting');
+    },5000);
     socket.onopen = () =>
       socket.send(
         JSON.stringify({
@@ -256,6 +269,7 @@ export class NetworkTransport {
         }),
       );
     socket.onmessage = (e) => {
+      if(this.socket!==socket||this.stop)return;
       let message: any;
       try {
         message = JSON.parse(e.data);
@@ -263,6 +277,7 @@ export class NetworkTransport {
         return;
       }
       if (message.type === "snapshot") {
+        lastSnapshotAt=Date.now();
         if (
           message.protocol !== PROTOCOL_VERSION ||
           message.net?.mapSignature !== MAP_SIGNATURE ||
@@ -297,6 +312,7 @@ export class NetworkTransport {
               ? ""
               : this.net.error,
         };
+        this.net={...this.net,error:this.net.error.startsWith('Connection interrupted.')?'':this.net.error};
         this.reconnects = 0;
         this.firstResolve?.();
         this.firstResolve = undefined;
@@ -390,7 +406,13 @@ export class NetworkTransport {
         }
       }
     };
-    socket.onclose = () => {
+    socket.onclose = (event) => {
+      if(this.socket!==socket||this.stop)return;
+      clearInterval(this.connectionWatchdog);
+      const recovery=connectionRecovery(event.code,this.reconnects);
+      this.connectionDiagnostics.push({at:new Date().toISOString(),code:event.code,reason:event.reason||'No close reason received',wasClean:event.wasClean});
+      this.connectionDiagnostics=this.connectionDiagnostics.slice(-20);
+      window.dispatchEvent(new CustomEvent('ghost-connection-close',{detail:this.connectionDiagnostics.at(-1)}));
       this.movementStatus = {
         ...this.movementStatus,
         connected: false,
@@ -400,19 +422,25 @@ export class NetworkTransport {
       this.net = { ...this.net, connected: false };
       this.state = {
         ...this.state,
-        connection: this.reconnects >= 7 ? "Connection failed" : "Reconnecting",
+        connection: recovery.retry ? "Reconnecting" : "Connection failed",
       };
       this.emit();
-      if (this.reconnects < 8)
+      if(!recovery.retry){
+        this.stop=true;
+        this.error(event.reason||'Connection ended. Rejoin or sign in before reconnecting.');
+        return;
+      }
+      if (recovery.retry)
         this.timeout = setTimeout(
           () => {
             this.reconnects++;
             this.connect(id, role);
           },
-          Math.min(8000, 1000 * 2 ** this.reconnects),
+          recovery.delay,
         );
     };
     socket.onerror = () => {
+      if(this.socket!==socket||this.stop)return;
       this.net = {
         ...this.net,
         error:
@@ -679,6 +707,7 @@ export class NetworkTransport {
   destroy() {
     this.stop = true;
     clearTimeout(this.timeout);
+    clearInterval(this.connectionWatchdog);
     this.socket?.close();
   }
 }
