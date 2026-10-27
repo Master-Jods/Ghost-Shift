@@ -1,4 +1,4 @@
-const CACHE='among-shadows-cloud-recovery-28';
+const CACHE='among-shadows-cloud-recovery-29';
 const ESSENTIAL=['/','/play','/manifest.webmanifest','/icons/app.svg','/industrial-corners.svg','/horror/aster-night-clean.png','/horror/among-the-shadows-title.svg','/horror/blood.svg','/trainers/a-atlas.svg','/trainers/b-atlas.svg','/catalog/index.json','/fonts/fonts.css',...[25,68,197,9,282,59,609,491,94].flatMap(id=>[`/pokemon/${id}-art.png`,`/pokemon/${id}-sprite.png`]),...Array.from({length:12},(_,i)=>`/fonts/font-${i}.woff2`)];
 // Shell updates must not be held hostage by an optional image/font failing.
 self.addEventListener('install',event=>{event.waitUntil((async()=>{

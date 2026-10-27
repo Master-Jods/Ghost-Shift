@@ -408,3 +408,7 @@ test('latest-only polling cannot overtake a queued consequential command',async(
  const until=Date.now()+3000;while(!trace.includes(stop.seq)&&Date.now()<until)await new Promise(r=>setTimeout(r,20));assert.ok(trace.includes(stop.seq));assert.ok(trace.indexOf(move.seq)<trace.indexOf(action.seq));assert.ok(trace.indexOf(action.seq)<trace.indexOf(stop.seq),JSON.stringify(trace));
  }finally{release?.();socket?.terminate();await app.close();}
 });
+test('database cold-start failure can recover without restarting the cloud instance',async()=>{
+ const db=memoryPostgres();let fail=true;const flaky={...db,transaction:async<T>(work:any):Promise<T>=>{if(fail){fail=false;throw Error('temporary database connection timeout');}return db.transaction(work) as Promise<T>;}};
+ const service=new CloudService(flaky);try{await assert.rejects(()=>service.ready,/temporary database/);await service.ready;const room=await service.create(null);assert.ok(room.sessionId);}finally{await db.close();}
+});

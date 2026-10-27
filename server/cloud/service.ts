@@ -69,7 +69,13 @@ const js = (v: unknown) => JSON.stringify(v),
     return r;
   };
 export class CloudService {
-  readonly ready: Promise<void>;
+  private initialization?:Promise<void>;
+  get ready():Promise<void>{
+    if(!this.initialization)this.initialization=migrate(this.db).then(async()=>{
+      if(this.options.bootstrapPassword)await this.createOperator(this.options.bootstrapUser||'operator',this.options.bootstrapPassword);
+    }).catch(error=>{this.initialization=undefined;throw error;});
+    return this.initialization;
+  }
   readonly graceMs: number;
   readonly leaseMs = 4000;
   constructor(
@@ -81,14 +87,8 @@ export class CloudService {
     } = {},
   ) {
     this.graceMs = options.graceMs ?? 10000;
-    this.ready = migrate(db).then(async () => {
-      if (options.bootstrapPassword)
-        await this.createOperator(
-          options.bootstrapUser || "operator",
-          options.bootstrapPassword,
-        );
-    });
   }
+
   async createOperator(username: string, password: string) {
     check(
       /^[a-zA-Z0-9_-]{3,32}$/.test(username) && password.length >= 10,

@@ -187,7 +187,7 @@ export class NetworkTransport {
               "Could not open the player socket. Use reconnect after checking the server.",
             ),
           );
-      }, 7000);
+      }, 30000);
     });
   }
   async join(role: "A" | "B", code: string, profile: PlayerProfile) {
@@ -219,7 +219,7 @@ export class NetworkTransport {
       setTimeout(() => {
         if (!this.net.connected)
           reject(Error("Operator socket did not connect."));
-      }, 7000);
+      }, 30000);
     });
   }
   private connect(id: string, role: "control" | "A" | "B") {

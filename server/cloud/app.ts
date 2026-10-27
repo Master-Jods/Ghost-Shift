@@ -522,8 +522,8 @@ export function createCloudApp(options: CloudOptions = {}) {
       else send(await service.snapshot(session,a,true));
     };
     const authTimer = setTimeout(() => {
-      if (!authenticated) ws.close(4003, "Authentication timeout");
-    }, 10000);
+      if (!authenticated) ws.close(1013, "Authentication timed out; retrying server connection");
+    }, 30000);
     ws.on("message", (data) => {
       if (Date.now() - windowAt > 1000) {
         frames = 0;
